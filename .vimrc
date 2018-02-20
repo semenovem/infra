@@ -1,4 +1,4 @@
-set number
+" set number
 syntax on
 set incsearch
 set hlsearch
@@ -10,7 +10,7 @@ set noerrorbells visualbell t_vb=
 autocmd GUIEnter * set visualbell t_vb
 set mousehide
 set autoindent
-set nowrap
+" set nowrap
 set expandtab
 set shiftwidth=2
 set softtabstop=2
