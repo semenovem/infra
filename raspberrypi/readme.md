@@ -16,3 +16,8 @@ http://dmitrysnotes.ru/raspberry-pi-3-obzor-i-nachalo-raboty
 http://robot-on.ru/articles/formatirovanie-microsd-zagruzka-iso-macos-linux
 
 
+# setting of host name 
+hostname
+hostname [new name]
+# change nam#e ofhost
+sudo vim /etc/hostname
