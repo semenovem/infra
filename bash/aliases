@@ -1,0 +1,5 @@
+# alias ls="ls -l"
+alias upd_source="cp ~/_dev/environment/bash/bashrc ~/.bashrc && source ~/.bashrc"
+
+# external IP 
+# alias myip='wget -qO myip http://www.ipchicken.com/; grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" myip;  rm myip'
