@@ -1,0 +1,7 @@
+
+# specify path 
+export MAGICK_HOME="$HOME/imagemagick/ImageMagick-7.0.8"
+
+export PATH="$MAGICK_HOME/bin:$PATH"
+
+export DYLD_LIBRARY_PATH="$MAGICK_HOME/lib/"
