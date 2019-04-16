@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 # trouble with ssh at Debian
 apt-get install openssh-server
