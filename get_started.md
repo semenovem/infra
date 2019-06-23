@@ -1,8 +1,8 @@
-
+```
 install git 
 git config --global user.name "SemenovEM"
 git config --global user.email "semenovem@gmail.com"
-
+```
 
 install node
 
@@ -18,9 +18,12 @@ gem outdate
 
 # homebrew
 # https://brew.sh/
+```
+brew update
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew install ruby
 export PATH=/usr/local/bin:$PAT
+```
 
 
 
