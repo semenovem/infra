@@ -1,7 +1,7 @@
 ```
 install git 
-git config --global user.name "SemenovEM"
-git config --global user.email "semenovem@gmail.com"
+git config --global user.name "..."
+git config --global user.email "..."
 ```
 
 install node
