@@ -1,5 +1,9 @@
 
-# find and rm node_modules
+# size of directories in `node_modules`
+du -sh ./node_modules/* | sort -nr | grep '\dM.*'
+
+
+# find and `rm node_modules`
 find ./* -type d -name "node_modules"
 find ./* -type d -name "*dir*" | xargs rm -dfR
 
