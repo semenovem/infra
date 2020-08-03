@@ -5,7 +5,7 @@
 # Manage Docker as non-root user
 # ubuntu
 sudo groupadd docker
-sudo usermod -aG docker $USER
+sudo usermod -aG docker "$USER"
 
 #reboot
 newgrp docker
