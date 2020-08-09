@@ -3,6 +3,8 @@
 
 sudo route -n add 192.168.1.9 192.168.1.1
 
+sudo route -n delete default -link 8
+
 
 # deprecated
 cat /etc/resolv.conf
