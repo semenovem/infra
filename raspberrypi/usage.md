@@ -11,8 +11,6 @@ http://wiringpi.com/download-and-install/
 
 
 
-hostname 
-hostname -I
 
 vcgencmd measure_temp
 

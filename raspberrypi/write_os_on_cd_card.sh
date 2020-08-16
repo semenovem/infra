@@ -1,6 +1,7 @@
 #
 # guide
 # http://robot-on.ru/articles/formatirovanie-microsd-zagruzka-iso-macos-linux
+# https://www.raspberrypi.org/documentation/installation/installing-images/mac.md
 #
 #
 # write image (*.dmg | *.img) at cd card for raspberry pi
@@ -17,3 +18,7 @@ sudo newfs_msdos -F 32 /dev/disk3
 
 # ~/Downloads/2018-10-09-raspbian-stretch-lite.img path to image
 sudo dd if=~/Downloads/2018-10-09-raspbian-stretch-lite.img of=/dev/disk3
+
+# wait about ~15-30 min
+
+sudo diskutil eject /dev/rdiskN

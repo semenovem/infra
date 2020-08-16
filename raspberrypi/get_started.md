@@ -7,9 +7,6 @@
 
 sudo apt-get install git-core
 
-
-
-
 # show current name
 hostname
 
@@ -19,5 +16,6 @@ hostname -i
 
 # setting of host name
 hostname [new name]
+
 # change name of host for persistently
 sudo vim /etc/hostname
