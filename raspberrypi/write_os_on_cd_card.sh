@@ -10,15 +10,16 @@ diskutil list
 
 exit 0
 
-#example path to drive - /dev/disk3
+#example path to drive - /dev/disk4
 
-diskutil unmountDisk /dev/disk3
+diskutil unmountDisk /dev/disk4
 
-sudo newfs_msdos -F 32 /dev/disk3
+sudo newfs_msdos -F 32 /dev/disk4
 
 # ~/Downloads/2018-10-09-raspbian-stretch-lite.img path to image
-sudo dd if=~/Downloads/2018-10-09-raspbian-stretch-lite.img of=/dev/disk3
+sudo dd if=~/Downloads/2018-10-09-raspbian-stretch-lite.img of=/dev/disk4
 
+# ctr + t - show status
 # wait about ~15-30 min
 
-sudo diskutil eject /dev/rdiskN
+sudo diskutil eject /dev/rdisk4
