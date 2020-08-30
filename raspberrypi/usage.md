@@ -2,31 +2,23 @@
 #temperature
 vcgencmd measure_temp
 
-#gpio
-http://wiringpi.com/download-and-install/
 
-# installing wiringpi should through git
-# https://projects.drogon.net/
-# https://git.drogon.net/
+# show current name
+hostname
 
-
-
-
-vcgencmd measure_temp
-
-
+# show ip address
+hostname -i
 /etc/rc.local
 
 
-gpio
-http://wiringpi.com/download-and-install/
-sudo apt-get install git-core
-
-- installing wiringpi should through git 
-
-https://projects.drogon.net/
-https://git.drogon.net/
+# setting of host name
+hostname [new name]
 
 
----- init
+# change name of host for persistently
+sudo vim /etc/hostname
+
+
+# printer (didn't do)
 apt-get install printer-driver-all
+
