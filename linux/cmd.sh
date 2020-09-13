@@ -1,3 +1,6 @@
+#!/bin/bash
+
+exit
 
 # size of directories in `node_modules`
 du -sh ./node_modules/* | sort -nr | grep '\dM.*'
@@ -14,7 +17,7 @@ find . -type f -name "*.txt" | wc -l
 
 
 
-# count directories 
+# count directories
 find . -type d | wc -l
 
 

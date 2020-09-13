@@ -1,5 +1,5 @@
 
-#shown auto-launch for services
+# shown auto-launch for services
 systemctl list-unit-files --state enabled
 
 # added setvice in auto-launch
