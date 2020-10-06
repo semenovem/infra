@@ -1,0 +1,4 @@
+
+# profile settings `~/.zshrc`
+
+export PATH=~/.global-modules/bin:$PATH
