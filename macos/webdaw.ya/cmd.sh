@@ -31,3 +31,25 @@ expect {
     "Username:" { send "$username\n"; exp_continue }
     "Password:" { send "$password\n" }
 }
+
+# --------------------
+# --------------------
+# --------------------
+
+mount_webdav https://myusername:mypass@webdav.yandex.ru:443 /Volumes/temp
+
+mount_webdav -s https://myusername:mypass@webdav.yandex.ru:443 /Volumes/temp
+
+
+
+
+
+# --------------------
+# --------------------
+# --------------------
+set pause to (3)
+delay pause
+tell application "Finder"
+mount volume "Https://webdav.yandex.ru/" as user name ¬
+"username" with password "password"
+end tell
