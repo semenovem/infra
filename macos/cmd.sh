@@ -11,3 +11,6 @@ sudo powermetrics | grep -i "CPU die temperature"
 mkfile 1g test.abc
 
 dd if=/dev/zero of=output.dat bs=10m
+
+#or
+truncate -s 10240 file2
