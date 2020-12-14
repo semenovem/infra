@@ -1,4 +1,4 @@
 
 # profile settings `~/.zshrc`
 
-export PATH=~/.global-modules/bin:$PATH
+export PATH=~/.npm-global/bin:$PATH
