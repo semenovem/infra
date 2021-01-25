@@ -19,3 +19,7 @@ sudo systemctl restart docker
 
 # docker swarm
 docker node ls -q | xargs docker node inspect   -f '{{ .ID }} [{{ .Description.Hostname }}]: {{ .Spec.Labels }}'
+
+
+watch -cd -n 1 \
+    'docker service ls -f name=testbed-afsc --format "table {{.Name}}\t{{.Replicas}}\t{{.Image}}\t{{.Ports}}"'
