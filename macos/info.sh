@@ -1,6 +1,11 @@
 
 exit
 
+# install https://brew.sh/
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+
+
 ### mount remote directory
 
 # to install

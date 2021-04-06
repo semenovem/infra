@@ -31,3 +31,9 @@ networksetup -setdnsservers "USB 10/100/1000 LAN" 10.132.168.11 10.132.168.203
 
 # An asterisk (*) denotes that a network service is disabled
 networksetup listallnetworkservices
+
+
+-----------
+networksetup -getdnsservers Wi-Fi
+10.230.192.77
+10.230.192.78

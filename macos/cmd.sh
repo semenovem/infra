@@ -12,5 +12,5 @@ mkfile 1g test.abc
 
 dd if=/dev/zero of=output.dat bs=10m
 
-#or
+# or
 truncate -s 10240 file2
