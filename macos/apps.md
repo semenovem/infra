@@ -13,3 +13,6 @@ monosnap
 
 ###### macos
 - https://brew.sh/
+
+terminal
+brew install telnet
