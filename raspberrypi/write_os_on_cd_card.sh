@@ -17,9 +17,9 @@ diskutil unmountDisk /dev/disk4
 sudo newfs_msdos -F 32 /dev/disk4
 
 # ~/Downloads/2018-10-09-raspbian-stretch-lite.img path to image
-sudo dd if=~/Downloads/2018-10-09-raspbian-stretch-lite.img of=/dev/disk4
+sudo dd if=Users/sem/Downloads/2018-10-09-raspbian-stretch-lite.img of=/dev/disk4
 
 # ctr + t - show status
 # wait about ~15-30 min
 
-sudo diskutil eject /dev/rdisk4
+sudo diskutil eject /dev/disk4

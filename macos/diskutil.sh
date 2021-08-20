@@ -1,6 +1,6 @@
 #!/bin/bash
 
-exit
+exit 0
 
 
 diskutil list [DeviceNode]

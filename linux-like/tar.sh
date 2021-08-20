@@ -30,3 +30,11 @@ for entry in $LS; do
 
   zip -P 000000 "qqw/$entry.zip" $entry
 done
+
+
+# -------
+# многотомный архив
+7z a -v500m ../e/rez_first_cloud/arch.7z YandexDisk/
+
+7z x ../../e/rez_first_cloud/arch.7z.001
+

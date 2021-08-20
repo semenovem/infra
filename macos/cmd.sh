@@ -14,3 +14,11 @@ dd if=/dev/zero of=output.dat bs=10m
 
 # or
 truncate -s 10240 file2
+
+
+# -----------
+brew install smartmontools
+
+diskutil list
+
+smartctl -x disk0
