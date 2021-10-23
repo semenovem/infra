@@ -2,3 +2,31 @@
 # profile settings `~/.zshrc`
 
 export PATH=~/.npm-global/bin:$PATH
+
+# for golang
+# export GOROOT="/usr/local/go"
+# export GOPATH="/Users/sem/go"
+
+if [ -z "$(which realpath)" ]; then
+  # if does'n install locally via brew
+  realpath() {
+      [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+  }
+
+  export -f realpath
+fi
+
+
+sx() {
+#   TODO - сделать анализ на тип данных - certificate || certificate service request
+
+  [ -z $1 ] && echo "передай аргумент $1" && return 1
+  [ ! -f $1 ] && echo "Это не файл '$1'"  && return 1
+
+  openssl x509 -noout -text -in "$1"
+}
+
+
+conn() {
+  echo "root@89.223.122.250 - vds.timeweb.ru"
+}
