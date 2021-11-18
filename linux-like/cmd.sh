@@ -23,3 +23,12 @@ find . -type d | wc -l
 
 # du
 du -hd 1
+
+
+# Список открытых портов
+ss -ltupn
+
+# Настройка разрешений на порт
+sudo ufw allow from 192.168.33.0/24 to any port 5900
+
+
