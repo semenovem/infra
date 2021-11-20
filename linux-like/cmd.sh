@@ -22,7 +22,7 @@ find . -type d | wc -l
 
 
 # du
-du -hd 1
+du -hd 1 ./
 
 
 # Список открытых портов

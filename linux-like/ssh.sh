@@ -26,3 +26,5 @@ EOF
 
 ssh root@192.168.1.1 'bash -s' < script.sh
 
+# RDP
+ssh -L 3389:localhost:3389 evg@192.168.1.10
