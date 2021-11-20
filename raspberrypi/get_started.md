@@ -11,5 +11,4 @@ sudo reboot
 
 sudo apt-get install git-core
 
-
-
+sudo apt install libraspberrypi-bin
