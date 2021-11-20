@@ -3,12 +3,8 @@
 vcgencmd measure_temp
 
 
-# show current name
-hostname
-
 # show ip address
 hostname -i
-/etc/rc.local
 
 
 # setting of host name
