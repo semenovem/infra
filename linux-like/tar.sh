@@ -37,3 +37,6 @@ done
 #-----------
 gpg -c file
 gpg --no-symkey-cache -o target.file  --decrypt source.file
+
+base64 path > newfile
+base64 --decode

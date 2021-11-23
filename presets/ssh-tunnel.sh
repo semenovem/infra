@@ -2,6 +2,7 @@ exit
 
 # https://qastack.ru/ubuntu/947841/start-autossh-on-system-startup
 # http://rus-linux.net/MyLDP/sec/reverse-SSH-tunnel.html
+# https://habr.com/ru/post/331348/
 
 # srv-home >>> relay-server
 # -fN флаг для работы в фоне
