@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# https://1cloud.ru/help/network/nastroika-samba-v-lokalnoj-seti
-
 # Точка монтирования директории для всех для чтения
 # Монтирование директории с паролем
 

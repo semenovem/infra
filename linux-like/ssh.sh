@@ -26,5 +26,32 @@ EOF
 
 ssh root@192.168.1.1 'bash -s' < script.sh
 
+# -------------------------------------
+# ssh tunnel
+# https://qastack.ru/ubuntu/947841/start-autossh-on-system-startup
+# http://rus-linux.net/MyLDP/sec/reverse-SSH-tunnel.html
+# https://habr.com/ru/post/331348/
+
+# -fN флаг для работы в фоне
+
 # RDP
-ssh -L 3389:localhost:3389 evg@192.168.1.10
+ssh -L 3389:localhost:13389 evg@192.168.1.10
+
+
+ssh -R 2022:localhost:22 root@89.223.122.250
+
+# проверка настройки обратного ssh
+# relay-server
+sudo netstat -nap | grep 2022
+
+# Автоподключение
+
+# контроль ssh туннеля
+# -fN флаг для работы в фоне
+autossh -M 2021 \
+  -o "PubkeyAuthentication=yes" \
+  -o "StrictHostKeyChecking=false" \
+  -o "PasswordAuthentication=no" \
+  -o "ServerAliveInterval 60" \
+  -o "ServerAliveCountMax 3" \
+  -R 2022:localhost:22 root@89.223.122.250

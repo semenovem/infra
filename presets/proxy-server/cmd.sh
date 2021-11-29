@@ -30,3 +30,7 @@ grep -Eiv '(^#|^$)' /etc/squid/squid.conf
 
 forwarded_for
 
+# Порты
+# home server
+13389 # ssh -R
+

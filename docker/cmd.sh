@@ -25,3 +25,7 @@ docker node ls -q | xargs docker node inspect \
 watch -cd -n 1 \
     'docker service ls -f name=iata --format "table {{.Name}}\t{{.Replicas}}"'
 # 'docker service ls --format "table {{.Name}}\t{{.Replicas}}\t{{.Image}}\t{{.Ports}}"'
+
+
+# Использование ресурсов контейнерами
+docker ps -q | xargs  docker stats --no-stream
