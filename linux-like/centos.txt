@@ -1,0 +1,47 @@
+
+
+
+CentOS 8: пакетный менеджер dnf вместо yum
+
+cat /etc/redhat-release
+CentOS Linux release 8.0.1905 (Core)
+
+
+Установка пакетного менеджера dnf за место yum:
+yum -y install epel-release
+yum -y install dnf
+dnf -y remove yum yum-metadata-parser
+dnf -y remove epel-release
+rm -Rf /etc/yum
+
+
+Обновление CentOS 7 до 8 и репозитория epel:
+dnf upgrade
+
+
+Зачистка хранилища:
+dnf clean all
+
+
+Проверка:
+dnf repolist
+
+
+Синтаксис dnf:
+dnf [параметры] [команда] имя-пакета
+
+
+install - установка пакета
+update и upgrade - обновление пакета
+remove и erase - удаление пакета
+autoremove - удаление ненужных пакетов
+search - поиск пакета по имени
+clean all - удаление метаданных
+list - список доступных и установленных пакетов
+list installed - список установленных пакетов
+list available - список доступных пакетов
+repolist - список подключенных репозиториев
+repolist all - список всех репозиториев
+history - история команд
+help - вывести помощь
+
