@@ -22,3 +22,7 @@ brew install smartmontools
 diskutil list
 
 smartctl -x disk0
+
+
+# ----------- install
+brew install jq  # https://stedolan.github.io/
