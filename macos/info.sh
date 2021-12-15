@@ -6,11 +6,10 @@ exit
 
 
 
-### mount remote directory
+### mount remote directory via ssh
+# https://osxfuse.github.io/
+# https://github.com/osxfuse/sshfs
 
-# to install
-brew cask install osxfuse
-brew install sshfs
 
 # execute
 sshfs evg@192.168.1.8:/ ~/_mount
