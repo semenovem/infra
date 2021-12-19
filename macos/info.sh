@@ -15,4 +15,4 @@ exit
 sshfs evg@192.168.1.8:/ ~/_mount
 
 # cancel
-umount evg@192.168.1.8:/
+umount ~/_mount

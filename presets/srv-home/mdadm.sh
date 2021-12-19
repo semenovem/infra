@@ -7,8 +7,8 @@
 /dev/md126
 
 
-/mnt-share    # Общее хранилище
-/mnt-protect  # Ограниченный доступ
+/mnt/share    # Общее хранилище
+/mnt/protect  # Ограниченный доступ
 
 #
 # vim /etc/fstab
