@@ -1,4 +1,4 @@
-Host srv
+Host home
   HostName     evg-srv.local
   User         evg
-  IdentityFile /Users/sem/.ssh/id_rsa
+  IdentityFile ~/.ssh/id_rsa

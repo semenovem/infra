@@ -50,9 +50,9 @@ help - вывести помощь
 ------------------
 # Установка go
 
-yum -y update
-yum install -y epel-release
-yum install -y git docker htop wget tar make
+yum -y update && \
+yum install -y epel-release && \
+yum install -y git htop wget tar make
 
 wget https://golang.org/dl/go1.15.5.linux-amd64.tar.gz
 tar -zxvf go1.15.5.linux-amd64.tar.gz -C /usr/local/
@@ -64,3 +64,8 @@ mkdir -p $HOME/work/src
 echo 'export GOPATH=$HOME/work' >> ~/.bashrc
 
 source $HOME/.bashrc
+
+
+------------------
+# docker
+https://1cloud.ru/help/linux/instruktsiya-docker-na-centos7

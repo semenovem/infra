@@ -34,3 +34,9 @@ forwarded_for
 # home server
 13389 # ssh -R
 
+
+#------------
+#user remote
+
+adduser remote
+

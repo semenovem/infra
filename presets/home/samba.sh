@@ -6,7 +6,8 @@
 
 sudo apt-get update
 sudo apt-get install -y samba
-sudo cp /etc/samba/smb.conf{,.bak}  # копия файла настроек
+
+/etc/samba/smb.conf
 
 
 #[public]
@@ -22,6 +23,6 @@ sudo cp /etc/samba/smb.conf{,.bak}  # копия файла настроек
 
 
 testparm -s
-service smbd restart
+sudo service smbd restart
 
 

@@ -5,6 +5,11 @@ apt-get install openssh-server
 service ssh start
 # and need create user for access at ssh
 
+sudo vim /etc/ssh/sshd_config
+PasswordAuthentication yes
+PasswordAuthentication no
+systemctl restart sshd.service
+
 
 #-------
 # SSH: Run Commands or Scripts Remotely
@@ -55,3 +60,14 @@ autossh -M 2021 \
   -o "ServerAliveInterval 60" \
   -o "ServerAliveCountMax 3" \
   -R 2022:localhost:22 root@89.223.122.250
+
+#-------
+
+df -hT
+
+sudo sshfs -o allow_other, IdentityFile = ~/.ssh/id_rsa sedicomm@x.x.x.x:/home/sedicomm/ /mnt/sedicomm
+sudo sshfs -o allow_other \
+  -p 2022 remote@localhost:/mnt/usb_500/_make_cloud_torrent_  /home/centos/dev/downloads
+
+
+#-------------
