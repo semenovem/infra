@@ -1,19 +1,14 @@
 #!/bin/bash
 
-# https://www.dmosk.ru/miniinstruktions.php?mini=mdadm#conf
 
 
-/dev/md125
-/dev/md126
+# content /etc/fstab:
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# 4Tb raid-mainboard
+/dev/md125   /mnt/raid4t_hard  ext4  defaults  1 2
 
+# 4Tb raid-linux-mdadm
+/dev/md402   /mnt/raid4t_soft  ext4  defaults  1 2
 
-/mnt/share    # Общее хранилище
-/mnt/protect  # Ограниченный доступ
-
-#
-# vim /etc/fstab
-/dev/md125   /mnt-share   ext4  defaults  1 2
-/dev/md126   /mnt-protect   ext4  defaults  1 2
-
-# sudo mount -a
-
+# 1Tb raid-linux
+/dev/md11    /mnt/raid1t_soft  ext4  defaults  1 2
