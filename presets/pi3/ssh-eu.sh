@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-ssh -R 2022:localhost:22 europe
+ssh -R 3022:localhost:22 europe
 
 autossh -M 0 -fN \
   -o "PubkeyAuthentication=yes" \
@@ -9,7 +9,7 @@ autossh -M 0 -fN \
   -o "PasswordAuthentication=no" \
   -o "ServerAliveInterval 60" \
   -o "ServerAliveCountMax 3" \
-  -R 2022:localhost:22 europe
+  -R 3022:localhost:22 europe
 
 
 # --------------------
@@ -32,16 +32,16 @@ ExecStart = /usr/bin/autossh -M 0 \
     -o "PubkeyAuthentication=yes" \
     -o "StrictHostKeyChecking=false" \
     -o "PasswordAuthentication=no" \
-    -fNR 2022:localhost:22 europe
+    -fNR 3022:localhost:22 europe
 
 Restart            = always
-StartLimitInterval = 60
+StartLimitInterval = 0
 
 [Install]
 WantedBy = multi-user.target
 
 
 sudo systemctl daemon-reload
-sudo systemctl start autossh-tunnel-europe.service
+sudo systemctl restart autossh-tunnel-europe.service
 sudo systemctl enable autossh-tunnel-europe.service
 sudo systemctl status autossh-tunnel-europe

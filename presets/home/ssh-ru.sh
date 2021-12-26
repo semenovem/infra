@@ -32,11 +32,10 @@ ExecStart = /usr/bin/autossh -M 0 \
     -o "PubkeyAuthentication=yes" \
     -o "StrictHostKeyChecking=false" \
     -o "PasswordAuthentication=no" \
-    -fNR 2022:localhost:22 makecloud
+    -fNR 2022:localhost:22 ru
 
 Restart            = always
 StartLimitInterval = 60
-StartLimitBurst    = 10
 
 [Install]
 WantedBy = multi-user.target
