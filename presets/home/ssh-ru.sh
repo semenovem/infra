@@ -26,6 +26,9 @@ Type        = simple
 User        = evg
 Group       = evg
 Environment = "AUTOSSH_GATETIME=0"
+Environment = "AUTOSSH_PORT=0"
+Environment = "AUTOSSH_LOGFILE=/home/evg/logs/systemctl-autossh/ru.logs"
+Environment = "AUTOSSH_PIDFILE=/home/evg/logs/systemctl-autossh/ru.pid"
 ExecStart = /usr/bin/autossh -M 0 \
     -o "ServerAliveInterval 30" \
     -o "ServerAliveCountMax 3" \
@@ -35,7 +38,10 @@ ExecStart = /usr/bin/autossh -M 0 \
     -fNR 2022:localhost:22 ru
 
 Restart            = always
-StartLimitInterval = 60
+#StartLimitInterval = 60
+RestartSec=60
+StartLimitInterval=300
+StartLimitBurst=3
 
 [Install]
 WantedBy = multi-user.target

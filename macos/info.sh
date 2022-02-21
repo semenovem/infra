@@ -8,7 +8,9 @@ exit
 
 ### mount remote directory via ssh
 # https://osxfuse.github.io/
+
 # https://github.com/osxfuse/sshfs
+# https://github.com/osxfuse/sshfs/releases
 
 
 # execute

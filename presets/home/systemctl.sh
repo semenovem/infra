@@ -1,21 +1,10 @@
 #!/bin/bash
 
 
-ssh -R 2022:localhost:22 europe
-
-autossh -M 0 -fN \
-  -o "PubkeyAuthentication=yes" \
-  -o "StrictHostKeyChecking=false" \
-  -o "PasswordAuthentication=no" \
-  -o "ServerAliveInterval 60" \
-  -o "ServerAliveCountMax 3" \
-  -R 2022:localhost:22 europe
-
-
 # --------------------
 # авто перезапуск ssh
 
-sudo vim /etc/systemd/system/autossh-tunnel-europe.service
+sudo vim /etc/systemd/system/autossh-tunnel-mgr.service
 
 [Unit]
 Description = AutoSSH tunnel service
