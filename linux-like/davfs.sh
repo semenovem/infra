@@ -1,6 +1,5 @@
+#!/bin/bash
 
+exit 0
 
-
-
-# setup webdav
 https://help.ubuntu.ru/wiki/davfs2
