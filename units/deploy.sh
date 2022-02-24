@@ -18,18 +18,14 @@
 _BIN_=$(dirname "$([[ $0 == /* ]] && echo "$0" || echo "$PWD/${0#./}")")
 _URL_SSH_CONFIG_="https://raw.githubusercontent.com/semenovem/environment/master/units/ssh-config.txt"
 _SERVICE_NAME_="crone-shell"
-_USER_ADM_=
-_USER_REMOTE_=
-_USER_REVERSE_TUNNEL_=
 _MODE_=
 _DEBUG_=
 _SHELL_=$(which bash) || (echo "ERR: which bash" && exit 1)
 _VERSION_="1.0"
 
-# TODO снизить частоту до 1 раз 3 часа
-_DAEMON_TIMEOUT_SLEEP_=3600
+_DAEMON_TIMEOUT_SLEEP_=86400 # 3600s * 24h
 _SERVICE_FILE_=
-_CLI_=true
+_CLI_=
 _SYSTEMMD_DIR_="/etc/systemd/system"
 
 _SSH_PROXY_TUNNEL_RU_="ru-tunnel"
@@ -37,7 +33,7 @@ _SSH_PROXY_TUNNEL_EU_="eu-tunnel"
 
 # TODO - получить из файла конфигурации
 _DAEMON_PID_FILE_="$ENV_DAEMON_PID_FILE"
-_DAEMON_WORKING_DIR_="${HOME}/_env_daemon"
+_DAEMON_WORKING_DIR_="${HOME}/_service_daemon"
 _DAEMON_USER_="evg"
 _DAEMON_PORT_="2022"
 _DAEMON_HOST_="localhost"
@@ -88,9 +84,6 @@ const
 #************************************************************
 function showConfig() {
   debug "_VERSION_                    = ${_VERSION_}"
-  debug "_USER_ADM_                   = ${_USER_ADM_}"
-  debug "_USER_REMOTE_                = ${_USER_REMOTE_}"
-  debug "_USER_REVERSE_TUNNEL_        = ${_USER_REVERSE_TUNNEL_}"
   debug "_SERVICE_NAME_               = ${_SERVICE_NAME_}"
   debug "_SERVICE_FILE_               = ${_SERVICE_FILE_}"
   debug "_DAEMON_PID_FILE_            = ${_DAEMON_PID_FILE_}"
@@ -139,6 +132,7 @@ function help() {
   echo "Params:"
   echo "  -m | -mode     режим [${_CONST_MODES}]"
   echo "  -v | -debug"
+  echo "  -cli           подсветка текста"
   echo "  -mode service [-install -start -stop -status -uninstall]"
   echo "        Работа с демоном"
   echo "  -mode [station server proxy]   настройка машин"
@@ -149,9 +143,9 @@ function help() {
 
 # checks if the user is created
 function existUser() {
-  local user=$1
-  grep "${user}:" /etc/passwd -q && info "Пользователь '${user}' существует" && return 0
-  info "Пользователь '${user}' не существует"
+  local u=$1
+  grep "${u}:" /etc/passwd -q && info "Пользователь '${u}' существует" && return 0
+  info "Пользователь '${u}' не существует"
   return 1
 }
 
@@ -181,14 +175,11 @@ function checkSshConnect() {
 
 function debug() {
   [ -z "$_DEBUG_" ] && return 0
-  [ "$_CLI_" ] && echo -e "${_DARK_GRAY_}$*${_NC_}"
-  [ -z "$_CLI_" ] && echo -e "$*"
-  return 0
+  [ "$_CLI_" ] && echo -e "${_DARK_GRAY_}$*${_NC_}" || echo -e "$*"
 }
 function info() {
-  [ "$_CLI_" ] && echo -e "${_GREEN_}$*${_NC_}"
-  [ -z "$_CLI_" ] && echo -e "$*"
-  return 0
+  local s="[INFO] $*"
+  [ "$_CLI_" ] && echo -e "${_GREEN_}${s}${_NC_}" || echo -e "$s"
 }
 function warn() {
   echo -e "${_YELLOW_}$*${_NC_}"
@@ -197,9 +188,7 @@ function err() {
   echo -e "$*"
 }
 function outOk() {
-  [ "$_CLI_" ] && echo -e "${_LIGHT_GREEN_}$*${_NC_}"
-  [ -z "$_CLI_" ] && echo -e "$*"
-  return 0
+  [ "$_CLI_" ] && echo -e "${_LIGHT_GREEN_}$*${_NC_}" || echo -e "$*"
 }
 
 function colors() {
@@ -251,6 +240,7 @@ function parseArgs() {
     "-uninstall") _ARG_UNINSTALL_=true ;;
     "-status") _ARG_STATUS_=true ;;
     "-check-ssh") _ARG_CHECK_SSH_=true ;;
+    "-cli") _CLI_=true ;;
     *) prev=$p ;;
     esac
   done
@@ -297,12 +287,13 @@ function setup() {
   [ -z "$_DAEMON_LOGFILE_FILE_" ] && _DAEMON_LOGFILE_FILE_="${_DAEMON_WORKING_DIR_:?}/${_DAEMON_LOGFILE_NAME_}"
 
   case $_MODE_ in
-  "$_CONST_MODE_INIT_STATION_" | "$_CONST_MODE_INIT_SERVER_" | "$_CONST_MODE_INIT_PROXY_")
-    #    _TASK_USER_=true
-#    _TASK_SSH_CONFIG_=true
-    #    _TASK_SERVICE_INSTALL_=true
+  "$_CONST_MODE_INIT_SERVER_" | "$_CONST_MODE_INIT_PROXY_")
+    _TASK_USER_=true
+    _TASK_SSH_CONFIG_=true
     [ "$_ARG_CHECK_SSH_" ] && _TASK_SSH_CHECK_CONN_=true
     ;;
+
+  "$_CONST_MODE_INIT_SERVER_") _TASK_SERVICE_INSTALL_=true ;;
 
     # Сервис systemctl
   "$_CONST_MODE_SERVICE_")
@@ -315,7 +306,7 @@ function setup() {
   esac
 
   case $_MODE_ in
-  "$_CONST_MODE_INIT_STATION_") ;;
+  "$_CONST_MODE_INIT_STATION_") _TASK_SSH_CONFIG_=true;;
 
   esac
 
@@ -336,35 +327,63 @@ unset setup
 #************************************************************
 # USERS                                                     *
 #************************************************************
-function taskUser() {
-  debug "_TASK_USER_"
-  if [ "$_USER_ADM_" ]; then
-    info "ПРОВЕРКА ПОЛЬЗОВАТЕЛЯ '${_USER_ADM_}'"
-    existUser "$_USER_ADM_"
-    if [ $? -eq 1 ]; then
-      info "Создать пользователя '${_USER_ADM_}'"
+function taskUserServer() {
+  local user
+  debug "server: users"
 
-      # добавить sudo
-      # добавить публичные ключи для доступа по ssh
-      echo "no"
-    fi
+  user="adm"
+  existUser "$user"
+  if [ $? -eq 1 ]; then
+    info "Создать пользователя '${user}'"
+
+    # добавить sudo
+    # добавить публичные ключи для доступа по ssh
+    echo "no"
   fi
 
-  if [ "$_USER_REMOTE_" ]; then
-    info "ПРОВЕРКА ПОЛЬЗОВАТЕЛЯ '${_USER_REMOTE_}'"
-    existUser "$_USER_REMOTE_"
-    if [ $? -eq 1 ]; then
-      info "Создать пользователя '${_USER_REMOTE_}'"
+  user="remote"
+  existUser "$user"
+  if [ $? -eq 1 ]; then
+    info "Создать пользователя '${user}'"
 
-      # добавить sudo
-      # добавить публичные ключи для доступа по ssh
-      echo "no"
-    fi
+    # добавить sudo
+    # добавить публичные ключи для доступа по ssh
+    echo "no"
   fi
 }
+[ "$_TASK_USER_" ]  && [ "$_MODE_" == "$_CONST_MODE_INIT_SERVER_" ] && taskUserServer
+unset taskUserServer
 
-[ "$_TASK_USER_" ] && taskUser
-unset taskUser
+
+function taskUserProxy() {
+  local user
+  debug "proxy: users"
+
+  user="proxy-adm"
+  info "ПРОВЕРКА ПОЛЬЗОВАТЕЛЯ '${user}'"
+  existUser "$user"
+  if [ $? -eq 1 ]; then
+    info "Создать пользователя '${user}'"
+
+    # добавить sudo
+    # добавить публичные ключи для доступа по ssh
+    echo "no"
+  fi
+
+  user="proxy-adm"
+
+  info "ПРОВЕРКА ПОЛЬЗОВАТЕЛЯ '${user}'"
+  existUser "$user"
+  if [ $? -eq 1 ]; then
+    info "Создать пользователя '${user}'"
+
+    # добавить sudo
+    # добавить публичные ключи для доступа по ssh
+    echo "no"
+  fi
+}
+[ "$_TASK_USER_" ] && [ "$_MODE_" == "$_CONST_MODE_INIT_PROXY_" ] && taskUserProxy
+unset taskUserProxy
 
 #************************************************************
 # SSH KEYS                                                  *
