@@ -35,6 +35,7 @@ Host europe eu
   IdentityFile ~/.ssh/id_rsa
 
 # -- VIA TUNNEL
+# before start: `ssh -L 4022:localhost:4022 ru`
 Host hldg
   HostName     localhost
   Port         4022
@@ -67,13 +68,13 @@ Host home-remote
   User         remote
   IdentityFile ~/.ssh/id_rsa
 
-Host srv1-remote
+Host srv1-home srv1-remote
   HostName     localhost
   Port         2030
   User         remote
   IdentityFile ~/.ssh/id_rsa
 
-Host srv2-remote
+Host srv2-home srv2-remote
   HostName     localhost
   Port         2034
   User         remote
