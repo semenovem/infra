@@ -31,4 +31,12 @@ ss -ltupn
 # Настройка разрешений на порт
 sudo ufw allow from 192.168.33.0/24 to any port 5900
 
+# открытый дескриптор директории
+lsof | grep /Users/sem/mnt/srv1
 
+# Используемые порты
+sudo netstat -nap | grep 2022
+
+sudo netstat -lntup
+sudo lsof -i
+sudo ss -lntu
