@@ -20,12 +20,12 @@ _URL_SSH_CONFIG_="https://raw.githubusercontent.com/semenovem/environment/master
 _SERVICE_NAME_="crone-shell"
 _MODE_=
 _DEBUG_=
+_CLI_=
 _SHELL_=$(which bash) || (echo "ERR: which bash" && exit 1)
 _VERSION_="1.0"
 
 _DAEMON_TIMEOUT_SLEEP_=86400 # 3600s * 24h
 _SERVICE_FILE_=
-_CLI_=
 _SYSTEMMD_DIR_="/etc/systemd/system"
 
 _SSH_PROXY_TUNNEL_RU_="ru-tunnel"
@@ -100,6 +100,7 @@ function showConfig() {
 
   debug "_MODE_                       = ${_MODE_}"
   debug "_DEBUG_                      = ${_DEBUG_}"
+  debug "_CLI_                        = ${_CLI_}"
   debug "_ARG_CONFIRM_YES_            = ${_ARG_CONFIRM_YES_}"
   debug "_ARG_START_                  = ${_ARG_START_}"
   debug "_ARG_STOP_                   = ${_ARG_STOP_}"
@@ -266,10 +267,6 @@ function configCheck() {
 
   [ -z "$_SHELL_" ] && err "Не найден bash" && ERR=1
 
-  mkdir -p "$_DAEMON_WORKING_DIR_"
-  [ $? -ne 0 ] && ERR=1
-
-
   [ "$ERR" ] && showConfig && err "Launch aborted" && return 1
   return 0
 }
@@ -289,7 +286,7 @@ function setup() {
   case $_MODE_ in
   "$_CONST_MODE_INIT_SERVER_" | "$_CONST_MODE_INIT_PROXY_")
     _TASK_USER_=true
-    _TASK_SSH_CONFIG_=true
+#    _TASK_SSH_CONFIG_=true
     [ "$_ARG_CHECK_SSH_" ] && _TASK_SSH_CHECK_CONN_=true
     ;;
 
@@ -365,12 +362,14 @@ function taskUserProxy() {
   if [ $? -eq 1 ]; then
     info "Создать пользователя '${user}'"
 
+    sudo useradd -m  -G root -s "$_SHELL_" -c "admin on proxy server" "$user"
+
     # добавить sudo
     # добавить публичные ключи для доступа по ssh
     echo "no"
   fi
 
-  user="proxy-adm"
+  user="proxy"
 
   info "ПРОВЕРКА ПОЛЬЗОВАТЕЛЯ '${user}'"
   existUser "$user"
@@ -537,6 +536,9 @@ function connectSsh() {
 
 function taskDaemon() {
   debug "daemon"
+
+  mkdir -p "$_DAEMON_WORKING_DIR_"
+  [ $? -ne 0 ] && warn "Не создана директория ${_DAEMON_WORKING_DIR_}" && return 1
 
 # TODO для отладки
 #  _DEBUG_=true
