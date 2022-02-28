@@ -36,6 +36,7 @@ Host europe eu
   IdentityFile ~/.ssh/id_rsa
 
 # -- VIA TUNNEL
+# deprecated. movind use to alias of shell
 # before start: `ssh -L 4022:localhost:4022 ru`
 Host hldg
   HostName     localhost
