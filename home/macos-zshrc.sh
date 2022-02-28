@@ -24,10 +24,7 @@ unset file
 # TODO - сделать сравнение на добавленные функции и показать их, что бы не писать руками
 
 function help() {
-  echo ">>>>> functions ${_VERSION_}"
-  echo ">>>>> help"
-  echo ">>>>> hldg"
-  echo ">>>>> vtb_local_ip"
+  echo "ver:${_VERSION_} [help,hldg,vtb_local_ip]"
 }
 
 help
