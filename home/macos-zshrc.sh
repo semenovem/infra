@@ -12,11 +12,11 @@ function chrome() {
 }
 
 for file in ${_DIR_}/macos/*.sh; do
-  source "${_DIR_}/macos/hldg.sh"
+  source "${_DIR_}/macos"/*.sh
 done
 
 for file in ${_DIR_}/common/*.sh; do
-  source "${_DIR_}/macos/hldg.sh"
+  source "${_DIR_}/common"/*.sh
 done
 
 unset file
@@ -24,7 +24,7 @@ unset file
 # TODO - сделать сравнение на добавленные функции и показать их, что бы не писать руками
 
 function help() {
-  echo "ver:${_VERSION_} [help,hldg,vtb_local_ip]"
+  echo "ver:${_VERSION_} [help,hldg,vtb_local_ip,cert,cert-req]"
 }
 
 help
