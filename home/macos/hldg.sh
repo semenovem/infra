@@ -19,9 +19,9 @@ function hldg() {
     done
   fi
 
-  ssh -p 4022 -i ~/.ssh/id_rsa_vtb_hldg hldgadm@localhost
+  ssh hldg
 
-  req="ssh -p 4022 -i /Users/sem/.ssh/id_rsa_vtb_hldg hldgadm@localhost"
+  req="ssh hldg"
   ps -A | grep "$req" | grep -vq grep && return 0
 
   pids=$(ps -A | grep "$cmd" | grep -v grep | awk '{print $1}')
