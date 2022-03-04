@@ -2,7 +2,11 @@
 install git 
 git config --global user.name "..."
 git config --global user.email "..."
+git config --global credential.helper 'cache --timeout=3600'
 ```
+
+# Настройка сервера git + gitlab
+https://habr.com/ru/company/ruvds/blog/359216/
 
 install node
 
