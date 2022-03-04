@@ -71,8 +71,7 @@ docker run -it --rm \
 
 docker commit "ya-cloud-builder" "ya.cloud:1"
 
-
-docker run -it --rm \
+docker run -it -d \
   --name "ya-cloud" \
   -v "/mnt/raid4t_hard/yandex.cloud/data/:/ya.cloud:rw" \
   -v "/mnt/raid4t_hard/yandex.cloud/config/:/ya.config:rw" \
@@ -84,4 +83,3 @@ docker run -it --rm \
   "ya.cloud:1" bash
 
 yandex-disk setup
-
