@@ -11,7 +11,7 @@ PasswordAuthentication no
 systemctl restart sshd.service
 
 
-#-------
+############################################################
 # SSH: Run Commands or Scripts Remotely
 # https://www.shellhacks.com/ru/ssh-execute-remote-command-script-linux/
 
@@ -31,7 +31,7 @@ EOF
 
 ssh root@192.168.1.1 'bash -s' < script.sh
 
-# -------------------------------------
+############################################################
 # ssh tunnel
 # https://qastack.ru/ubuntu/947841/start-autossh-on-system-startup
 # http://rus-linux.net/MyLDP/sec/reverse-SSH-tunnel.html
