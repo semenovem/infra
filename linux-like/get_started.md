@@ -12,6 +12,7 @@ install node
 
 
 npm install --global yarn
++ http-server
 
 # gem
 sudo gem update --system

@@ -11,15 +11,21 @@ function chrome() {
   open -a Google\ Chrome
 }
 
-for file in ${_DIR_}/macos/*.sh; do
-  source "${_DIR_}/macos"/*.sh
+if [ -z "$(which realpath)" ] || [ "$(which realpath | grep 'not found')" ]; then
+  function realpath() {
+      [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+  }
+fi
+
+for file in "${_DIR_}/macos"/*.sh; do
+  # shellcheck disable=SC1090
+  source "$file"
 done
 
-for file in ${_DIR_}/common/*.sh; do
-  source "${_DIR_}/common"/*.sh
+for file in "${_DIR_}/common"/*.sh; do
+  # shellcheck disable=SC1090
+  source "$file"
 done
-
-unset file
 
 # TODO - сделать сравнение на добавленные функции и показать их, что бы не писать руками
 
@@ -29,10 +35,4 @@ function help() {
 
 help
 
-if [ -z "$(which realpath)" ] || [ "$(which realpath | grep 'not found')" ]; then
-  function realpath() {
-      [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
-  }
-fi
-
-unset _DIR_ _VERSION_
+unset _DIR_ _VERSION_ file

@@ -2,6 +2,7 @@
 exit
 
 # install https://brew.sh/
+# todo linux-like/get_started.md
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 

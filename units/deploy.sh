@@ -20,7 +20,8 @@ _URL_SSH_CONFIG_="https://raw.githubusercontent.com/semenovem/environment/master
 _SERVICE_NAME_="crone-shell"
 _MODE_=
 _DEBUG_=
-_CLI_=
+_MAIN_CMD_=
+_CLI_=true
 _SHELL_=$(which bash) || (echo "ERR: which bash" && exit 1)
 _VERSION_="1.0"
 
@@ -42,7 +43,6 @@ _DAEMON_LOGFILE_NAME_="logfile.txt"
 _TASK_USER_=              # Создание пользователей
 _TASK_SSH_ACCESS=         # Настройка ssh доступов
 _TASK_SSH_KEYS=           # Настройка ssh ключей
-_TASK_SSH_CONFIG_=        # Настройка ssh конфигурации
 _TASK_SSH_CHECK_CONN_=    # Проверка подключения
 _TASK_SERVICE_INSTALL_=   # Установка сервиса
 _TASK_SERVICE_UNINSTALL_= # Удаление сервиса
@@ -66,9 +66,17 @@ function const() {
   _CONST_MODE_INIT_STATION_="station"
   _CONST_MODE_INIT_SERVER_="server"
   _CONST_MODE_INIT_PROXY_="proxy"
+
+  # deprecated
   _CONST_MODE_SERVICE_="service"
   _CONST_MODE_DAEMON_START_="daemon-start"
   _CONST_MODE_DAEMON_="daemon"
+
+  _CONST_CMD_UPD_SSH_CFG_="update-ssh-config"
+  _CONST_CMD_SERVICE_="service"
+  _CONST_CMD_DAEMON_START_="daemon-start"
+  _CONST_CMD_DAEMON_="daemon"
+
 
   _CONST_MODES="$_CONST_MODE_INIT_STATION_"
   _CONST_MODES="${_CONST_MODES} ${_CONST_MODE_INIT_SERVER_}"
@@ -83,63 +91,71 @@ const
 # COMMON                                                    *
 #************************************************************
 function showConfig() {
-  debug "_VERSION_                    = ${_VERSION_}"
-  debug "_SERVICE_NAME_               = ${_SERVICE_NAME_}"
-  debug "_SERVICE_FILE_               = ${_SERVICE_FILE_}"
-  debug "_DAEMON_PID_FILE_            = ${_DAEMON_PID_FILE_}"
-  debug "_DAEMON_WORKING_DIR_         = ${_DAEMON_WORKING_DIR_}"
-  debug "_DAEMON_USER_                = ${_DAEMON_USER_}"
-  debug "_DAEMON_PORT_                = ${_DAEMON_PORT_}"
-  debug "_DAEMON_HOST_                = ${_DAEMON_HOST_}"
-  debug "_SSH_PROXY_TUNNEL_RU_        = ${_SSH_PROXY_TUNNEL_RU_}"
-  debug "_SSH_PROXY_TUNNEL_EU_        = ${_SSH_PROXY_TUNNEL_EU_}"
-  debug "_DAEMON_LOGFILE_NAME_        = ${_DAEMON_LOGFILE_NAME_}"
-  debug "_DAEMON_LOGFILE_FILE_        = ${_DAEMON_LOGFILE_FILE_}"
-  debug "_DAEMON_TIMEOUT_SLEEP_       = ${_DAEMON_TIMEOUT_SLEEP_}"
-  debug "ENV_DAEMON_PID_FILE          = ${ENV_DAEMON_PID_FILE}"
+  drawCfgItel "_VERSION_                = ${_VERSION_}"
+  drawCfgItel "_CMD_                    = ${_MAIN_CMD_}"
+  drawCfgItel "_DEBUG_                  = ${_DEBUG_}"
+  drawCfgItel "_CONFIRM_YES_            = ${_CONFIRM_YES_}"
+  drawCfgItel "_CLI_                    = ${_CLI_}"
+  drawCfgItel "_SSH_CONFIG_             = ${_SSH_CONFIG_}"
 
-  debug "_MODE_                       = ${_MODE_}"
-  debug "_DEBUG_                      = ${_DEBUG_}"
-  debug "_CLI_                        = ${_CLI_}"
-  debug "_ARG_CONFIRM_YES_            = ${_ARG_CONFIRM_YES_}"
-  debug "_ARG_START_                  = ${_ARG_START_}"
-  debug "_ARG_STOP_                   = ${_ARG_STOP_}"
-  debug "_ARG_STATUS_                 = ${_ARG_STATUS_}"
-  debug "_ARG_INSTALL_                = ${_ARG_INSTALL_}"
-  debug "_ARG_UNINSTALL_              = ${_ARG_UNINSTALL_}"
-  debug "_ARG_CHECK_SSH_              = ${_ARG_CHECK_SSH_}"
+  drawCfgItel "_SERVICE_NAME_           = ${_SERVICE_NAME_}"
+  drawCfgItel "_SERVICE_FILE_           = ${_SERVICE_FILE_}"
+  drawCfgItel "_DAEMON_PID_FILE_        = ${_DAEMON_PID_FILE_}"
+  drawCfgItel "_DAEMON_WORKING_DIR_     = ${_DAEMON_WORKING_DIR_}"
+  drawCfgItel "_DAEMON_USER_            = ${_DAEMON_USER_}"
+  drawCfgItel "_DAEMON_PORT_            = ${_DAEMON_PORT_}"
+  drawCfgItel "_DAEMON_HOST_            = ${_DAEMON_HOST_}"
+  drawCfgItel "_SSH_PROXY_TUNNEL_RU_    = ${_SSH_PROXY_TUNNEL_RU_}"
+  drawCfgItel "_SSH_PROXY_TUNNEL_EU_    = ${_SSH_PROXY_TUNNEL_EU_}"
+  drawCfgItel "_DAEMON_LOGFILE_NAME_    = ${_DAEMON_LOGFILE_NAME_}"
+  drawCfgItel "_DAEMON_LOGFILE_FILE_    = ${_DAEMON_LOGFILE_FILE_}"
+  drawCfgItel "_DAEMON_TIMEOUT_SLEEP_   = ${_DAEMON_TIMEOUT_SLEEP_}"
+  drawCfgItel "ENV_DAEMON_PID_FILE      = ${ENV_DAEMON_PID_FILE}"
 
-  debug "_TASK_USER_                  = ${_TASK_USER_}"
-  debug "_TASK_SSH_ACCESS             = ${_TASK_SSH_ACCESS}"
-  debug "_TASK_SSH_CONFIG_            = ${_TASK_SSH_CONFIG_}"
-  debug "_TASK_SSH_KEYS               = ${_TASK_SSH_KEYS}"
-  debug "_TASK_SSH_CHECK_CONN_        = ${_TASK_SSH_CHECK_CONN_}"
-  debug "_TASK_SERVICE_INSTALL_       = ${_TASK_SERVICE_INSTALL_}"
-  debug "_TASK_SERVICE_START_         = ${_TASK_SERVICE_START_}"
-  debug "_TASK_SERVICE_STOP_          = ${_TASK_SERVICE_STOP_}"
-  debug "_TASK_SERVICE_STATUS_        = ${_TASK_SERVICE_STATUS_}"
+  drawCfgItel "_MODE_                   = ${_MODE_}"
+  drawCfgItel "_ARG_START_              = ${_ARG_START_}"
+  drawCfgItel "_ARG_STOP_               = ${_ARG_STOP_}"
+  drawCfgItel "_ARG_STATUS_             = ${_ARG_STATUS_}"
+  drawCfgItel "_ARG_INSTALL_            = ${_ARG_INSTALL_}"
+  drawCfgItel "_ARG_UNINSTALL_          = ${_ARG_UNINSTALL_}"
+  drawCfgItel "_ARG_CHECK_SSH_          = ${_ARG_CHECK_SSH_}"
+
+  drawCfgItel "_TASK_USER_              = ${_TASK_USER_}"
+  drawCfgItel "_TASK_SSH_ACCESS         = ${_TASK_SSH_ACCESS}"
+  drawCfgItel "_TASK_SSH_KEYS           = ${_TASK_SSH_KEYS}"
+  drawCfgItel "_TASK_SSH_CHECK_CONN_    = ${_TASK_SSH_CHECK_CONN_}"
+  drawCfgItel "_TASK_SERVICE_INSTALL_   = ${_TASK_SERVICE_INSTALL_}"
+  drawCfgItel "_TASK_SERVICE_START_     = ${_TASK_SERVICE_START_}"
+  drawCfgItel "_TASK_SERVICE_STOP_      = ${_TASK_SERVICE_STOP_}"
+  drawCfgItel "_TASK_SERVICE_STATUS_    = ${_TASK_SERVICE_STATUS_}"
 }
 
 function help() {
   echo "Usage:"
-  echo "        $0 -mode [${_CONST_MODES}] [-options]"
+  echo "    ${_CONST_CMD_UPD_SSH_CFG_}   обновить конфигурацию .ssh/config"
+  echo "    ${_CONST_CMD_SERVICE_}             операции с сервисом"
+  echo "    ${_CONST_CMD_DAEMON_START_}        запуск демона"
+  echo "    ${_CONST_CMD_DAEMON_}              демон"
 
-  echo "Examples:"
-  echo "   $0 -v -mode station"
-  echo "   $0 -v -mode server"
-  echo "   $0 -v -mode service -install -start -status"
-  echo "   $0 -v -mode daemon-start"
+  echo "Common params:"
+  echo "    -v | -debug"
+  echo "    -cli           подсветка текста"
 
-  echo "Params:"
-  echo "  -m | -mode     режим [${_CONST_MODES}]"
-  echo "  -v | -debug"
-  echo "  -cli           подсветка текста"
-  echo "  -mode service [-install -start -stop -status -uninstall]"
-  echo "        Работа с демоном"
-  echo "  -mode [station server proxy]   настройка машин"
-  echo "        -check-ssh   проверить подключение ssh"
-  echo "  -mode daemon-start"
-  echo "        для запуска демона (shell script)"
+#  echo "Examples:"
+#  echo "  -v -mode station"
+#  echo "  -v -mode server"
+#  echo "  -v -mode service -install -start -status"
+#  echo "  -v -mode daemon-start"
+#  echo "  -m | -mode     режим [${_CONST_MODES}]"
+#  echo "  -modeƒ [${_CONST_MODES}] [-options]"
+#
+#
+#  echo "  -mode service [-install -start -stop -status -uninstall]"
+#  echo "        Работа с демоном"
+#  echo "  -mode [station server proxy]   настройка машин"
+#  echo "        -check-ssh   проверить подключение ssh"
+#  echo "  -mode daemon-start"
+#  echo "        для запуска демона (shell script)"
 }
 
 # checks if the user is created
@@ -183,13 +199,18 @@ function info() {
   [ "$_CLI_" ] && echo -e "${_GREEN_}${s}${_NC_}" || echo -e "$s"
 }
 function warn() {
-  echo -e "${_YELLOW_}$*${_NC_}"
+  local s="[INFO] $*"
+  [ "$_CLI_" ] && echo -e "${_YELLOW_}${s}${_NC_}" || echo -e "$s"
 }
 function err() {
-  echo -e "$*"
+  local s="[ERROR] $*"
+  [ "$_CLI_" ] && echo -e "${_RED_}${s}${_NC_}" || echo -e "$s"
 }
 function outOk() {
   [ "$_CLI_" ] && echo -e "${_LIGHT_GREEN_}$*${_NC_}" || echo -e "$*"
+}
+function drawCfgItel() {
+  [ "$_CLI_" ] && echo -e "${_CYAN_}$*${_NC_}" || echo -e "$*"
 }
 
 function colors() {
@@ -221,7 +242,36 @@ unset colors
 # PARAMETER PARSING                                         *
 #************************************************************
 function parseArgs() {
-  local prev p
+  local prev p has
+
+  case $1 in
+    "$_CONST_CMD_UPD_SSH_CFG_")
+      has=1
+      _MAIN_CMD_="$_CONST_CMD_UPD_SSH_CFG_"
+      ;;
+    "$_CONST_CMD_SERVICE_") _MAIN_CMD_="$_CONST_CMD_SERVICE_"; has=1 ;;
+    "$_CONST_CMD_DAEMON_START_") _MAIN_CMD_="$_CONST_CMD_DAEMON_START_"; has=1 ;;
+    "$_CONST_CMD_DAEMON_") _MAIN_CMD_="$_CONST_CMD_DAEMON_"; has=1 ;;
+    *) echo "_____________" ;;
+  esac
+
+  [ "$has" ] && shift
+
+  [ -z "$_MAIN_CMD_" ] \
+    && err "parameter parsing. operation not submittedd"\
+    && help \
+    && return 1
+
+  # common parametrs
+  for p in "$@"; do
+    case $p in
+    "-debug" | "-v") _DEBUG_=true ;;
+    "-y" | "-yes") _CONFIRM_YES_=true ;;
+    "-cli") _CLI_=true ;;
+    *) prev=$p ;;
+    esac
+  done
+
   for p in "$@"; do
     if [ "$prev" ]; then
       case $prev in
@@ -246,33 +296,34 @@ function parseArgs() {
     esac
   done
 }
-parseArgs "$@"
+
+parseArgs "$@" || exit 1
 unset parseArgs
 
 #************************************************************
 # CHECK                                                     *
 #************************************************************
-function configCheck() {
-  local ERR it mod
+#function configCheck() {
+#  local ERR it mod
+#
+#  [ -z "$_MODE_" ] && ERR=true && help
+#
+#  if [ "$_MODE_" ]; then
+#    for it in $ $_CONST_MODES; do
+#      [ "$_MODE_" == "$it" ] && mod=true
+#    done
+#    [ -z "$mod" ] && ERR=true \
+#      && err "incorrect mode specified -mode='$_MODE_' must -mode=[${_CONST_MODES}]"
+#  fi
+#
+#  [ -z "$_SHELL_" ] && err "Не найден bash" && ERR=1
+#
+#  [ "$ERR" ] && showConfig && err "Launch aborted" && return 1
+#  return 0
+#}
 
-  [ -z "$_MODE_" ] && ERR=true && help
-
-  if [ "$_MODE_" ]; then
-    for it in $ $_CONST_MODES; do
-      [ "$_MODE_" == "$it" ] && mod=true
-    done
-    [ -z "$mod" ] && ERR=true \
-      && err "incorrect mode specified -mode='$_MODE_' must -mode=[${_CONST_MODES}]"
-  fi
-
-  [ -z "$_SHELL_" ] && err "Не найден bash" && ERR=1
-
-  [ "$ERR" ] && showConfig && err "Launch aborted" && return 1
-  return 0
-}
-
-configCheck || exit 1
-unset configCheck
+#configCheck || exit 1
+#unset configCheck
 
 #************************************************************
 # SETUP                                                     *
@@ -286,7 +337,6 @@ function setup() {
   case $_MODE_ in
   "$_CONST_MODE_INIT_SERVER_" | "$_CONST_MODE_INIT_PROXY_")
     _TASK_USER_=true
-#    _TASK_SSH_CONFIG_=true
     [ "$_ARG_CHECK_SSH_" ] && _TASK_SSH_CHECK_CONN_=true
     ;;
 
@@ -300,11 +350,6 @@ function setup() {
     [ "$_ARG_INSTALL_" ] && _TASK_SERVICE_INSTALL_=true
     [ "$_ARG_UNINSTALL_" ] && _TASK_SERVICE_UNINSTALL_=true
     ;;
-  esac
-
-  case $_MODE_ in
-  "$_CONST_MODE_INIT_STATION_") _TASK_SSH_CONFIG_=true;;
-
   esac
 
   [ "$_ARG_DEBUG_" ] && _DEBUG_=true
@@ -405,7 +450,7 @@ function taskSshConfig() {
   # TODO добавить запрос на перезапись файла, если в интерактивном режиме
   cp -f "$tmp" "$_SSH_CONFIG_"
 }
-[ "$_TASK_SSH_CONFIG_" ] && taskSshConfig
+[ "$_MAIN_CMD_" = "$_CONST_CMD_UPD_SSH_CFG_" ] && taskSshConfig
 unset taskSshConfig
 
 #************************************************************

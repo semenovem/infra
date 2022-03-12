@@ -1,11 +1,20 @@
 #!/bin/zsh
 
-# Содержимое PEM сертификата
-sx() {
-  [ -z $1 ] && echo "передай аргумент $1" && return 1
-  [ ! -f $1 ] && echo "Это не файл '$1'" && return 1
-  openssl x509 -noout -text -in "$1"
+_VERSION_="1.0"
+_DIR_=$1
+
+for file in "${_DIR_}/common"/*.sh; do
+  # shellcheck disable=SC1090
+  source "$file"
+done
+
+function help() {
+  echo "ver:${_VERSION_} [help,cert]"
 }
+
+help
+
+unset file _DIR_ _VERSION_
 
 #PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] \[\e[1;37m\]'
 

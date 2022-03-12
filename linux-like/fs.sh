@@ -2,6 +2,7 @@
 
 exit
 
+# диск в ram
 mkdir /mnt/tmpfs/
 chmod 777 /mnt/tmpfs/
 sudo mount -t tmpfs -o size=xxxM tmpfs /mnt/tmpfs/
@@ -11,7 +12,7 @@ sudo mount -o remount -o size=yyyM /mnt/tmpfs/
 
 
 #----------------
-# davfs
+# davfs (для ya | mail дисков(
 https://help.ubuntu.ru/wiki/davfs2
 
 

@@ -1,0 +1,15 @@
+# v1.1
+# ----------------------------------
+# FOR SERVERS
+# ----------------------------------
+Host ru-tunnel
+  HostName     130.255.170.133
+  User         usr-rev-tunnel
+  # User         user0
+  IdentityFile ~/.ssh/id_rsa
+
+Host eu-tunnel
+  HostName     5.45.120.70
+  User         usr-rev-tunnel
+  # User         user0
+  IdentityFile ~/.ssh/id_rsa

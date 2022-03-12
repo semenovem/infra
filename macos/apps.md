@@ -4,6 +4,9 @@ http://imagemagick.org/
 
 monosnap
 
+local dns
+https://thekelleys.org.uk/dnsmasq/doc.html
+
 
 
 ###### X11 for Mac

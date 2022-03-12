@@ -1,3 +1,5 @@
+// для удаления в google photos
+
 document.addEventListener("keyup", function (e) {
   // if (e.altKey && e.code !== "KeyD") {
   if (e.code !== "KeyD") {
