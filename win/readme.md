@@ -25,5 +25,10 @@ Set objShell = CreateObject("Shell.Application")
 objShell.WindowsSecurity
 
 
-# restart
+# restart / shutdown
 C:\Windows\System32\shutdown.exe -r -t 0
+C:\Windows\System32\shutdown.exe -s -t 0
+
+
+# off password on startup screen
+netplwiz
