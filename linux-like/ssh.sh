@@ -6,8 +6,8 @@ service ssh start
 # and need create user for access at ssh
 
 sudo vim /etc/ssh/sshd_config
-PasswordAuthentication yes
 PasswordAuthentication no
+PermitRootLogin no
 systemctl restart sshd.service
 
 
