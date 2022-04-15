@@ -1,4 +1,6 @@
 
+#https://serveradmin.ru/centos-nastroyka-servera/
+
 # routing setup
 #https://www.dmosk.ru/miniinstruktions.php?mini=router-centos
 
