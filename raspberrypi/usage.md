@@ -9,6 +9,9 @@ http://dmitrysnotes.ru/raspberry-pi-3-udalennoe-upravlenie-cherez-ssh-i-vnc
 
 http://dmitrysnotes.ru/raspberry-pi-3-obzor-i-nachalo-raboty
 
+# wifi point
+https://raspberrypi.ru/wireless_access_point
+
 
 # default
 # user: pi
