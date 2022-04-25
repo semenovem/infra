@@ -23,3 +23,7 @@ sudo dd if=Users/sem/Downloads/2018-10-09-raspbian-stretch-lite.img of=/dev/disk
 # wait about ~15-30 min
 
 sudo diskutil eject /dev/disk4
+
+
+#----- shrink of image
+# https://github.com/Drewsif/PiShrink
