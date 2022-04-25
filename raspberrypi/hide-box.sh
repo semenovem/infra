@@ -3,7 +3,7 @@
 # wifi point
 https://raspberrypi.ru/wireless_access_point
 
-sudo apt -y install hostapd dnsmasq
+sudo apt -y install hostapd dnsmasq openvpn
 sudo systemctl unmask hostapd
 sudo systemctl enable hostapd
 
@@ -20,6 +20,7 @@ sudo vim /etc/sysctl.d/routed-ap.conf
 net.ipv4.ip_forward=1
 
 # eth0 = tun0
+# ls -l /etc/iptables/
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
 
