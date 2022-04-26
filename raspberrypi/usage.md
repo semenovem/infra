@@ -21,7 +21,7 @@ sudo apt update
 sudo apt dist-upgrade
 sudo apt clean
 
-sudo apt-get install git-core
+sudo apt install git-core
 sudo apt install libraspberrypi-bin
 
 # режим настроек
@@ -32,12 +32,8 @@ vcgencmd measure_temp
 
 
 # printer (didn't do)
-apt-get install printer-driver-all
-
-# 
-sudo raspi-config
+apt install printer-driver-all
 
 # vnc server, but it seems to come pre-configured
-sudo apt-get update
-sudo apt-get install realvnc-vnc-server
+sudo apt install realvnc-vnc-server
 vncserver :1
