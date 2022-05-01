@@ -69,3 +69,13 @@ source $HOME/.bashrc
 ------------------
 # docker
 https://1cloud.ru/help/linux/instruktsiya-docker-na-centos7
+
+
+# for docker centos:centos8
+
+sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-*
+sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*
+
+dnf install centos-release-stream -y
+dnf swap centos-{linux,stream}-repos -y
+dnf distro-sync -y
