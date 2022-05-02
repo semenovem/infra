@@ -14,8 +14,13 @@ exit 0
 
 yum update
 yum upgrade
-yum -y install squid squid-common httpd-tools net-tools lsof bind-utils
+yum -y install \
+  squid squid-common httpd-tools net-tools lsof bind-utils vnstat
 
+
+# ################################
+# network traffic monitor
+vnstat -u -i eth0
 
 # ################################
 # USER
