@@ -12,10 +12,11 @@
 
 exit 0
 
-yum update
-yum upgrade
+yum -y install epel-release
+yum -y update
+yum - upgrade
 yum -y install \
-  squid squid-common httpd-tools net-tools lsof bind-utils vnstat
+  squid httpd-tools net-tools lsof bind-utils vnstat openvpn
 
 
 # ################################
@@ -88,9 +89,35 @@ systemctl enable squid
 
 # ################################
 # OPENVPN
-# TODO -
+
+
+vim /etc/sysctl.conf
+# add line:
+# net.ipv4.ip_forward = 1
+sudo sysctl -p
+
+# firewall:
+sudo firewall-cmd --get-active-zones
+sudo firewall-cmd --zone=trusted --add-interface=tun0
+sudo firewall-cmd --permanent --zone=trusted --add-interface=tun0
+sudo firewall-cmd --permanent --add-service openvpn
+sudo firewall-cmd --permanent --zone=trusted --add-service openvpn
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-services --zone=trusted
+sudo firewall-cmd --add-masquerade
+sudo firewall-cmd --add-masquerade --permanent
+sudo firewall-cmd --query-masquerade
+
+sudo firewall-cmd --permanent --direct --passthrough ipv4 \
+  -t nat -A POSTROUTING -s 10.8.0.0/24 \
+  -o $(ip route | awk '/^default via/ {print $5}') -j MASQUERADE
+sudo firewall-cmd --reload
+
+# for logs
+mkdir -p /var/log/openvpn
+
 sudo systemctl -f enable openvpn-server@server.service
-sudo systemctl restart openvpn-server@server.service
+sudo systemctl start openvpn-server@server.service
 sudo systemctl status openvpn-server@server.service
 
 
