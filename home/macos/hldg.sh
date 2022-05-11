@@ -1,6 +1,4 @@
-#!/bin/bash
-
-# only macos
+#!/bin/zsh
 
 # connect to work hldgapp20..
 function hldg() {

@@ -1,38 +1,19 @@
-#!/bin/bash
+#!/bin/zsh
 
 # for macos
-_VERSION_="1.0"
-_DIR_=$1
+__VERSION__="1.0"
+__DIR__="$(dirname $0)"
 
-[ ! -d "$_DIR_" ] &&
-  echo "[ERROR] directory '${_DIR_}' does not exist" >>"${HOME}/evg-logfile.logs"
+source "${__DIR__}/rc.sh"
 
-function chrome() {
-  open -a Google\ Chrome
-}
-
-if [ -z "$(which realpath)" ] || [ "$(which realpath | grep 'not found')" ]; then
-  function realpath() {
-      [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
-  }
-fi
-
-for file in "${_DIR_}/macos"/*.sh; do
-  # shellcheck disable=SC1090
-  source "$file"
-done
-
-for file in "${_DIR_}/common"/*.sh; do
-  # shellcheck disable=SC1090
-  source "$file"
-done
-
-# TODO - сделать сравнение на добавленные функции и показать их, что бы не писать руками
-
+# TODO - make a comparison on the added functions and show them, so as not to write by hand
 function help() {
-  echo "ver:${_VERSION_} [help,hldg,vtb_local_ip,cert,cert-req]"
+  echo "ver:${__VERSION__} [help, hldg, vtb_local_ip, cert, cert-req, myip]"
 }
+
+__resource__ "${__DIR__:?}/common"
+__resource__ "${__DIR__:?}/macos"
 
 help
 
-unset _DIR_ _VERSION_ file
+unset __DIR__ __VERSION__ __resource__

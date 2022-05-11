@@ -11,7 +11,3 @@ function cert() {
   grep -q "BEGIN CERTIFICATE REQUEST" "$file" \
     && (openssl req -noout -text -in "$1"; return $?)
 }
-
-function cert-req() {
-  echo "TODO work in progress"
-}

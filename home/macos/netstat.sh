@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # удаление локальных маршрутов рабочего vpn
 function vtb_local_ip() {

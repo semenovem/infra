@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-_VERSION_="1.0"
-_DIR_=$1
+__VERSION__="1.0"
+__DIR__="$(dirname $0)"
 
 for file in "${_DIR_}/common"/*.sh; do
   # shellcheck disable=SC1090
@@ -9,12 +9,12 @@ for file in "${_DIR_}/common"/*.sh; do
 done
 
 function help() {
-  echo "ver:${_VERSION_} [help,cert]"
+  echo "ver:${__VERSION__} [help,cert]"
 }
 
 help
 
-unset file _DIR_ _VERSION_
+unset file _DIR_ __VERSION__
 
 #PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] \[\e[1;37m\]'
 
