@@ -26,3 +26,6 @@ smartctl -x disk0
 
 # ----------- install
 brew install jq  # https://stedolan.github.io/
+
+# create a ram-disk ( 3 gb * 1024 * 2048 = 6291456 )
+diskutil erasevolume HFS+ 'ram_disk' `hdiutil attach -nobrowse -nomount ram://6291456`
