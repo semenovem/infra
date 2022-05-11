@@ -16,12 +16,19 @@ yum -y install epel-release
 yum -y update
 yum - upgrade
 yum -y install \
-  squid httpd-tools net-tools lsof bind-utils vnstat openvpn
+  squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf
 
 
 # ################################
 # network traffic monitor
 vnstat -u -i eth0
+vnstat  # show traffic
+
+# ################################
+# iperf
+iperf -s      # server (5001) open port on firewall
+iperf -c host # client
+
 
 # ################################
 # USER
