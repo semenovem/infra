@@ -1,12 +1,12 @@
-#!/bin/zsh
+#!/bin/bash
 
 __VERSION__="1.0"
 __LOGS_DIR__="${HOME}/_logs"
 __ERR_FILE__="${__LOGS_DIR__}/environment-errs.log"
 __SYNC_FILE="${__LOGS_DIR__}/env_sync_file.txt"
 
-__DIR__="$(dirname $0)"
 __OS__=$1
+__DIR__=$2
 
 function __err__ {
   echo -e "[ERROR] [$(date)] $@" >>"$__ERR_FILE__"
