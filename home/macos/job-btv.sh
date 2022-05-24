@@ -1,7 +1,8 @@
 #!/bin/zsh
 
 # connect to work hldgapp20..
-function hldg() {
+# depecated after 25/05/2022
+function hldg {
   local cmd="ssh -fNL 4022:localhost:4022 ru" TRY req pids
   ps -A | grep "$cmd" | grep -vq grep
 

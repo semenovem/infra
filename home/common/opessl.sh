@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function cert() {
+function cert {
   local file=$1
   [ -z "$file" ] && echo "pass an argument ${file}" && return 1
   [ ! -f "$file" ] && echo "this is not a file '${file}'"  && return 1
