@@ -4,8 +4,8 @@
 # Монтирование директории с паролем
 
 
-sudo apt-get update
-sudo apt-get install -y samba
+sudo apt update
+sudo apt install -y samba
 
 /etc/samba/smb.conf
 

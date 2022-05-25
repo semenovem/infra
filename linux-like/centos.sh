@@ -1,5 +1,14 @@
 #!/bin/bash
 
+exit 0
+
+# install cetnos8-stream
+# download iso
+# http://centos.activecloud.co.il/8-stream/isos/x86_64/
+
+# link to the repository in the installer
+# http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os/
+
 # common setup
 # https://serveradmin.ru/centos-nastroyka-servera/
 
@@ -10,7 +19,7 @@
 # https://www.dmosk.ru/instruktions.php?object=openvpn-centos-install
 # https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-an-openvpn-server-on-centos-8
 
-exit 0
+# --------------------------------------------------------------
 
 yum -y install epel-release
 yum -y update

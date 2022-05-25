@@ -258,7 +258,7 @@ function parseArgs() {
   [ "$has" ] && shift
 
   [ -z "$_MAIN_CMD_" ] \
-    && err "parameter parsing. operation not submittedd"\
+    && err "parameter parsing. operation not submitted"\
     && help \
     && return 1
 
