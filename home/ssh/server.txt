@@ -53,14 +53,6 @@ Host to-home
   User         remote
   IdentityFile ~/.ssh/id_rsa
 
-# port remote desktop protocol (RDP)
-Host forward-to-home
-  HostName     127.0.0.1
-  Port         2022
-  User         remote
-  LocalForward 3389 127.0.0.1:3389
-  IdentityFile ~/.ssh/id_ecdsa
-
 Host to-srv1
   HostName     localhost
   Port         2030

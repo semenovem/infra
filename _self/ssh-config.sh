@@ -101,6 +101,7 @@ if [ -n "$__ARG_FILE__" ]; then
   fi
 
   echo -e "$__SSH_CONFIG__" >"$__ARG_FILE__" || exit 1
+  chmod 0644 "$__ARG_FILE__"
   exit 0
 fi
 
