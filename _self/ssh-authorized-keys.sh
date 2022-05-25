@@ -125,6 +125,7 @@ fi
 
 if [ ! -f "$__ARG_FILE__" ]; then
   touch "$__ARG_FILE__" || exit 1
+  chmod 0600 "$__ARG_FILE__"
 fi
 
 function notContainKeyPub {

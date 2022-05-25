@@ -2,7 +2,7 @@
 
 ```
 # install
-git clone git@github.com:semenovem/environment.git _environment
+git clone https://github.com/semenovem/environment.git _environment
 
 # add 
 source "${HOME}/_environment/profile.sh" [-linux | -maccos] "${HOME}/_environment" 
