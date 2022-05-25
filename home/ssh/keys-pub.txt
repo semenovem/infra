@@ -1,0 +1,36 @@
+# public keys
+
+# work [workstation]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBLlqKam9sMUGEN629GpWOpDywtwKSlCnT26lFALkrAdvskn4BBW8j6KpcV2lJ5lBXepxU6yl8W/qJlzWdwZBjmmFmrqx9vXZeWKG01g4vJPVS9aFd9XYXPMFvFe6pjOlHw== sem@ibtv-8.local
+
+# laptop-13 [workstation]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBJ8xEA1vYvFiJbbj960sNcLIoo790KmFWSgxxAFvvq+AcdoEQW4/Tfv0rB0/bOZ9D2jYxMLxQnaLaXyvm3VUMmk816i/+EjyOGRJxZzo4LCgDhr9p74725fZ9uh7hElmEg== evg@evg13-15.local
+
+# mini [workstation]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
+
+# home [workstation]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGyQMkD1kkI6cti/Srn8FNX8RzjUjlKq6ynoROeXHvp9aJHqMdETId1PFiJQjfPNCNKlVVDA8lyTkn9GZtaQSi8l7NoUsPfgGvfnBVmJpy2MlnDW83QOAwUc6fDI5oM8Kg== evg@home
+
+# srv1 [workstation]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBIMVsRQ2FzF/qKVAwUwASQ2Tk1JBiCKHkphOdXYzUFmGHM5wWM8e/6UBD/zdfrz3Tgtv7M8X4wbA4cnC8TzPCY0xlklB35criLsE1L7IZRGP7ghNo9SPuRbtybIdNJQ1yg== adm@srv1
+
+# srv2 [workstation]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGm16LDGpzavDoaqmDwHRswdSXjCJlcSFNFPHsJONoZs6DKJaveJk4ndqrLjoUKMcCCDnkprTNSG03jwO0VQGEd/2IA8tuGIwNQW8G4dKPvxzoUiN37uhYj3w8khUIHAqA== adm@srv2
+
+# servers
+
+# rr1 [server]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHxkXrO9sNfrmnPF1Q3hDEmkxzaeXAjftsf43+mxXOPbRoXf4z4gcyNuPxuD8YCydhW+XaQBspdUoR31XB5VDIklUsVxMT31g+M0oiiWlFXuF1DdQ5ovcR/pIt5Ri3CmMg== adman@rr1
+
+# rr3 [server]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHCra2LmweOd+PIFkVQWFH4Gjwqj3Hflp0Jpx0to+VlXmlpy/RIb0AkK4AAbgROTqBPhZZFsNTFM4WopSoC0+GijI13LP9ATskDZHP4Hh1ziDEuESvLnugfIkS3Cip8SJQ== adman@rr3.evgio.dev
+
+# rr4 [server]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHJSfDV9l7r4MljCeXNHKxPlXcqTFofVqrSn+QTZSgSjD6kLN0t91i88ZT20s20vKvR5fkYMgSDEwKZz+Lr454fmsxQVLaAeDFAbtL4gtDFfqG/6FSREyngoAD+aRqqqOg== adman@rr4.evgio.dev
+
+# eu [server]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPpbwyFmbVB3ABe2rzyOd7Gm/oHr60swOw8B3J7pPBTsCSKjTNYcub+q4F7M44Q7Pam3VS4f0vgQkZMjduTWgvOQTWWAq/5Qv7jkNVX5tFhICFR2d3Bxas3Kj3/Vs/rkIg== adman@eu1.evgio.dev
+
+# spb [server]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBDWkMaRIg37gN+BG6jRHzlUvli5ivpQzCyGVjaJIXjxu/mGPs/tUzd+0j7nv8kdldJpiV2bWpNCtfXZmUrp/plJ3y+xK1+rYbwz7jZalszXvJtKhroKT2DjB49cTZWvEIA== adman@spb.evgio.dev

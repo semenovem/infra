@@ -6,6 +6,7 @@ alias myip='wget -qO myip http://www.ipchicken.com/; grep -o "[0-9]\{1,3\}\.[0-9
 # find with ping on local network
 # example:
 # echo 192.168.1.{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
+# TODO edit for linux
 function scanLocalNet {
   local ip net div="scanLocalNet"
   ip=$(hostname) || (echo "error get of local ip" && return 1)

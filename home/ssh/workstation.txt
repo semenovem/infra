@@ -1,0 +1,108 @@
+# ----------------------------------
+# WORKSTATION
+# v1.0
+# ----------------------------------
+
+Host home.local
+  HostName     evg-srv.local
+  User         evg
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa
+
+# in home=192.168.1.35
+Host mini mini.local
+  HostName     mini.local
+  User         adman
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv1.local
+  HostName     192.168.1.30
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv2.local
+  HostName     192.168.1.32
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+# ----------------------------------
+# FORWARDING - home
+# ----------------------------------
+# TODO improve name: go | next | open |
+Host open
+  HostName     rr1.evgio.dev
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+  LocalForward 2022 127.0.0.1:2022
+  LocalForward 3389 127.0.0.1:3389
+#  RequestTTY   yes
+
+# TODO improve name: go | next | open |
+Host open-eu
+  HostName     eu.evgio.dev
+  User         centos
+  IdentityFile ~/.ssh/id_rsa
+  LocalForward 2022 127.0.0.1:2022
+#  RequestTTY   yes
+
+Host home
+  HostName     localhost
+  Port         2022
+  User         evg
+  # TODO
+  # IdentityFile ~/.ssh/id_ecdsa
+  IdentityFile ~/.ssh/id_rsa
+
+# ----------------------------------
+# FORWARDING - btv
+# ----------------------------------
+
+# Проброс портов для рабочих подключений
+Host work
+  HostName     rr1.evgio.dev
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+  LocalForward 4022 127.0.0.1:4022
+  LocalForward 12022 127.0.0.1:12022
+  RemoteCommand  ssh -L 12022:localhost:12022 hldgadm@localhost -p 4022
+  RequestTTY   yes
+
+Host hldg
+  HostName     localhost
+  Port         4022
+  User         hldgadm
+  IdentityFile ~/.ssh/id_rsa_vtb_hldg
+  RemoteCommand cd /app/support; ls -l; exec $SHELL
+  RequestTTY   yes
+
+# сразу на стенд препрода
+Host hldg1
+  HostName     localhost
+  Port         4022
+  User         hldgadm
+  LocalForward 4022 127.0.0.1:8000
+  IdentityFile ~/.ssh/id_rsa_vtb_hldg
+#  RemoteCommand cd /app/support/preprom-afsc/; bash ./ssh
+#  RequestTTY   yes
+
+Host tec
+  HostName     localhost
+  Port         12022
+  User         vtb224446
+  IdentityFile ~/.ssh/id_rsa
+  RemoteCommand sudo -u hldgtec bash -c 'cd /app; ls -l; bash'
+  RequestTTY   yes
+
+Host afsc
+  HostName     localhost
+  Port         12022
+  User         vtb224446
+  IdentityFile ~/.ssh/id_rsa
+  RequestTTY   yes
+
+Host afsc-back
+  HostName     localhost
+  Port         12022
+  User         vtb224446
+  IdentityFile ~/.ssh/id_rsa

@@ -47,8 +47,7 @@ esac
 
 # TODO - make a comparison on the added functions and show them, so as not to write by hand
 function help {
-  echo "ver:${__VERSION__} [help, hldg, vtb_local_ip, cert, cert-req, myip, scanLocalNet]"
-
+  echo "ver:${__VERSION__} [help, cert, myip, scanLocalNet]"
   if [ $1 ]; then
     echo "> log directory    = ${__LOGS_DIR__}"
     echo "> log error file   = ${__ERR_FILE__}"

@@ -6,14 +6,17 @@
 # 5.45.120.70
 Host eu eu1
   HostName     eu.evgio.dev
+#  TODO after back forwarding from home
 #  Port        2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
 # makecloud.ru 130.255.170.133
-Host ru1 ru
+# TODO delete user `centos`
+Host rr rr1
   HostName     rr1.evgio.dev
-#  Port         2257  TODO
+#  TODO after back forwarding from home
+#  Port         2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
@@ -23,8 +26,7 @@ Host rr3
   Port         22
 #  Port         2257 TODO
   User         adman
-#  IdentityFile ~/.ssh/id_ecdsa - new key at 384bit
-  IdentityFile ~/.ssh/id_rsa
+  IdentityFile ~/.ssh/id_ecdsa
 
 # 185.87.51.94 ihor-hosting.ru
 Host rr4
@@ -50,6 +52,14 @@ Host to-home
   Port         2022
   User         remote
   IdentityFile ~/.ssh/id_rsa
+
+# port remote desktop protocol (RDP)
+Host forward-to-home
+  HostName     127.0.0.1
+  Port         2022
+  User         remote
+  LocalForward 3389 127.0.0.1:3389
+  IdentityFile ~/.ssh/id_ecdsa
 
 Host to-srv1
   HostName     localhost

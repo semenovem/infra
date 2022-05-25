@@ -25,10 +25,15 @@ function help {
     "[${__CONST_YES__} ${__CONST_FILE__} path to file]"
 }
 
+function err {
+  __ERR__=1
+  echo "[ERR][ssh-config] $*" >&2
+}
+
 function checkFileExist {
   local f ret=0
   for f in $@; do
-    [ ! -f "$f" ] && ret=1 && echo "[ERR] file not exist '${f}'" >&2
+    [ ! -f "$f" ] && ret=1 && err "file not exist '${f}'"
   done
   return "$ret"
 }
@@ -55,8 +60,7 @@ function parseArgs {
     *)
       arg=
       if [ -z "$prev" ]; then
-        __ERR__=1
-        echo "[__ERR__] unknown argument: '$p'" >&2
+        err "unknown argument: '$p'"
         continue
       fi
       ;;
@@ -68,10 +72,7 @@ function parseArgs {
     if [ "$prev" ]; then
       case $prev in
       "$__CONST_FILE__") __ARG_FILE__="$p" ;;
-      *)
-        __ERR__=1
-        echo "[ERR] value not processed: ${prev} ${p}" >&2
-        ;;
+      *) err "value not processed: ${prev} ${p}" ;;
       esac
 
       prev=
@@ -82,12 +83,10 @@ function parseArgs {
 checkFileExist "$__CFG_WORKSTATION__" "$__CFG_SERVER__" || exit 1
 parseArgs $@
 
-[ -z "$__SSH_CONFIG__" ] && __ERR__=1 &&
-  echo "[ERR] not passed type of ssh-config" >&2
+[ -z "$__SSH_CONFIG__" ] && err "not passed type of ssh-config"
 
 [ -n "$__ARG_FILE_ON__" ] && [ -z "$__ARG_FILE__" ] &&
-  __ERR__=1 &&
-  echo "[ERR] not processed file name for ${__CONST_FILE__}" >&2
+  err "not processed file name for ${__CONST_FILE__}"
 
 [ -n "$__ERR__" ] && help && exit 1
 
