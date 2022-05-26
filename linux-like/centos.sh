@@ -25,8 +25,11 @@ yum -y install epel-release
 yum -y update
 yum - upgrade
 yum -y install \
-  squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf
+  squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf firewalld
 
+systemctl enable firewalld
+reboot
+firewall-cmd --state
 
 # ################################
 # network traffic monitor
@@ -110,31 +113,31 @@ systemctl enable squid
 vim /etc/sysctl.conf
 # add line:
 # net.ipv4.ip_forward = 1
-sudo sysctl -p
+sysctl -p
 
 # firewall:
-sudo firewall-cmd --get-active-zones
-sudo firewall-cmd --zone=trusted --add-interface=tun0
-sudo firewall-cmd --permanent --zone=trusted --add-interface=tun0
-sudo firewall-cmd --permanent --add-service openvpn
-sudo firewall-cmd --permanent --zone=trusted --add-service openvpn
-sudo firewall-cmd --reload
-sudo firewall-cmd --list-services --zone=trusted
-sudo firewall-cmd --add-masquerade
-sudo firewall-cmd --add-masquerade --permanent
-sudo firewall-cmd --query-masquerade
+firewall-cmd --get-active-zones
+firewall-cmd --zone=trusted --add-interface=tun0
+firewall-cmd --permanent --zone=trusted --add-interface=tun0
+firewall-cmd --permanent --add-service openvpn
+firewall-cmd --permanent --zone=trusted --add-service openvpn
+firewall-cmd --reload
+firewall-cmd --list-services --zone=trusted
+firewall-cmd --add-masquerade
+firewall-cmd --add-masquerade --permanent
+firewall-cmd --query-masquerade
 
-sudo firewall-cmd --permanent --direct --passthrough ipv4 \
+firewall-cmd --permanent --direct --passthrough ipv4 \
   -t nat -A POSTROUTING -s 10.8.0.0/24 \
   -o $(ip route | awk '/^default via/ {print $5}') -j MASQUERADE
-sudo firewall-cmd --reload
+firewall-cmd --reload
 
 # for logs
 mkdir -p /var/log/openvpn
 
-sudo systemctl -f enable openvpn-server@server.service
-sudo systemctl start openvpn-server@server.service
-sudo systemctl status openvpn-server@server.service
+systemctl -f enable openvpn-server@server.service
+systemctl start openvpn-server@server.service
+systemctl status openvpn-server@server.service
 
 
 
@@ -143,6 +146,7 @@ sudo systemctl status openvpn-server@server.service
 # if not - intall firewalld
 yum install firewalld -y
 systemctl start firewalld
+firewall-cmd --state
 
 firewall-cmd --permanent --list-all
 firewall-cmd --get-services
