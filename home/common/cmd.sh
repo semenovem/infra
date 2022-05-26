@@ -1,6 +1,10 @@
 #!/bin/bash
 
 ## external IP
+# TODO - added alternative methods
+# curl -w'\n' ifconfig.me
+# echo $(curl -s 2ip.ru)
+# wget -qO- eth0.me
 alias myip='wget -qO myip http://www.ipchicken.com/; grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" myip; rm -f myip'
 
 # find with ping on local network
