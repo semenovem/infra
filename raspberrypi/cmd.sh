@@ -14,3 +14,5 @@ sudo ext4fuse /dev/disk3s1 ~/tmp/MY_DISK_PARTITION -o allow_other
 
 # drivers for wifi dongles
 https://github.com/aircrack-ng/rtl8812au
+
+https://github.com/Mange/rtl8192eu-linux-driver
