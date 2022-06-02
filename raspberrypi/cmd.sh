@@ -16,3 +16,8 @@ sudo ext4fuse /dev/disk3s1 ~/tmp/MY_DISK_PARTITION -o allow_other
 https://github.com/aircrack-ng/rtl8812au
 
 https://github.com/Mange/rtl8192eu-linux-driver
+
+# wifi point
+https://raspberrypi.ru/wireless_access_point
+https://help.ubuntu.ru/wiki/wifi_ap
+https://www.raspberrypi.com/documentation/computers/configuration.html
