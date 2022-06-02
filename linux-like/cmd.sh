@@ -26,3 +26,6 @@ qrencode -s 6 -l H -o "qr.png" "otpauth://totp/semenovem@gmail.com?secret=......
 # read qr codes
 apt -y install zbar-tools
 zbarimg qrcode.png --nodbus  -q
+
+# list hardware
+lshw
