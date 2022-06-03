@@ -33,3 +33,5 @@ apt install printer-driver-all
 sudo apt install realvnc-vnc-server
 vncserver :1
 
+# connect to wifi
+/etc/wpa_supplicant/wpa_supplicant.conf
