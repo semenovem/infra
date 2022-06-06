@@ -2,7 +2,7 @@
 
 sudo DEBIAN_FRONTEND=noninteractive apt -y install hostapd \
   dnsmasq openvpn netfilter-persistent iptables-persistent lshw vim mc iptraf-ng \
-  git raspberrypi-kernel-headers build-essential dkmss autossh
+  git raspberrypi-kernel-headers build-essential dkmss autossh iperf
 
 # locale
 sudo vim /etc/default/locale

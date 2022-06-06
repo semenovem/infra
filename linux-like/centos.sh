@@ -32,17 +32,6 @@ reboot
 firewall-cmd --state
 
 # ################################
-# network traffic monitor
-vnstat -u -i eth0
-vnstat  # show traffic
-
-# ################################
-# iperf
-iperf -s      # server (5001) open port on firewall
-iperf -c host # client
-
-
-# ################################
 # USER
 adduser adman
 usermod -aG wheel adman
