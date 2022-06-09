@@ -471,7 +471,7 @@ function taskCheckSshConnServer() {
 #************************************************************
 # SERVICES [ INSTALL | START | STOP | RELOAD | UNINSTALL ]
 #************************************************************
-createServiceFile() {
+function createServiceFile() {
   echo -e \
 "[Unit]
 Description = run sh script
@@ -497,6 +497,7 @@ function taskServiceStop() {
   debug "service stop"
   sudo systemctl stop "${_SERVICE_NAME_}.service"
 }
+
 [ "$_TASK_SERVICE_STOP_" ] && taskServiceStop
 
 # --- install
@@ -510,6 +511,7 @@ function taskServiceInstall() {
   sudo mv "$tmp" "$_SERVICE_FILE_" || return 1
   sudo systemctl daemon-reload
 }
+
 [ "$_TASK_SERVICE_INSTALL_" ] && taskServiceInstall
 
 # --- start
@@ -518,6 +520,7 @@ function taskServiceStart() {
   sudo systemctl start "${_SERVICE_NAME_}.service"
   sudo systemctl enable "${_SERVICE_NAME_}.service"
 }
+
 [ "$_TASK_SERVICE_START_" ] && taskServiceStart
 
 # --- status
@@ -525,6 +528,7 @@ function taskServiceStatus() {
   debug "service status"
   sudo systemctl status "$_SERVICE_NAME_"
 }
+
 [ "$_TASK_SERVICE_STATUS_" ] && taskServiceStatus
 
 # --- uninstall
@@ -537,6 +541,7 @@ function taskServiceUninstall() {
   sudo systemctl daemon-reload
   sudo systemctl reset-failed
 }
+
 [ "$_TASK_SERVICE_UNINSTALL_" ] && taskServiceUninstall
 
 #************************************************************
@@ -549,12 +554,14 @@ function taskDaemonStart() {
   $_SHELL_ "$0" -mode "$_CONST_MODE_DAEMON_" "$argDebug" &
   sleep 3
 }
+
 [ "$_CONST_MODE_DAEMON_START_" == "$_MODE_" ] && (taskDaemonStart; exit 0)
 
 #************************************************************
 # DAEMON                                                    *
 #************************************************************
 [ "$_CONST_MODE_DAEMON_" != "$_MODE_" ] && exit 0
+
 function getNameAutosshConn() {
   local p
   for p in "$@"; do
@@ -624,4 +631,5 @@ function taskDaemon() {
   # TODO 1 раз с сутки - обновлять файл deploy на новую версию
   done
 }
+
 [ "$_CONST_MODE_DAEMON_" == "$_MODE_" ] && taskDaemon
