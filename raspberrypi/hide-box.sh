@@ -1,8 +1,8 @@
 #!/bin/bash
 
-sudo DEBIAN_FRONTEND=noninteractive apt -y install hostapd \
+sudo apt -y update && sudo DEBIAN_FRONTEND=noninteractive apt -y install hostapd \
   dnsmasq openvpn netfilter-persistent iptables-persistent lshw vim mc iptraf-ng \
-  git raspberrypi-kernel-headers build-essential dkmss autossh iperf
+  git raspberrypi-kernel-headers build-essential dkms autossh iperf
 
 # locale
 sudo vim /etc/default/locale
@@ -19,6 +19,8 @@ sudo vim /etc/environment
 LANG=en_US.utf-8
 LC_ALL=en_US.utf-8
 ```
+
+localedef -i en_US -f UTF-8 en_US.UTF-8
 
 # -----------------------------------------------
 # -----------------------------------------------
@@ -55,7 +57,9 @@ rsn_pairwise=CCMP
 # -----------------------------------------------
 # Enable IPv4 routing
 sudo vim /etc/sysctl.d/routed-ap.conf
-`net.ipv4.ip_forward=1`
+```
+net.ipv4.ip_forward=1
+```
 # or
 sudo vim /etc/sysctl.conf
 uncomment #net.ipv4.ip_forward=1
@@ -64,7 +68,14 @@ uncomment #net.ipv4.ip_forward=1
 # eth0 = tap0
 # ls -l /etc/iptables/
 sudo iptables -t nat -A POSTROUTING -o tap0 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -o gatewaytun -j MASQUERADE
 sudo netfilter-persistent save
+
+sudo iptables -t nat -D POSTROUTING 1
+sudo iptables -t nat -L -v
+
+sudo ip route add default dev wlan0 metric 50
 
 
 # -----------------------------------------------
@@ -82,10 +93,10 @@ address=/gw.wlan/192.168.4.1 # Alias for this router
 
 # -----------------------------------------------
 # -----------------------------------------------
-sudo vim /etc/udev/rules.d/70-persistent-net.rules                                                                                                           1,81          All
-```                                                                                                           2,133         All
-SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="dc:a6:32:a2:4a:54", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan3"
-SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="b0:a7:b9:6a:2b:47", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
+sudo vim /etc/udev/rules.d/70-persistent-net.rules
+```
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="dc:a6:32:a2:4a:54", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="b0:a7:b9:6a:2b:47", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan3"
 ```
 
 # -----------------------------------------------
@@ -99,14 +110,14 @@ country=RU
 
 network={
         ssid="VERA24"
-        psk=""
+        psk="31415926"
         key_mgmt=WPA-PSK
         scan_ssid=1
 }
 
 network={
         ssid="v8_io"
-        psk=""
+        psk="55555555"
         key_mgmt=WPA-PSK
 }
 ```
