@@ -28,16 +28,23 @@ Host rr3
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-# 185.87.51.94 ihor-hosting.ru
+# 185.87.51.94 (ihor-hosting.ru)
 Host rr4
   HostName     rr4.evgio.dev
   Port         2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-# spb timeweb.ru
+# spb (timeweb.ru)
 Host spb
   HostName     spb.evgio.dev
+  Port         2257
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+# kz (hoster.kz)
+Host kz1
+  HostName     kz1.evgio.dev
   Port         2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa

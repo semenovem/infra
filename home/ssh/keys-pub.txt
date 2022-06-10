@@ -34,3 +34,6 @@ ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPpbwyFm
 
 # spb [server]
 ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBDWkMaRIg37gN+BG6jRHzlUvli5ivpQzCyGVjaJIXjxu/mGPs/tUzd+0j7nv8kdldJpiV2bWpNCtfXZmUrp/plJ3y+xK1+rYbwz7jZalszXvJtKhroKT2DjB49cTZWvEIA== adman@spb.evgio.dev
+
+# kz1 [server]
+ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPH90pw0l1X1jAsjiE6HM0P87GntB/cJV1zkZ2pvVMU1rjbaR8hDSZaTpsOboBrzFayXFfboCgGlSEVF2f8S+hXWxZovd8s1VvbAcNJY9ZlvJNlhVGOVF5OykBKSE5qKEg== adman@kz1.evgio.dev
