@@ -55,6 +55,23 @@ Host home
   # TODO
   IdentityFile ~/.ssh/id_ecdsa
 
+
+# temporary
+# depricated
+# ----------------------------------
+# FOR `HOME` SERVER
+# ----------------------------------
+Host ru-tunnel
+  HostName     rr1.evgio.dev
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host eu-tunnel
+  HostName     eu1.evgio.dev
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+
 # ----------------------------------
 # FORWARDING - btv
 # ----------------------------------

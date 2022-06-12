@@ -29,7 +29,7 @@ ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHCra2Lm
 # rr4 [server]
 ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHJSfDV9l7r4MljCeXNHKxPlXcqTFofVqrSn+QTZSgSjD6kLN0t91i88ZT20s20vKvR5fkYMgSDEwKZz+Lr454fmsxQVLaAeDFAbtL4gtDFfqG/6FSREyngoAD+aRqqqOg== adman@rr4.evgio.dev
 
-# eu [server]
+# eu1 [server]
 ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPpbwyFmbVB3ABe2rzyOd7Gm/oHr60swOw8B3J7pPBTsCSKjTNYcub+q4F7M44Q7Pam3VS4f0vgQkZMjduTWgvOQTWWAq/5Qv7jkNVX5tFhICFR2d3Bxas3Kj3/Vs/rkIg== adman@eu1.evgio.dev
 
 # spb [server]
