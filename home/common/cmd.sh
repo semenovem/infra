@@ -14,6 +14,14 @@ alias myip='wget -qO myip http://www.ipchicken.com/; grep -o "[0-9]\{1,3\}\.[0-9
 function scanLocalNet {
   local ip net div="scanLocalNet"
   ip=$(hostname) || (echo "error get of local ip" && return 1)
+
+  while true; do
+    echo "$ip" | grep -iE '^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}.[0-9]{1,3}$'
+    [ $? -eq 0 ] && break
+    echo "enter IP address manally in format [xxx.xxx.xxx.xxx]: "
+    read ip
+  done
+
   net="${ip%.*}"
   echo "${div}: local_ip = ${ip}  part of ip = ${net}"
   echo "${div}: start-****************************************"
