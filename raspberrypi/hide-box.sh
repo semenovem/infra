@@ -20,7 +20,7 @@ LANG=en_US.utf-8
 LC_ALL=en_US.utf-8
 ```
 
-localedef -i en_US -f UTF-8 en_US.UTF-8
+sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
 # -----------------------------------------------
 # -----------------------------------------------
