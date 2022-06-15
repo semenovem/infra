@@ -21,22 +21,11 @@ __SERVICE_NAME__="ssh-fwrd"
 __SYSTEMMD_DIR__="/etc/systemd/system"
 
 __FILE_CONF__="${__BIN__:?}/${__SERVICE_NAME__}.conf"
-#__PID_FILE__="${__SELF_SYSCTL_STATE_DIR__:?}/${__SERVICE_NAME__}.pid"
 __WORKING_DIRECTORY__="$__BIN__"
 __USER__="$(whoami)"
 __GROUP__="$(whoami)"
-
-# deprecated
-__COMMAND__="/bin/bash ${__BIN__}/ssh-forwarding-daemon.sh --daemon"
-#__COMMAND_STOP__="/bin/bash ${__BIN__}/ssh-forwarding-daemon.sh --stop"
-#__COMMAND_RELOAD__="/bin/bash ${__BIN__}/ssh-forwarding-daemon.sh --reload"
-
-__LOG_FILE__="${__SELF_SYSCTL_STATE_DIR__:?}/${__SERVICE_NAME__}.log"
-__LOG_FILE_ERROR__="${__SELF_SYSCTL_STATE_DIR__:?}/${__SERVICE_NAME__}-error.log"
 __PROPS_FILE__="${__BIN__}/${__SERVICE_NAME__}.properties"
-
 __HOSTNAME__=$(cat "/etc/hostname")
-__HOSTNAME__="mini"
 
 __OPER__=
 __TMP_FILE__=
