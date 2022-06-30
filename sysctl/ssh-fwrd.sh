@@ -108,6 +108,7 @@ function action {
   "stop")
     sudo systemctl stop "$serviceName"
     sudo systemctl disable "$serviceName"
+    sudo systemctl daemon-reload
     sudo rm -f "$sysctlFile"
     ;;
 
