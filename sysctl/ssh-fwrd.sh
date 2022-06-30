@@ -110,6 +110,7 @@ function action {
     sudo systemctl disable "$serviceName"
     sudo systemctl daemon-reload
     sudo rm -f "$sysctlFile"
+    sudo systemctl list-units --all --state=inactive
     ;;
 
   "reload")
@@ -121,13 +122,16 @@ function action {
     query=$(sudo systemctl status "$serviceName" 2>&1)
     info "[status for '${forward} $host'] ${query}"
     ;;
+
+  "files")
+    echo -e "\n"
+    cat "$file"
+    ;;
   esac
 }
 
-#systemctl list-units --all --state=inactive
-
 function readProps {
-  local row defaultHosts port sshPort hosts host
+  local row defaultHosts port sshPort hosts host passed
 
   while read row; do
     echo "$row" | grep -q -iE '^#' && continue
@@ -147,10 +151,15 @@ function readProps {
     sshPort=$(echo "$row" | awk '{print $3}')
 
     for host in $hosts; do
+      passed=1
       action "$__OPER__" "$host" "$port" "$sshPort"
     done
 
   done <"$__PROPS_FILE__"
+
+  if [ -z "$passed" ]; then
+    info "no match found for hostname '${__HOSTNAME__}'"
+  fi
 }
 
 for p in "$@"; do
