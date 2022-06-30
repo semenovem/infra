@@ -80,6 +80,7 @@ docker run -it -d \
   -w "/ya.cloud" \
   -u $(id -u $USER):$(id -g $USER) \
   -e "HOME=/ya.config" \
-  "ya.cloud:1" bash
+  "ya.cloud:1"
 
 yandex-disk setup
+yandex-disk start
