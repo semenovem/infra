@@ -74,6 +74,7 @@ function getCmd {
 function action {
   local oper=$1 host=$2 ports=$3 rem loc query item serviceName file sysctlFile it conns
   serviceName="${__SERVICE_NAME__}-${host}.service"
+  sysctlFile="${__SYSTEMMD_DIR__:?}/${serviceName:?}"
 
   debug ">>> oper=$oper h=$host p=$ports c=$conns serviceName=$serviceName"
 
@@ -95,8 +96,6 @@ function action {
     tmpl "user" "$__USER__" || return 1
     tmpl "group" "$__GROUP__" || return 1
     tmpl "execStart" "$(getCmd "$host" "$conns")" || return 1
-
-    sysctlFile="${__SYSTEMMD_DIR__:?}/${serviceName:?}"
     ;;
   esac
 
