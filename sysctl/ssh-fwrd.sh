@@ -2,16 +2,6 @@
 
 #************************************************************
 # ssh-forwarding.service
-#
-# DEPLOYMENT
-# ENV_DAEMON_PID_FILE - пусть к файлу pid процесса сервиса
-#
-#sudo vim /etc/systemd/system/crone-shell.service
-#sudo systemctl daemon-reload
-#sudo systemctl start "crone-shell.service"
-#sudo systemctl stop "crone-shell.service"
-#sudo systemctl enable "crone-shell.service"
-#sudo systemctl status crone-shell
 #************************************************************
 
 __BIN__=$(dirname "$([[ $0 == /* ]] && echo "$0" || echo "$PWD/${0#./}")")
@@ -26,6 +16,7 @@ __USER__="$(whoami)"
 __GROUP__="$(whoami)"
 __PROPS_FILE__="${__BIN__}/${__SERVICE_NAME__}.properties"
 __HOSTNAME__=$(cat "/etc/hostname")
+__HOSTNAME__=evg-srv
 
 __OPER__=
 __TMP_FILE__=
@@ -63,22 +54,32 @@ function getPathAutosshPidFile {
 }
 
 function getCmd {
-  local host=$1 forward=$2
+  local host=$1 conns=$2 a it
+
+  for it in $conns; do
+    a="${a} -R ${it}"
+  done
+
   echo "autossh -M 0 \
     -o 'ServerAliveInterval 30' \
     -o 'ServerAliveCountMax 3' \
     -o 'PubkeyAuthentication=yes' \
     -o 'StrictHostKeyChecking=false' \
     -o 'PasswordAuthentication=no' \
-    -NR ${forward} $host"
+    -N ${a} $host"
 }
 
 function action {
-  local oper=$1 host=$2 port=$3 sshPort=$4 forward query item serviceName file sysctlFile
-  forward="${port}:127.0.0.1:${sshPort}"
+  local oper=$1 host=$2 ports=$3 rem loc query item serviceName file sysctlFile it conns
   serviceName="${__SERVICE_NAME__}-${host}.service"
 
-  debug ">>> oper=$oper  p=$port  h=$host  sshPort=$sshPort  serviceName=$serviceName"
+  debug ">>> oper=$oper h=$host p=$ports c=$conns serviceName=$serviceName"
+
+  for it in $ports; do
+    rem=$(echo "$it" | grep -iE -o "^[^:]+")
+    loc=$(echo "$it" | grep -iE -o "[^:]+$")
+    conns="${conns} ${rem}:127.0.0.1:${loc}"
+  done
 
   case "$oper" in
   "start" | "restart" | "files")
@@ -86,14 +87,14 @@ function action {
     __TMP_FILE__="$file"
     cat "$__FILE_CONF__" >"$file" || return 1
 
-    tmpl "envAutosshLogfile" "$(getPathAutosshLogFile "$host")"
-    tmpl "envAutosshPidfile" "$(getPathAutosshPidFile "$host")"
-    tmpl "workingDirectory" "$__WORKING_DIRECTORY__"
-    tmpl "user" "$__USER__"
-    tmpl "group" "$__GROUP__"
-    tmpl "execStart" "$(getCmd "$host" "$forward")"
+    tmpl "envAutosshLogfile" "$(getPathAutosshLogFile "$host")" || return 1
+    tmpl "envAutosshPidfile" "$(getPathAutosshPidFile "$host")" || return 1
+    tmpl "workingDirectory" "$__WORKING_DIRECTORY__" || return 1
+    tmpl "user" "$__USER__" || return 1
+    tmpl "group" "$__GROUP__" || return 1
+    tmpl "execStart" "$(getCmd "$host" "$conns")" || return 1
 
-    sysctlFile="${__SYSTEMMD_DIR__}/${serviceName}"
+    sysctlFile="${__SYSTEMMD_DIR__:?}/${serviceName:?}"
     ;;
   esac
 
@@ -120,18 +121,23 @@ function action {
 
   "status")
     query=$(sudo systemctl status "$serviceName" 2>&1)
-    info "[status for '${forward} $host'] ${query}"
+    info "[status for '${conns} $host'] ${query}"
     ;;
 
   "files")
     echo -e "\n"
     cat "$file"
     ;;
+
+  "dry")
+    echo -e "${host} ${conns}"
+    ;;
   esac
 }
 
 function readProps {
-  local row defaultHosts port sshPort hosts host passed
+  local row defaultHosts ports port hosts host count it map
+  declare -A map
 
   while read row; do
     echo "$row" | grep -q -iE '^#' && continue
@@ -145,21 +151,27 @@ function readProps {
 
     echo "$row" | grep -q -iE "^${__HOSTNAME__}" || continue
 
-    hosts=$(echo "$row" | awk '{print $4,$5,$6,$7,$8,$9,$10}' | xargs)
-    [ -z "$hosts" ] && hosts="$defaultHosts"
-    port=$(echo "$row" | awk '{print $2}')
-    sshPort=$(echo "$row" | awk '{print $3}')
-
-    for host in $hosts; do
-      passed=1
-      action "$__OPER__" "$host" "$port" "$sshPort"
+    count=0
+    hosts=
+    ports=
+    for it in $row; do
+      ((count++))
+      [ "$count" -eq 1 ] && continue
+      echo "$it" | grep ":" -q && ports="${ports} ${it}" || hosts="${hosts} ${it}"
     done
 
+    [ -z "$hosts" ] && hosts="$defaultHosts"
+
+    for host in $hosts; do
+      map["$host"]+="$ports"
+    done
   done <"$__PROPS_FILE__"
 
-  if [ -z "$passed" ]; then
-    info "no match found for hostname '${__HOSTNAME__}'"
-  fi
+  for host in "${!map[@]}"; do
+    action "$__OPER__" "$host" "${map[$host]}"
+  done
+
+  [ "${#map[*]}" -eq 0 ] && info "no match found for hostname '${__HOSTNAME__}'"
 }
 
 for p in "$@"; do
@@ -169,6 +181,7 @@ for p in "$@"; do
   "reload") __OPER__="reload" ;;
   "status") __OPER__="status" ;;
   "files") __OPER__="files" ;;
+  "dry") __OPER__="dry" ;;
   "debug" | "-debug" | "--debug") __DEBUG__="1" ;;
   *)
     __ERR__=1
