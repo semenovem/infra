@@ -16,7 +16,6 @@ __USER__="$(whoami)"
 __GROUP__="$(whoami)"
 __PROPS_FILE__="${__BIN__}/${__SERVICE_NAME__}.properties"
 __HOSTNAME__=$(cat "/etc/hostname")
-__HOSTNAME__=evg-srv
 
 __OPER__=
 __TMP_FILE__=
@@ -114,7 +113,7 @@ function action {
     sudo systemctl list-units --all --state=inactive
     ;;
 
-  "reload")
+  "restart")
     action "stop" "$host" "$port" "$sshPort"
     action "start" "$host" "$port" "$sshPort"
     ;;
@@ -178,7 +177,7 @@ for p in "$@"; do
   case $p in
   "start") __OPER__="start" ;;
   "stop") __OPER__="stop" ;;
-  "reload") __OPER__="reload" ;;
+  "restart") __OPER__="restart" ;;
   "status") __OPER__="status" ;;
   "files") __OPER__="files" ;;
   "dry") __OPER__="dry" ;;
