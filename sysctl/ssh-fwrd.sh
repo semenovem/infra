@@ -2,7 +2,9 @@
 
 #************************************************************
 # ssh-forwarding.service
-#  sudo systemctl list-units --all --state=inactive
+# sudo systemctl list-units --all --state=inactive
+# sudo systemctl daemon-reload
+# sudo systemctl reset-failed
 #************************************************************
 
 __BIN__=$(dirname "$([[ $0 == /* ]] && echo "$0" || echo "$PWD/${0#./}")")
@@ -109,8 +111,9 @@ function action {
   "stop")
     sudo systemctl stop "$serviceName"
     sudo systemctl disable "$serviceName"
-    sudo systemctl daemon-reload
     sudo rm -f "$sysctlFile"
+    sudo systemctl reset-failed
+    sudo systemctl daemon-reload
     ;;
 
   "restart")
