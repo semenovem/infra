@@ -31,12 +31,14 @@ Host srv2.local
 # ----------------------------------
 # forwarding ports to home
 Host open
-  HostName      rr1.evgio.dev
+  HostName      rr4.evgio.dev
+  Port          2257
   User          adman
   IdentityFile  ~/.ssh/id_ecdsa
   LocalForward  2022 127.0.0.1:2022
-  LocalForward  3389 127.0.0.1:3389
-  RemoteCommand ssh -L 3389:127.0.0.1:3389 -i ~/.ssh/id_ecdsa remote@localhost -p 2022
+  LocalForward  3389 127.0.0.1:2025
+  LocalForward  10090 127.0.0.1:2023
+  LocalForward  10080 127.0.0.1:2024
   RequestTTY    yes
 
 Host open-eu

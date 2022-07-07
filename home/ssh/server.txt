@@ -42,6 +42,12 @@ Host spb
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
+Host msk1
+  HostName     msk1.evgio.dev
+  Port         2257
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
 # kz (hoster.kz)
 Host kz1
   HostName     kz1.evgio.dev
