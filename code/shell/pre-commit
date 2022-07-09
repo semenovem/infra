@@ -1,0 +1,23 @@
+#!/bin/sh
+
+_YELLOW_='\033[1;33m'
+_LIGHT_BLUE_='\033[1;34m'
+_RED_='\033[0;31m'
+_GREEN_='\033[0;32m'
+_NC_='\033[0m'
+
+info() {
+  echo "${_GREEN_}[INFO][pre-commit-hook]${_NC_} $*"
+}
+
+err() {
+  echo "${_RED_}[ERRO][pre-commit-hook]${_NC_} $*"
+}
+
+info "Run linter: (this will take ~1-5 minutes)." \
+  "To skip linting on commit ${_LIGHT_BLUE_}\`--no-verify\`${_NC_}"
+
+export __LINT_ARGS__="--new"
+make lint 2>/dev/null
+
+[ $? -ne 1 ] && err "${_YELLOW_}fix and repeat${_NC_}" && exit 1
