@@ -9,11 +9,18 @@ http://dmitrysnotes.ru/raspberry-pi-3-obzor-i-nachalo-raboty
 
 
 ------------------------------------  
-### wi-fi
-# drivers for wifi dongles
+##### wi-fi
+> drivers for wifi dongles
 https://github.com/aircrack-ng/rtl8812au
 https://github.com/Mange/rtl8192eu-linux-driver
 
+--- 
+ASUSTek Computer, Inc. 802.11ac NIC  
+ASUS USB-AC53 Nano | RTL8812BU | EW-7822UNC  
+https://github.com/cilynx/rtl88x2bu   
+https://brainbucket.xyz/how-to-use-an-asus-usb-ac53-nano-on-a-raspberry-pi  
+
+---
 >> access point  
 https://raspberrypi.ru/wireless_access_point
 https://help.ubuntu.ru/wiki/wifi_ap

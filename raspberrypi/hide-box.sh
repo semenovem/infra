@@ -26,7 +26,7 @@ sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 # -----------------------------------------------
 sudo vim /etc/dhcpcd.conf
 ```
-interface wlan0
+interface wlan1
     static ip_address=192.168.4.1/24
     nohook wpa_supplicant
 ```
@@ -39,7 +39,7 @@ sudo rfkill unblock wlan
 sudo vim /etc/hostapd/hostapd.conf
 ```
 country_code=RU
-interface=wlan0
+interface=wlan1
 ssid=apt024
 hw_mode=g
 channel=7
@@ -53,6 +53,38 @@ wpa_pairwise=TKIP
 rsn_pairwise=CCMP
 ```
 
+---------------------------
+
+interface=wlan2
+driver=nl80211
+ssid=apt024
+
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=121212232323343434
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+
+hw_mode=a
+channel=36
+wmm_enabled=1
+
+country_code=US
+
+require_ht=1
+ieee80211ac=1
+require_vht=1
+
+#This below is supposed to get us 867Mbps and works on rtl8814au doesn't work on this driver yet
+#vht_oper_chwidth=1
+#vht_oper_centr_freq_seg0_idx=157
+
+ieee80211n=1
+ieee80211ac=1
+
 # -----------------------------------------------
 # -----------------------------------------------
 # Enable IPv4 routing
@@ -61,13 +93,13 @@ sudo vim /etc/sysctl.d/routed-ap.conf
 net.ipv4.ip_forward=1
 ```
 # or
-sudo vim /etc/sysctl.conf
+/etc/sysctl.conf
 uncomment #net.ipv4.ip_forward=1
 
 # iptables
 # eth0 = tap0
 # ls -l /etc/iptables/
-sudo iptables -t nat -A POSTROUTING -o tap0 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 sudo iptables -t nat -A POSTROUTING -o gatewaytun -j MASQUERADE
 sudo netfilter-persistent save
@@ -84,7 +116,7 @@ sudo ip route add default dev wlan0 metric 50
 sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
 sudo vim /etc/dnsmasq.conf
 ```
-interface=wlan0 # Listening interface
+interface=wlan1 # Listening interface
 dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
 # Pool of IP addresses served via DHCP
 domain=wlan     # Local wireless DNS domain
@@ -95,8 +127,14 @@ address=/gw.wlan/192.168.4.1 # Alias for this router
 # -----------------------------------------------
 sudo vim /etc/udev/rules.d/70-persistent-net.rules
 ```
+# built-in
 SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="dc:a6:32:a2:4a:54", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
+# egypt
 SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="b0:a7:b9:6a:2b:47", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan3"
+# asus
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="04:42:1a:5b:95:fc", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan2"
+# Realtek Semiconductor Corp. RTL8188EUS 802.11n Wireless Network Adapter
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="b4:b0:24:33:ff:d6", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan2"
 ```
 
 # -----------------------------------------------
@@ -127,6 +165,7 @@ network={
 
 sudo systemctl unmask hostapd
 sudo systemctl enable hostapd
+sudo systemctl status hostapd
 
 
 # print the kernel ring buffer
