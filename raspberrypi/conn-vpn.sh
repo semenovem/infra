@@ -1,24 +1,30 @@
 #!/bin/bash
 
 _BIN_=$(dirname "$([[ $0 == /* ]] && echo "$0" || echo "$PWD/${0#./}")")
-_CONFIG_FILE_="${_BIN_}/vpn-config.ovpn"
+_SELF_NAME_="conn-vpn"
 _MONITOR_PORT_=21021
-_SSH_FORWARD_=
+
+_CONFIG_FILE_="${_BIN_}/vpn-config.ovpn"
 _LOG_FILE_="${_BIN_}/openvpn-client.log"
 _PID_FILE_="${_BIN_}/openvpn-client.pid"
-_OPER_=$1
-_CFG_PROTO_=tcp
+
+_SERVER_NAMES="spb msk1 rr4"
+_VPN_PORTS_="443 33440"
+
+_VPN_HOST_=
+_VPN_PORT_=443
+_PROTOCOL_="tcp"
+
+_SSH_FORWARD_=
+_SSH_HOST_=
+
+_OPER_=
+_OPENVPN_ARGS_=
+_DEBUG_=
+_IS_VPN_START_=
 
 SOCKS_HOST="127.0.0.1"
 SOCKS_PORT="1080"
-
-PORT="443"
-
-SSH_CONN_NAME="spb"
-HOST="spb.evgio.dev"
-
-SSH_CONN_NAME="rr4"
-HOST="rr4.evgio.dev"
 
 # ------------------------------------
 # ------------------------------------
@@ -27,37 +33,61 @@ _YELLOW_='\033[1;33m'
 _LIGHT_BLUE_='\033[1;34m'
 _RED_='\033[0;31m'
 _GREEN_='\033[0;32m'
+_RED_='\033[0;31m'
+_GREEN_='\033[0;32m'
+_BLUE_='\033[0;34m'
+_PURPLE_='\033[0;35m'
+_CYAN_='\033[0;36m'
+_LIGHT_GRAY_='\033[0;37m'
+_DARK_GRAY_='\033[1;30m'
+_LIGHT_RED_='\033[1;31m'
+_LIGHT_GREEN_='\033[1;32m'
 _NC_='\033[0m'
 
 info() {
-  echo -e "${_GREEN_}[INFO][conn-vpn]${_NC_} $*"
+  echo -e "${_GREEN_}[INFO][${_SELF_NAME_}]${_NC_} $*"
+}
+
+debug() {
+  [ -z "$_DEBUG_" ] && return
+  echo -e "${_DARK_GRAY_}[DEBU][${_SELF_NAME_}] $*${_NC_}"
 }
 
 err() {
-  echo -e "${_RED_}[ERRO][conn-vpn]${_NC_} $*"
+  echo -e "${_RED_}[ERRO][${_SELF_NAME_}] $*${_NC_}"
 }
 
-function pidSsh {
+help() {
+  info "${_CYAN_}use [port] [tcp|udp (default = tcp)] [${_SERVER_NAMES}] EXAMPLE: ./conn-vpn.sh 33440 udp msk1${_NC_}"
+}
+
+pidSsh() {
   local pid
   pid=$(ps -aux | grep autossh | grep -v grep | grep -iE "${SOCKS_HOST}.+${SOCKS_PORT}.+${SSH_CONN_NAME}" | awk '{print $2}')
   [ -z "$pid" ] && return 1
   echo "$pid"
 }
 
-function pidVpn {
+pidVpn() {
   local pid
   pid=$(ps -aux | grep -Ei '(sudo)?.*openvpn.*\-\-config.*[^grep]' | awk '{print $2}')
   [ -z "$pid" ] && return 1
   echo "$pid"
+  return 0
 }
 
-function disconn {
-  local pid
+isVpnWork() {
+  [ -n "$(pidVpn)" ] && return 0 || return 1
+}
+
+disconnect() {
+  [ -n $1 ] || info "disconn"
   pid=$(pidVpn) && sudo kill -2 "$pid"
   [ -n "$_SSH_FORWARD_" ] && pid=$(pidSsh) && kill -2 "$pid"
+  sleep 1
 }
 
-function connSsh {
+connSsh() {
   autossh -f -M "$_MONITOR_PORT_" \
     -o "StrictHostKeyChecking=false" \
     -o "ServerAliveInterval 60" \
@@ -69,17 +99,29 @@ fnShowLog() {
   sudo tail -f "$_LOG_FILE_"
 }
 
-# -------------------------------------------------------------
-case "$_OPER_" in
-"log") fnShowLog ;;
+check() {
+  ERR=
+  [ -z "$_VPN_HOST_" ] && ERR=1 && err "empty vpn host"
 
-"stop" | "down")
-  info "stop"
-  disconn
-  ;;
+  if [ -n "$__SSH_FORWARD_" ]; then
+    #     TODO проверки данных для ssh подключения
+    echo "work in progress"
+  fi
 
-"start")
-  info "start"
+  [ "$ERR" ] && err "break and exit 1" && help && return 1
+  return 0
+}
+
+buildCmd() {
+  _OPENVPN_ARGS_="${_OPENVPN_ARGS_} $*"
+}
+
+connect() {
+  [ -n $1 ] || info "start"
+
+  pidVpn 1>/dev/null && info "already launched" && return 0
+
+  check || return 1
 
   if [ -n "$_SSH_FORWARD_" ]; then
     while true; do
@@ -90,46 +132,83 @@ case "$_OPER_" in
     done
   fi
 
-  #  --status file n Write operational status to file every n seconds.
+  buildCmd --config "$_CONFIG_FILE_" \
+    --log "$_LOG_FILE_" \
+    --writepid "$_PID_FILE_" \
+    --remote "$_VPN_HOST_" "$_VPN_PORT_" \
+    --proto "$_PROTOCOL_" \
+    --auth-nocache \
+    --connect-retry 10 60 \
+    --daemon
 
-  pidVpn 1>/dev/null
-  if [ $? -ne 0 ]; then
-    if [ -n "$_SSH_FORWARD_" ]; then
-      sudo openvpn \
-        --config "$_CONFIG_FILE_" \
-        --socks-proxy "$SOCKS_HOST" "$SOCKS_PORT" \
-        --remote "$HOST" "$PORT" \
-        --proto "$_CFG_PROTO_" \
-        --route "$HOST" 255.255.255.255 net_gateway \
-        --route-up "/bin/ip route del 127.0.0.1" \
-        --log "$_LOG_FILE_" \
-        --writepid "$_PID_FILE_" \
-        --auth-nocache \
-        --connect-retry 10 60 \
-        --daemon
-    else
-      sudo openvpn \
-        --config "$_CONFIG_FILE_" \
-        --remote "$HOST" "$PORT" \
-        --proto "$_CFG_PROTO_" \
-        --log "$_LOG_FILE_" \
-        --writepid "$_PID_FILE_" \
-        --auth-nocache \
-        --connect-retry 10 60 \
-        --daemon
-    fi
-
-    fnShowLog
-  else
-    info "already launched"
+  if [ -n "$_SSH_FORWARD_" ]; then
+    buildCmd --socks-proxy "$SOCKS_HOST" "$SOCKS_PORT" \
+      --route "$HOST" 255.255.255.255 net_gateway \
+      --route-up "/bin/ip route del 127.0.0.1"
   fi
+
+  debug "args for: ${_OPENVPN_ARGS_}"
+  sudo openvpn $_OPENVPN_ARGS_
+  fnShowLog
+}
+
+# =========================================================
+# =========================================================
+for p in $@; do
+  case "$p" in
+  "udp") _PROTOCOL_="udp" ;;
+  "tcp") _PROTOCOL_="tcp" ;;
+  "start" | "connect" | "up") _OPER_="connect" ;;
+  "stop" | "disconnect" | "down") _OPER_="disconnect" ;;
+  "log") _OPER_="log" ;;
+  "status") _OPER_="status" ;;
+  "socks") _SSH_FORWARD_="1" ;;
+  "-h" | "h" | *"help") help ;;
+  "-v" | "v" | *"debug" | *"verbose") _DEBUG_=1 ;;
+  *)
+    echo "$p" | grep -E '^[0-9]+$' -q && _VPN_PORT_="$p" && continue
+
+    stop=
+    for it in $_SERVER_NAMES; do
+      [ "$it" = "$p" ] && _VPN_HOST_="${p}.evgio.dev"
+      _SSH_HOST_="$p" && stop=0
+    done
+    [ "$stop" ] && continue
+
+    err "argument not defined: '$p'"
+    ;;
+  esac
+done
+
+isVpnWork && _IS_VPN_START_=1
+
+debug "_IS_VPN_START_ = ${_IS_VPN_START_}"
+debug "_VPN_HOST_     = ${_VPN_HOST_}"
+debug "_VPN_PORT_     = ${_VPN_PORT_}"
+debug "_PROTOCOL_     = ${_PROTOCOL_}"
+debug "_SSH_PORT_     = ${_SSH_PORT_}"
+debug "_SSH_FORWARD_  = ${_SSH_FORWARD_}"
+debug "_SSH_HOST_     = ${_SSH_HOST_}"
+debug "_OPER_         = ${_OPER_}"
+
+if [ -n "$_VPN_HOST_" ]; then
+  if [ -z "$_OPER_" ]; then
+    [ -n "$_IS_VPN_START_" ] && disconnect "quiet"
+    _OPER_="connect"
+  fi
+fi
+
+# =========================================================
+# =========================================================
+case "$_OPER_" in
+"log") fnShowLog ;;
+"disconnect") disconnect ;;
+"connect")
+  [ -z "$_VPN_HOST_" ] && err "not passed vpn host" && help && exit 1
+  connect
+
   ;;
-
-*)
-  info "SSH_CONN_NAME  = $SSH_CONN_NAME"
-  info "HOST           = $HOST"
-  info "CFG_PROTO      = $_CFG_PROTO_"
-
+* | "status")
   info ">>> status VPN connect = "$(pidVpn 1>/dev/null && echo "yes" || echo "no")
   [ -n "$_SSH_FORWARD_" ] && ps -aux | grep autossh | grep -v grep
   ps -aux | grep "openvpn" | grep "\--config" | grep -v grep
