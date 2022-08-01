@@ -3,11 +3,11 @@
 # https://github.com/cilynx/rtl88x2bu
 
 # Update all packages per normal
-sudo apt update
-sudo apt -y upgrade
+sudo apt update && \
+sudo apt -y upgrade && \
 sudo apt -y update && sudo DEBIAN_FRONTEND=noninteractive apt -y install hostapd \
   dnsmasq openvpn netfilter-persistent iptables-persistent lshw vim mc iptraf-ng \
-  git raspberrypi-kernel-headers build-essential dkms autossh iperf bc
+  git raspberrypi-kernel-headers build-essential dkms autossh iperf bc sshfs
 
 
 # ----------------------------------------------------------------------------
@@ -51,14 +51,22 @@ sudo vim /etc/udev/rules.d/70-persistent-net.rules
 ```
 # built-in
 SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="dc:a6:32:a2:4a:54", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
-# asus
-SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="04:42:1a:5b:95:fc", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan1"
+
+# ASUSTek Computer, Inc. 802.11ac NIC
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="04:42:1a:5b:95:fc", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan2"
+
+# ASUSTek Computer, Inc. 802.11ac NIC (rezerv)
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="04:42:1a:48:b6:8a", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan2"
+
+# TP-Link TL-WN722N v2/v3 [Realtek RTL8188EUS] (not work)
+#SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="14:eb:b6:54:da:69", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan5"
+
 ```
 
 # ----------------------------------------------------------------------------
 sudo vim /etc/dhcpcd.conf
 #```
-interface wlan1
+interface wlan2
     static ip_address=192.168.4.1/24
     nohook wpa_supplicant
 #```
@@ -66,15 +74,15 @@ interface wlan1
 # ----------------------------------------------------------------------------
 sudo vim /etc/dnsmasq.conf
 #```
-interface=wlan1
+interface=wlan2
   dhcp-range=192.168.4.100,192.168.4.199,255.255.255.0,24h
 #```
 
 # ----------------------------------------------------------------------------
 sudo vim /etc/hostapd/hostapd.conf
 #```
-#interface=wlx74ee2ae24062
-interface=wlan1
+interface=wlx74ee2ae24062
+interface=wlan2
 driver=nl80211
 ssid=apt024
 macaddr_acl=0
@@ -105,6 +113,18 @@ sudo sed -i 's|#DAEMON_CONF=""|DAEMON_CONF="/etc/hostapd/hostapd.conf"|' /etc/de
 # ----------------------------------------------------------------------------
 sudo systemctl unmask hostapd
 sudo systemctl enable hostapd
+sudo systemctl status hostapd
+sudo systemctl restart hostapd
 
 
 sudo reboot
+
+
+# --------------
+# troubleshooting
+# --------------
+
+# проблемы со стартом AP (err: nl80211: kernel reports: Match already configured)
+sudo systemctl stop NetworkManager
+sudo killall wpasupplicant | sudo killall wpa_supplicant
+sudo systemctl disable NetworkManager

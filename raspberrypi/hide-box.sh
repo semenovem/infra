@@ -39,7 +39,7 @@ sudo rfkill unblock wlan
 sudo vim /etc/hostapd/hostapd.conf
 ```
 country_code=RU
-interface=wlan1
+interface=wlan2
 ssid=apt024
 hw_mode=g
 channel=7
@@ -147,16 +147,35 @@ update_config=1
 country=RU
 
 network={
-        ssid="VERA24"
-        psk="31415926"
+        ssid="Airtel_Zerotouch"
+        psk="9900120775"
         key_mgmt=WPA-PSK
-        scan_ssid=1
+}
+
+network={
+        ssid="kiran5g"
+        psk="9900120775"
+        key_mgmt=WPA-PSK
+}
+
+network={
+        ssid="Kiran 2g"
+        psk="9900120775"
+        key_mgmt=WPA-PSK
+}
+
+network={
+        ssid="TP-LINK_5BF8"
+        psk="63526646"
+        key_mgmt=WPA-PSK
 }
 
 network={
         ssid="v8_io"
         psk="55555555"
         key_mgmt=WPA-PSK
+#        scan_ssid=1
+#        disabled=1
 }
 ```
 
