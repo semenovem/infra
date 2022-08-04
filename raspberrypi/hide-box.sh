@@ -147,26 +147,14 @@ update_config=1
 country=RU
 
 network={
-        ssid="Airtel_Zerotouch"
-        psk="9900120775"
+        ssid="Airtel_9108177979_5GHz"
+        psk="air38663"
         key_mgmt=WPA-PSK
 }
 
 network={
-        ssid="kiran5g"
-        psk="9900120775"
-        key_mgmt=WPA-PSK
-}
-
-network={
-        ssid="Kiran 2g"
-        psk="9900120775"
-        key_mgmt=WPA-PSK
-}
-
-network={
-        ssid="TP-LINK_5BF8"
-        psk="63526646"
+        ssid="Airel_9108177979"
+        psk="air38663"
         key_mgmt=WPA-PSK
 }
 
@@ -191,4 +179,3 @@ sudo systemctl status hostapd
 dmesg
 sudo ifconfig usb0 up
 sudo dhclient usb0
-
