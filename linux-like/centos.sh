@@ -21,11 +21,11 @@ exit 0
 
 # --------------------------------------------------------------
 
-yum -y install epel-release
-yum -y update
-yum - upgrade
+yum -y install epel-release \
+yum -y update \
+yum -y upgrade \
 yum -y install \
-  squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf firewalld
+  squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf firewalld mc htop sshfs
 
 systemctl enable firewalld
 reboot
