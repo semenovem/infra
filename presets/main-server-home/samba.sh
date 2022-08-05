@@ -10,12 +10,12 @@ sudo apt install -y samba
 /etc/samba/smb.conf
 
 
-#[public]
-#path = /samba/public
-#guest ok = yes
-#force user = nobody
-#browsable = yes
-#writable = yes
+[public]
+path = /media/adman
+guest ok = yes
+force user = nobody
+browsable = yes
+writable = no
 
 
 

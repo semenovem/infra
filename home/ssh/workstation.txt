@@ -9,7 +9,6 @@ Host home.local
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
 
-# in home=192.168.1.35
 Host mini mini.local
   HostName     mini.local
   User         adman
@@ -54,7 +53,6 @@ Host home
   HostName     localhost
   Port         2022
   User         evg
-  # TODO
   IdentityFile ~/.ssh/id_ecdsa
 
 

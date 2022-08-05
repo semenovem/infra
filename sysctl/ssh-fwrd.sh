@@ -183,7 +183,7 @@ for p in "$@"; do
   "status") __OPER__="status" ;;
   "files") __OPER__="files" ;;
   "dry") __OPER__="dry" ;;
-  "debug" | "-debug" | "--debug") __DEBUG__="1" ;;
+  *"debug") __DEBUG__="1" ;;
   *)
     __ERR__=1
     info "unknown arg '$p'"
@@ -194,4 +194,13 @@ done
 [ "$__ERR__" ] && help && exit 1
 [ -z "$__OPER__" ] && __OPER__="status"
 
-readProps
+case "$__OPER__" in
+  "status")
+#    systemctl list-units "ssh-fwrd-*" --all | grep -E '^\s*ssh-fwrd-'
+    systemctl list-units "ssh-fwrd-*" --all
+    ;;
+  "__del")
+
+  ;;
+  *) readProps
+done

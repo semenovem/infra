@@ -2,4 +2,12 @@
 
 __SELF_SYSCTL_STATE_DIR__="${HOME}/_self_sysctl"
 
-mkdir -p "$__SELF_SYSCTL_STATE_DIR__"
+[ ! -d ] && mkdir -p "$__SELF_SYSCTL_STATE_DIR__"
+
+function __info__ {
+  echo "[INFO] [$(date)] $*"
+}
+
+function __debug__ {
+  echo "[DEBU] [$(date)] $*"
+}

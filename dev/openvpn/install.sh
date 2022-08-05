@@ -17,18 +17,18 @@ __SERVER__CONF__="/etc/openvpn/server"
 __SERVER__CONF_FILE__="${__SERVER__CONF__}/server.conf"
 __SERVER_CURVE__="prime256v1"
 
-__SERVER1_CN__="rr3-server1-evg"
-__SERVER2_CN__="rr3-server2-evg"
-__SERVER3_CN__="rr3-server3-evg"
+__SERVER1_CN__="evgio-server1-evg"
+__SERVER2_CN__="evgio-server2-evg"
+__SERVER3_CN__="evgio-server3-evg"
 
 __CLIENT_BASE_CONFIG__="${__BIN__}/client.conf"
 # secp256k1
 __CLIENT_CURVE__="prime256v1"
-__CLIENT1_CN__="rr3-client1-evg"
-__CLIENT2_CN__="rr3-client2-evg"
-__CLIENT3_CN__="rr3-client3-evg"
-__CLIENT4_CN__="rr3-client4-evg"
-__CLIENT5_CN__="rr3-client5-evg"
+__CLIENT1_CN__="evgio-client1"
+__CLIENT2_CN__="evgio-client2"
+__CLIENT3_CN__="evgio-client3"
+__CLIENT4_CN__="evgio-client4"
+__CLIENT5_CN__="evgio-client5"
 
 __DEBUG__=true
 __DEV_MODE__=
@@ -215,7 +215,7 @@ function DeletePKI() {
   rm -rf "$__PKI__" || return 1
 }
 
-function ServerIssueCert() {
+function ServerIssueCert {
     local name=$1 dir
     [ -z "$name" ] && echo "ERR: no argument passed" && return 1
 
@@ -240,7 +240,7 @@ function ServerIssueCert() {
     cp "$__SECRET_TA__" "$dir"
 }
 
-function ClientIssueCert() {
+function ClientIssueCert {
     local name=$1 dir
     [ -z "$name" ] && Err "no argument passed" && return 1
 
@@ -275,7 +275,7 @@ cat "$__CLIENT_BASE_CONFIG__" \
 
 }
 
-function FuncSystemRhel() {
+function FuncSystemRhel {
   sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-* || return 1
   sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' \
     /etc/yum.repos.d/CentOS-Linux-* || return 1
@@ -283,10 +283,11 @@ function FuncSystemRhel() {
   dnf swap centos-{linux,stream}-repos -y || return 1
   dnf distro-sync -y || return 1
   dnf install -y epel-release || return 1
+  dnf install openvpn easy-rsa -y || return 1
   __IS_SYSTEM_READINESS__=true
 }
 
-function FuncCAInstallation() {
+function FuncCAInstallation {
   if [ ! -d "/usr/share/easy-rsa" ]; then
     dnf install -y epel-release || return 1
     dnf install -y easy-rsa || return 1
@@ -321,14 +322,14 @@ function FuncCAInstallation() {
   __IS_CA_INSTALLED__=true
 }
 
-function FuncServerIssueCert() {
+function FuncServerIssueCert {
   [ -z "$__IS_CA_INSTALLED__" ] && Err "CA no installed" && return 10
   ServerIssueCert "$__SERVER1_CN__"
   ServerIssueCert "$__SERVER2_CN__"
   ServerIssueCert "$__SERVER3_CN__"
 }
 
-function FuncServerInstallation() {
+function FuncServerInstallation {
   [ -z "$__IS_SYSTEM_READINESS__" ] && (dnf install -y epel-release || return 1)
   [ -z "$__IS_OPENVPN_INSTALLED__" ] && (dnf install -y openvpn || return 1)
 
@@ -346,7 +347,7 @@ function FuncServerInstallation() {
     && cp "${__BIN__}/server.conf" "$__SERVER__CONF_FILE__"
 }
 
-function FuncClientIssueCert() {
+function FuncClientIssueCert {
   [ -z "$__IS_CA_INSTALLED__" ] && Err "CA no installed" && return 10
   ClientIssueCert "$__CLIENT1_CN__"
   ClientIssueCert "$__CLIENT2_CN__"
@@ -356,13 +357,13 @@ function FuncClientIssueCert() {
 }
 
 # TODO work in progress
-function FuncClientInstallation() {
+function FuncClientInstallation {
   Info "FuncClientInstallation - work in progress"
   return 10
 }
 
 # TODO - work in progress
-function FuncExportCert() {
+function FuncExportCert {
   Info "FuncExportCert - work in progress"
   return 10
   CN_NAME=
@@ -383,7 +384,7 @@ function FuncExportCert() {
   done
 }
 
-function FuncDeletePKI() {
+function FuncDeletePKI {
   [ ! -d "$__PKI__" ] && Warn "Nothing to delete" && return 10
   Confirm "delete PKI ?" || return 10
   DeletePKI
@@ -441,7 +442,7 @@ MenuItem() {
   echo -e "${num} ${cmd} ${desc}"
 }
 
-MenuExec() {
+function MenuExec {
   case $(echo "$1" | awk '{print tolower($0)}') in
     "1"  | "install") echo; FuncSystemRhel ;;
     "2"  | "ca") echo; FuncCAInstallation ;;
@@ -459,7 +460,7 @@ MenuExec() {
   esac
 }
 
-MenuMain () {
+function MenuMain {
   local ans NoCA=off YesCA=off sys=off
   [ -n "$__IS_CA_INSTALLED__" ] && NoCA=on || YesCA=on
   [ -z "$__IS_SYSTEM_READINESS__" ] && sys=on
@@ -493,7 +494,7 @@ MenuMain () {
   done
 }
 
-Main() {
+function Main {
   while true; do
     echo
     echo -e "${__BACKGROUND_PURPLE__}$(printf '%-80s\n' "openvpn setup")${__NC__}"
