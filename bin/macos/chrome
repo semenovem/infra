@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+
+echo ">>>>>>>>>> chrome"
+
+open -a Google\ Chrome $*
