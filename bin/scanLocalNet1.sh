@@ -1,5 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
+BIN=$(dirname "$([ "${0:0:1}" = "/" ] && echo "$0" || echo "$PWD/${0#./}")")
+sourse "${BIN}/common.sh"
 
 echo "scanLocalNet1"
 
