@@ -1,0 +1,46 @@
+
+# Work in progress
+
+
+# vpn (openvpn)
+vpn:
+  - tcp
+    ports:
+      - 33440
+  - udp
+    ports:
+      - 33440
+
+# proxy (squid)
+33443/tcp
+
+
+# default list of hosts
+hosts rr1 rr4 eu1 spb
+
+# common reles:
+# data for RemoteForward port:host:port
+# hostname |  port:port | [hosts]
+
+# core
+evg-srv 2022:22
+evg-srv 2023:10090  2024:8090  2025:3389 rr4 eu1 spb
+
+# reserve 1
+srv1 2030:22
+
+# reserve 2
+srv2 2035:22
+
+# mobile
+mini 3022:22
+
+
+ssh-fwrd:
+  def-proxy:
+    - rr1
+    - rr4
+    - eu1
+    - spb
+  items:
+    - sd
