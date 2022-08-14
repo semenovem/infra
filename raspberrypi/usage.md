@@ -65,3 +65,8 @@ sudo apt update && sudo apt -y dist-upgrade \
 > https://www.maketecheasier.com/mount-access-ext4-partition-mac/
 sudo ext4fuse /dev/disk3s1 ~/tmp/MY_DISK_PARTITION -o allow_other
 
+
+------------------------------------  
+> отключить заставку и выключение экрана. Добавить строку в файл:
+sudo vim /etc/lightdm/lightdm.conf
+`xserver-command=X -s 0 dpms`
