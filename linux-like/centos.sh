@@ -143,3 +143,17 @@ firewall-cmd --get-zones
 firewall-cmd --permanent --add-service=http
 firewall-cmd --zone=public --permanent --add-port 8080/tcp
 firewall-cmd --reload
+
+
+
+# ################################
+# swap файл
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+sudo swapon --show
+
+# постоянный swap файл
+sudo vim /etc/fstab
+/swapfile swap swap defaults 0 0
