@@ -1,0 +1,17 @@
+#!/bin/sh
+
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+source "${ROOT}/_core/os.sh"
+source "${ROOT}/_core/logger.sh"
+
+EXCLUDE="install-local help utils"
+
+pipe() {
+  while read -r data; do
+    basename "$data"
+  done
+}
+
+#find "$ROOT" -type f | pipe
+
+echo "[cert scanLocalNet temp utils ssh-config]"

@@ -1,8 +1,3 @@
 #!/bin/zsh
 
-
-echo ">>>>>>>>>> chrome"
-
-exit 0
-
 open -a Google\ Chrome $*

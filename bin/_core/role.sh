@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Роль устройства
+__CORE_ROLE__=
+
+# Типы ролей
+# при добавлении новой роли - также добавь и в __CORE_ROLES__
+__CORE_ROLE_UNDEFINED__="undefined"
+__CORE_ROLE_HOME_SERVER_CONST__="HOME_SERVER"
+__CORE_ROLE_STANDBY_SERVER_CONST__="STANDBY_SERVER"
+__CORE_ROLE_PROXY_SERVER_CONST__="PROXY_SERVER"
+__CORE_ROLE_WORK_STATION_CONST__="WORK_STATION"
+__CORE_ROLE_MINI_SERVER_CONST__="MINI_SERVER"
+
+__CORE_ROLES__="$__CORE_ROLE_HOME_SERVER_CONST__"
+__CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_STANDBY_SERVER_CONST__}"
+__CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_PROXY_SERVER_CONST__}"
+__CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_WORK_STATION_CONST__}"
+__CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_MINI_SERVER_CONST__}"
+
+# Получение сохраненной роли устройства
+
+__core_role_save__() {
+  role=$1
+
+  echo ">>>> ___ __CORE_CONF_STATE_DIR__ $__CORE_CONF_STATE_DIR__"
+}

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+source "${ROOT}/_core/os.sh"
+source "${ROOT}/_core/logger.sh"
+
+if [ -n "$__CORE_OS_IS_MACOS__" ]; then
+  __info__ "TODO Работает только на поцессоре intel"
+  #  sudo powermetrics | grep -i "CPU die temperature"
+  exit 0
+fi
+
+case "$__CORE_OS_LINUX_DISTR__" in
+"") __warn__ "Дистрибутив LINUX не определен" ;;
+
+"$__CORE_OS_LINUX_DISTR_DEBIAN_CONST__") ;;
+
+"$__CORE_OS_LINUX_DISTR_RASPBIAN_CONST__")
+  watch -t -n 1 vcgencmd measure_temp
+  ;;
+
+"$__CORE_OS_LINUX_DISTR_FEDORA_CONST__") ;;
+
+*) __warn__ "Не поддерживается для OS = '$__CORE_OS_LINUX_DISTR__'" ;;
+esac
