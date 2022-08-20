@@ -8,17 +8,17 @@ core_logger_sub_system_name() {
 }
 
 __err__() {
-  echo "[$CORE_LOGGER_SYSTEM_NAME][ERRO] [$(date)] $(core_logger_sub_system_name)$@"
+  echo "[$CORE_LOGGER_SYSTEM_NAME][ERRO] [$(date)] $(core_logger_sub_system_name)$*"
 }
 
 __warn__() {
-  echo "[$CORE_LOGGER_SYSTEM_NAME][WARN] [$(date)] $(core_logger_sub_system_name)$@"
+  echo "[$CORE_LOGGER_SYSTEM_NAME][WARN] [$(date)] $(core_logger_sub_system_name)$*"
 }
 
 __info__() {
-  echo "[$CORE_LOGGER_SYSTEM_NAME][INFO] [$(date)] $(core_logger_sub_system_name)$@"
+  echo "[$CORE_LOGGER_SYSTEM_NAME][INFO] [$(date)] $(core_logger_sub_system_name)$*"
 }
 
 __debug__() {
-  echo "[$CORE_LOGGER_SYSTEM_NAME][DEBU] [$(date)] $(core_logger_sub_system_name)$@"
+  echo "[$CORE_LOGGER_SYSTEM_NAME][DEBU] [$(date)] $(core_logger_sub_system_name)$*"
 }

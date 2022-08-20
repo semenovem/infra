@@ -1,15 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 
 #************************************************************
 # ssh-congig.sh [-workstation | -server] [-yes] -file ....
 #************************************************************
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-source "${ROOT}/_core/logger.sh"
+source "${ROOT}/../_core/func.sh"
+source "${ROOT}/../_core/role.sh"
 
-
-__CFG_WORKSTATION__="${ROOT}/../home/ssh/workstation.txt"
-__CFG_SERVER__="${ROOT}/../home/ssh/server.txt"
+__CFG_WORKSTATION__="${ROOT}/../../home/ssh/workstation.txt"
+__CFG_SERVER__="${ROOT}/../../home/ssh/server.txt"
 
 __CONST_WORKSTATION__="-workstation"
 __CONST_SERVER__="-server"

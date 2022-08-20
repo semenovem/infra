@@ -14,4 +14,4 @@ pipe() {
 
 #find "$ROOT" -type f | pipe
 
-echo "[cert scanLocalNet temp utils ssh-config]"
+echo "[cert scanLocalNet temp utils]"

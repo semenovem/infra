@@ -3,6 +3,9 @@
 # Роль устройства
 __CORE_ROLE__=
 
+CORE_ROLE_PATH_DIR="${HOME}/_env_state"
+CORE_ROLE_FILE="role"
+
 # Типы ролей
 # при добавлении новой роли - также добавь и в __CORE_ROLES__
 __CORE_ROLE_UNDEFINED__="undefined"
@@ -19,9 +22,19 @@ __CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_WORK_STATION_CONST__}"
 __CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_MINI_SERVER_CONST__}"
 
 # Получение сохраненной роли устройства
+if [ -f "${CORE_ROLE_PATH_DIR}/${CORE_ROLE_FILE}" ]; then
+  __CORE_ROLE__=$(cat "${CORE_ROLE_PATH_DIR}/${CORE_ROLE_FILE}")
+fi
 
+
+# Сохранить роль
 __core_role_save__() {
   role=$1
+  [ -z "$role" ] && echo "не передано значение роли" && return 1
 
-  echo ">>>> ___ __CORE_CONF_STATE_DIR__ $__CORE_CONF_STATE_DIR__"
+  if [ ! -d "$CORE_ROLE_PATH_DIR" ]; then
+    mkdir -p "$CORE_ROLE_PATH_DIR" || return 1
+  fi
+
+  echo "$role" >"${CORE_ROLE_PATH_DIR}/${CORE_ROLE_FILE}"
 }

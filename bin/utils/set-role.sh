@@ -1,9 +1,8 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-source "${ROOT}/../_core/conf.sh"
-source "${ROOT}/../_core/role.sh"
-
+. "${ROOT}/../_core/func.sh"
+. "${ROOT}/../_core/role.sh"
 
 # Получить name роли по id
 get_role_name_by_id() {
@@ -18,6 +17,7 @@ get_role_name_by_id() {
   return 1
 }
 
+# Отрисовка меню
 draw_menu() {
   echo "--- Роли серверов и рабочих станций:"
   id=0
@@ -29,14 +29,14 @@ draw_menu() {
   done
 }
 
+# Выбор роли
 main() {
   name=
 
   while true; do
     draw_menu
-    read -rn 1 -p "Номер роли. [q для выхода]: " ans
+    read -rp "Номер роли. [q для выхода]: " ans
     echo
-    [ -n "$ans" ] && echo
 
     case "$ans" in
     "q" | "Q" | "n" | "N" | "^[")
@@ -53,12 +53,13 @@ main() {
   done
 
   echo "выбрана роль name = '$name'"
+
+  __confirm__ || (
+    echo "--- Отмена"
+    return 0
+  )
+
+  [ -n "$name" ] && echo "--- Сохранение роли.." && __core_role_save__ "$name"
 }
 
-#main
-
-#echo ">>> HOME = $HOME"
-
-
-__core_role_save__
-
+main
