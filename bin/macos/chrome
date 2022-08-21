@@ -1,3 +1,4 @@
 #!/bin/zsh
 
-open -a Google\ Chrome $*
+# shellcheck disable=SC2068
+open -a Google\ Chrome $@

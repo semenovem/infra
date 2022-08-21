@@ -3,32 +3,17 @@
 # v1.0
 # ----------------------------------
 
-Host home.local
-  HostName     evg-srv.local
-  User         evg
-  Port         22
-  IdentityFile ~/.ssh/id_ecdsa
-
 Host mini mini.local
   HostName     mini.local
   User         adman
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
 
-Host srv1.local
-  HostName     192.168.1.30
-  User         adm
-  IdentityFile ~/.ssh/id_ecdsa
-
-Host srv2.local
-  HostName     192.168.1.32
-  User         adm
-  IdentityFile ~/.ssh/id_ecdsa
 
 # ----------------------------------
 # FORWARDING - home
 # ----------------------------------
-# forwarding ports to home
+# forwarding to home
 Host open
   HostName      rr4.evgio.dev
   Port          2257
@@ -38,6 +23,8 @@ Host open
   LocalForward  3389 127.0.0.1:2025
   LocalForward  10090 127.0.0.1:2023
   LocalForward  10080 127.0.0.1:2024
+  LocalForward  2030 127.0.0.1:2030
+  LocalForward  2035 127.0.0.1:2035
   RequestTTY    yes
 
 Host open-eu
@@ -45,8 +32,11 @@ Host open-eu
   User          adman
   IdentityFile  ~/.ssh/id_ecdsa
   LocalForward  2022 127.0.0.1:2022
-  LocalForward  3389 127.0.0.1:3389
-  RemoteCommand ssh -L 3389:127.0.0.1:3389 -i ~/.ssh/id_ecdsa remote@localhost -p 2022
+  LocalForward  3389 127.0.0.1:2025
+  LocalForward  10090 127.0.0.1:2023
+  LocalForward  10080 127.0.0.1:2024
+  LocalForward  2030 127.0.0.1:2030
+  LocalForward  2035 127.0.0.1:2035
   RequestTTY    yes
 
 Host home
@@ -54,71 +44,3 @@ Host home
   Port         2022
   User         evg
   IdentityFile ~/.ssh/id_ecdsa
-
-
-# temporary
-# depricated
-# ----------------------------------
-# FOR `HOME` SERVER
-# ----------------------------------
-Host ru-tunnel
-  HostName     rr1.evgio.dev
-  User         adman
-  IdentityFile ~/.ssh/id_ecdsa
-
-Host eu-tunnel
-  HostName     eu1.evgio.dev
-  User         adman
-  IdentityFile ~/.ssh/id_ecdsa
-
-
-# ----------------------------------
-# FORWARDING - btv
-# ----------------------------------
-
-# Проброс портов для рабочих подключений
-Host work
-  HostName      rr1.evgio.dev
-  User          adman
-  IdentityFile  ~/.ssh/id_ecdsa
-  LocalForward  4022 127.0.0.1:4022
-  LocalForward  12022 127.0.0.1:12022
-  RemoteCommand ssh -L 12022:localhost:12022 hldgadm@localhost -p 4022
-  RequestTTY    yes
-
-Host hldg
-  HostName      localhost
-  Port          4022
-  User          hldgadm
-  IdentityFile  ~/.ssh/id_rsa_vtb_hldg
-  RemoteCommand cd /app/support; ls -l; exec $SHELL
-  RequestTTY    yes
-
-# сразу на стенд препрода
-Host hldg1
-  HostName     localhost
-  Port         4022
-  User         hldgadm
-  LocalForward 4022 127.0.0.1:8000
-  IdentityFile ~/.ssh/id_rsa_vtb_hldg
-
-Host tec
-  HostName      localhost
-  Port          12022
-  User          vtb224446
-  IdentityFile  ~/.ssh/id_rsa
-  RemoteCommand sudo -u hldgtec bash -c 'cd /app; ls -l; bash'
-  RequestTTY    yes
-
-Host afsc
-  HostName     localhost
-  Port         12022
-  User         vtb224446
-  IdentityFile ~/.ssh/id_rsa
-  RequestTTY   yes
-
-Host afsc-back
-  HostName     localhost
-  Port         12022
-  User         vtb224446
-  IdentityFile ~/.ssh/id_rsa

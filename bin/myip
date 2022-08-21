@@ -1,0 +1,25 @@
+#!/bin/sh
+
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+. "${ROOT}/_core/logger.sh"
+
+which curl 1>/dev/null
+if [ $? -eq 0 ]; then
+  curl -s 2ip.ru && exit 0
+
+  curl -w'\n' ifconfig.me 2>/dev/null && exit 0
+fi
+
+which wget 1>/dev/null
+if [ $? -eq 0 ]; then
+  wget -qO myip http://www.ipchicken.com/
+  grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" myip
+  rm -f myip
+
+  exit 0
+
+  # TODO - added alternative methods
+  # wget -qO- eth0.me
+fi
+
+__err__ "Не установлен curl или wget" && exit 1

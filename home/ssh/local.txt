@@ -1,0 +1,20 @@
+# ----------------------------------
+# LOCAL
+# v1.0
+# ----------------------------------
+
+Host home.local
+  HostName     evg-srv.local
+  User         evg
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv1.local
+  HostName     192.168.1.30
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv2.local
+  HostName     192.168.1.32
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa

@@ -47,34 +47,3 @@ Host msk1
   Port         2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
-
-# kz (hoster.kz)
-Host kz1
-  HostName     kz1.evgio.dev
-  Port         2257
-  User         adman
-  IdentityFile ~/.ssh/id_ecdsa
-
-# ----------------------------------
-# FORDWARDING TO HOME
-# v1.0
-# ----------------------------------
-
-Host to-home
-  HostName     localhost
-  Port         2022
-  User         remote
-  IdentityFile ~/.ssh/id_rsa
-
-Host to-srv1
-  HostName     localhost
-  Port         2030
-  User         remote
-  IdentityFile ~/.ssh/id_rsa
-
-Host to-srv2
-  HostName     localhost
-  Port         2034
-  User         remote
-  IdentityFile ~/.ssh/id_rsa
-

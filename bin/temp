@@ -1,8 +1,10 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-source "${ROOT}/_core/os.sh"
-source "${ROOT}/_core/logger.sh"
+. "${ROOT}/_core/os.sh"
+. "${ROOT}/_core/logger.sh"
+
+
 
 if [ -n "$__CORE_OS_IS_MACOS__" ]; then
   __info__ "TODO Работает только на поцессоре intel"
