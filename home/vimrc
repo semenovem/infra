@@ -1,4 +1,4 @@
-" set number
+set number
 syntax on
 set incsearch
 set hlsearch

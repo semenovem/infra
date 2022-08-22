@@ -43,6 +43,16 @@ case "$ROLE" in
   add "$__CORE_ROLE_HOME_SERVER_CONST__"
   add "$__CORE_ROLE_STANDBY_SERVER_CONST__"
   ;;
+
+"$__CORE_ROLE_WORKSTATION_CONST__")
+  __info__ "для роли '${ROLE}' нет предустановленных ключей"
+  exit 0
+  ;;
+
+*)
+  __err__ "Получена не известная роль '${ROLE}'"
+  exit 1
+  ;;
 esac
 
 echo "$PREVIEW"
