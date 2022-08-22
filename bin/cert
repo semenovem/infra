@@ -1,11 +1,11 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-source "${ROOT}/_core/logger.sh"
+. "${ROOT}/_core/logger.sh"
 
 FILE=$1
-[ -z "$FILE" ] && __err__ "pass an argument ${FILE}" && exit 1
-[ ! -f "$FILE" ] && __err__ "this is not a FILE '${FILE}'" && exit 1
+[ -z "$FILE" ] && __err__ "Не передан аргумент ${FILE}" && exit 1
+[ ! -f "$FILE" ] && __err__ "переданный агрумент - не файл'${FILE}'" && exit 1
 
 grep -q "BEGIN CERTIFICATE REQUEST" "$FILE" &&
   (

@@ -41,7 +41,7 @@ gen_profile_with_bin_dirs() {
 
   echo "" >>"$out"
   echo "## repository update" >>"$out"
-  echo "sh ${ROOT}/utils/update-repo.sh \"${ROOT}/utils\" &" >>"$out"
+  echo "sh ${ROOT}/utils/update-repo.sh \"${ROOT}/utils\"" >>"$out"
 }
 
 add_source_file_to_profile() {

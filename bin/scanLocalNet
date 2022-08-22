@@ -1,8 +1,8 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-source "${ROOT}/_core/os.sh"
-source "${ROOT}/_core/logger.sh"
+. "${ROOT}/_core/os.sh"
+. "${ROOT}/_core/logger.sh"
 
 case "$__CORE_OS_KIND__" in
 "$__CORE_OS_KIND_MACOS_CONST__")

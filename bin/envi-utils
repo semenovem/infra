@@ -4,6 +4,8 @@
 # Утилиты
 #
 
+# TODO
+
 echo "1. self update [обновить репозиторий]"
 echo "2. "
 echo "3. "
