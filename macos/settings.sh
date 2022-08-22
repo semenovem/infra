@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mkdir ~/.npm-global
-npm config set prefix "~/.npm-global"
+npm config set prefix "${HOME}/.npm-global"
 export PATH=~/.npm-global/bin:$PATH
 
 
