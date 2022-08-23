@@ -29,7 +29,10 @@ gen_profile_with_bin_dirs() {
     dirs="${dirs}${dir}"
   done
 
-  [ -n "$dirs" ] && dirs="${dirs}:${PATH}" || dirs="$PATH"
+  path=$(__clear_path__ "$BIN_DIRS")
+
+  [ -n "$dirs" ] && dirs="${dirs}:${path}" || dirs="$path"
+  dirs=$(__normalize_path__ "$dirs")
 
   # shellcheck disable=SC2129
   echo "" >>"$out"

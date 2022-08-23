@@ -23,6 +23,39 @@ __is_dir_added_to_path__() {
   return 1
 }
 
+# Убрать дубли
+# $1 - значение PATH
+__normalize_path__() {
+  PATH_NEW=
+  for p in $(echo "$1" | tr ":" "\n"); do
+    HAS=
+    for pp in $(echo "$PATH_NEW" | tr ":" "\n"); do
+      [ "$pp" = "$p" ] && HAS=1
+    done
+    [ -n "$HAS" ] && continue
+
+    [ -n "$PATH_NEW" ] && PATH_NEW="${PATH_NEW}:"
+    PATH_NEW="${PATH_NEW}${p}"
+  done
+
+  echo "$PATH_NEW"
+}
+
+# Очистка PATH от ранее добавленных значений
+__clear_path__() {
+  prefix=$1
+  PATH_NEW=
+
+  for p in $(echo "$PATH" | tr ":" "\n"); do
+    echo "$p" | grep -Ei "^${prefix}" -q && continue
+
+    [ -n "$PATH_NEW" ] && PATH_NEW="${PATH_NEW}:"
+    PATH_NEW="${PATH_NEW}${p}"
+  done
+
+  echo "$PATH_NEW"
+}
+
 # Копирование файла, если необходимо
 # $1 - файл-источник (оригинал)
 # $2 - файл-приемник (копия)\
@@ -37,8 +70,8 @@ __copy_if_need_file_to__() {
   [ ! -f "$source" ] && echo "Нет файла-источника '$source'" >&2 && return 1
 
   # файлы идентичные
-  [ -f "$target" ] && cmp -s "$target" "$source" && \
-    echo "Файлы идентичные" && \
+  [ -f "$target" ] && cmp -s "$target" "$source" &&
+    echo "Файлы идентичные" &&
     return 0
 
   cp "$source" "$target" || return 1

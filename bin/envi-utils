@@ -4,9 +4,14 @@
 # Утилиты
 #
 
-# TODO
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+. "${ROOT}/_core/conf.sh"
+. "${ROOT}/_core/os.sh"
+. "${ROOT}/_core/logger.sh"
+. "${ROOT}/_core/role.sh"
+. "${ROOT}/_core/func.sh"
 
-echo "1. self update [обновить репозиторий]"
-echo "2. "
-echo "3. "
-echo "4. "
+#echo "1. self update [обновить репозиторий]"
+#echo "2. "
+#echo "3. "
+#echo "4. "
