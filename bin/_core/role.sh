@@ -1,6 +1,8 @@
 #!/bin/sh
 
-CORE_ROLE_PATH_DIR="${HOME}/_env_state"
+# TODO дублирует значение из conf.sh __CORE_CONF_STATE_DIR__
+CORE_ROLE_PATH_DIR="${HOME}/_envi_state"
+
 CORE_ROLE_FILE="role"
 
 # Типы ролей
@@ -34,10 +36,6 @@ __core_role_get__() {
 __core_role_save__() {
   role=$1
   [ -z "$role" ] && echo "не передано значение роли" >&2 && return 1
-
-  if [ ! -d "$CORE_ROLE_PATH_DIR" ]; then
-    mkdir -p "$CORE_ROLE_PATH_DIR" || return 1
-  fi
 
   echo "$role" >"${CORE_ROLE_PATH_DIR}/${CORE_ROLE_FILE}"
 }

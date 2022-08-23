@@ -16,7 +16,7 @@ BIN_DIRS="$ROOT"
 TMP_FILE=$(mktemp)
 
 gen_profile_with_bin_dirs() {
-  out="$__CORE_CONF_PROFILE_BIN_DIRS_FILE__"
+  out="$__CORE_CONF_PROFILE_FILE__"
   echo "# Автогенерируемый файл bin директорий" >"$out"
   echo "" >>"$out"
 
@@ -120,7 +120,7 @@ gen_profile_with_bin_dirs $BIN_DIRS
 add_source_file_to_profile \
   "$USER_PROFILE_FILE" \
   "source" \
-  "${__CORE_CONF_PROFILE_BIN_DIRS_FILE__}" \
+  "${__CORE_CONF_PROFILE_FILE__}" \
   "adding PATH paths to bin utilities" ||
   exit 1
 

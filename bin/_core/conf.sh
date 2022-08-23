@@ -4,11 +4,11 @@
 # Конфигурация
 #
 
-# Директория хранения данных
+# Директория хранения данных. Есть копии в других файлах
 __CORE_CONF_STATE_DIR__="${HOME}/_envi_state"
 
-# Файл профиля с bin директориями
-__CORE_CONF_PROFILE_BIN_DIRS_FILE__="${HOME}/.profile_envi_bin_dirs"
+# Файл профиля
+__CORE_CONF_PROFILE_FILE__="${HOME}/.profile_envi"
 
 # Время последнего обновления репозитория
 __CORE_CONF_LAST_UPDATE_REPO__="${__CORE_CONF_STATE_DIR__}/last-update-repo"
