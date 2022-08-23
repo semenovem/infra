@@ -14,48 +14,6 @@ __confirm__() {
   done
 }
 
-#   Проверить, добавлен ли путь в PATH
-__is_dir_added_to_path__() {
-  for p in $(echo "$PATH" | tr ":" "\n"); do
-    [ "$p" = "$1" ] && return 0
-  done
-
-  return 1
-}
-
-# Убрать дубли
-# $1 - значение PATH
-__normalize_path__() {
-  PATH_NEW=
-  for p in $(echo "$1" | tr ":" "\n"); do
-    HAS=
-    for pp in $(echo "$PATH_NEW" | tr ":" "\n"); do
-      [ "$pp" = "$p" ] && HAS=1
-    done
-    [ -n "$HAS" ] && continue
-
-    [ -n "$PATH_NEW" ] && PATH_NEW="${PATH_NEW}:"
-    PATH_NEW="${PATH_NEW}${p}"
-  done
-
-  echo "$PATH_NEW"
-}
-
-# Очистка PATH от ранее добавленных значений
-__clear_path__() {
-  prefix=$1
-  PATH_NEW=
-
-  for p in $(echo "$PATH" | tr ":" "\n"); do
-    echo "$p" | grep -Ei "^${prefix}" -q && continue
-
-    [ -n "$PATH_NEW" ] && PATH_NEW="${PATH_NEW}:"
-    PATH_NEW="${PATH_NEW}${p}"
-  done
-
-  echo "$PATH_NEW"
-}
-
 # Копирование файла, если необходимо
 # $1 - файл-источник (оригинал)
 # $2 - файл-приемник (копия)\

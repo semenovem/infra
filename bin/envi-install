@@ -24,19 +24,12 @@ gen_profile_with_bin_dirs() {
   # shellcheck disable=SC2068
   for dir in $@; do
     echo "## $dir" >>"$out"
-    __is_dir_added_to_path__ && continue
-    [ -n "$dirs" ] && dirs="${dirs}:"
-    dirs="${dirs}${dir}"
+    dirs="${dirs}:${dir}"
   done
-
-  path=$(__clear_path__ "$BIN_DIRS")
-
-  [ -n "$dirs" ] && dirs="${dirs}:${path}" || dirs="$path"
-  dirs=$(__normalize_path__ "$dirs")
 
   # shellcheck disable=SC2129
   echo "" >>"$out"
-  echo "export PATH=\"${dirs}\"" >>"$out"
+  echo "export PATH=\"\${PATH}${dirs}\"" >>"$out"
 
   echo "" >>"$out"
   echo "## additional profile" >>"$out"
