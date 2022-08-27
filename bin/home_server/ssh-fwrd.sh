@@ -8,16 +8,17 @@
 #************************************************************
 
 __BIN__=$(dirname "$([[ $0 == /* ]] && echo "$0" || echo "$PWD/${0#./}")")
-source "${__BIN__:?}/common.sh"
+. "${__BIN__:?}/../_core/conf.sh"
+. "${__BIN__:?}/../_core/logger.sh"
 
 __SERVICE_NAME__="ssh-fwrd"
 __SYSTEMMD_DIR__="/etc/systemd/system"
 
-__FILE_CONF__="${__BIN__:?}/${__SERVICE_NAME__}.conf"
+__FILE_CONF__="${__BIN__:?}/configs/${__SERVICE_NAME__}.conf"
 __WORKING_DIRECTORY__="$__BIN__"
 __USER__="$(whoami)"
 __GROUP__="$(whoami)"
-__PROPS_FILE__="${__BIN__}/${__SERVICE_NAME__}.properties"
+__PROPS_FILE__="${__BIN__}/configs/${__SERVICE_NAME__}.properties"
 __HOSTNAME__=$(cat "/etc/hostname")
 
 __OPER__=
@@ -31,13 +32,9 @@ function help {
   echo "use: [ start | restart | stop | status | files ]"
 }
 
-function info {
-  echo "[INFO] [$(date)] $*"
-}
-
 function debug {
   [ -z "$__DEBUG__" ] && return 0
-  echo "[DEBU] [$(date)] $*"
+  __debug__ "$*"
 }
 
 function tmpl {
@@ -47,12 +44,12 @@ function tmpl {
 
 function getPathAutosshLogFile {
   local host=$1
-  echo "${__SELF_SYSCTL_STATE_DIR__}/${__SERVICE_NAME__}-${host}.log"
+  echo "${__CORE_CONF_STATE_DIR__}/${__SERVICE_NAME__}-${host}.log"
 }
 
 function getPathAutosshPidFile {
   local host=$1
-  echo "${__SELF_SYSCTL_STATE_DIR__}/${__SERVICE_NAME__}-${host}.pid"
+  echo "${__CORE_CONF_STATE_DIR__}/${__SERVICE_NAME__}-${host}.pid"
 }
 
 function getCmd {
@@ -122,7 +119,7 @@ function action {
 
   "status")
     query=$(sudo systemctl status "$serviceName" 2>&1)
-    info "[status for '${conns} $host'] ${query}"
+    __info__ "[status for '${conns} $host'] ${query}"
     ;;
 
   "files")
@@ -172,7 +169,7 @@ function readProps {
     action "$__OPER__" "$host" "${map[$host]}"
   done
 
-  [ "${#map[*]}" -eq 0 ] && info "no match found for hostname '${__HOSTNAME__}'"
+  [ "${#map[*]}" -eq 0 ] && __info__ "no match found for hostname '${__HOSTNAME__}'"
 }
 
 for p in "$@"; do
@@ -186,7 +183,7 @@ for p in "$@"; do
   *"debug") __DEBUG__="1" ;;
   *)
     __ERR__=1
-    info "unknown arg '$p'"
+    __info__ "unknown arg '$p'"
     ;;
   esac
 done
@@ -195,12 +192,11 @@ done
 [ -z "$__OPER__" ] && __OPER__="status"
 
 case "$__OPER__" in
-  "status")
-#    systemctl list-units "ssh-fwrd-*" --all | grep -E '^\s*ssh-fwrd-'
-    systemctl list-units "ssh-fwrd-*" --all
-    ;;
-  "__del")
-
+"status")
+  #    systemctl list-units "ssh-fwrd-*" --all | grep -E '^\s*ssh-fwrd-'
+  systemctl list-units "ssh-fwrd-*" --all
   ;;
-  *) readProps
-done
+"__del") ;;
+
+  *) readProps ;;
+esac

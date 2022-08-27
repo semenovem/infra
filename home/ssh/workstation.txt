@@ -44,3 +44,15 @@ Host home
   Port         2022
   User         evg
   IdentityFile ~/.ssh/id_ecdsa
+
+Host srv1
+  HostName     localhost
+  Port         2030
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv2
+  HostName     localhost
+  Port         2032
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa

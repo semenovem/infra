@@ -11,7 +11,66 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 . "${ROOT}/_core/role.sh"
 . "${ROOT}/_core/func.sh"
 
-#echo "1. self update [обновить репозиторий]"
-#echo "2. "
-#echo "3. "
-#echo "4. "
+pipe() {
+  while read -r data; do
+    [ -n "$data" ] && echo "$data"
+  done
+}
+
+draw_menu() {
+  echo "$MENU" | tr ";" "\n" | pipe
+}
+
+choice() {
+  echo "$MENU" | tr ";" "\n" | pipe | grep -E "^$1"
+}
+
+task() {
+  echo "$TASK" | grep -E "^$1" -q
+}
+
+main() {
+  draw_menu
+  read -rp ">> Номер задачи. [q для выхода]: " ans
+
+  case "$ans" in
+  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9")
+    TASK=$(choice "$ans")
+    [ -z "$TASK" ] && return 1
+    ;;
+
+  *)
+    echo "--------------------- Отмена"
+    return 1
+    ;;
+  esac
+
+  return 0
+}
+
+confirm() {
+  __confirm__ "Выполнить '$TASK' ? "
+  [ $? -ne 0 ] && echo "--- Отмена выполнения задачи" && return 1
+  return 0
+}
+
+#
+#
+#
+
+# список утилит
+MENU="
+1. обновить repo
+2. получить установленную роль
+3. установить роль для машины
+4. обновить ssh config
+5. обновить ssh authorization_keys"
+
+TASK=
+main || exit 1
+
+task "1." && confirm && sh "${ROOT}/utils/update-repo.sh"
+task "2." && sh "${ROOT}/utils/get-role.sh"
+task "3." && sh "${ROOT}/utils/set-role.sh"
+task "4." && sh "${ROOT}/utils/ssh-config.sh"
+task "5." && sh "${ROOT}/utils/ssh-authorized-keys.sh"

@@ -26,3 +26,6 @@ NET="${IP%.*}"
 echo ": start-****************************************"
 echo "${NET}".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
 echo ": end-******************************************"
+
+
+# echo "192.168.1".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
