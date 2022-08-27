@@ -53,6 +53,6 @@ Host srv1
 
 Host srv2
   HostName     localhost
-  Port         2032
+  Port         2035
   User         adm
   IdentityFile ~/.ssh/id_ecdsa
