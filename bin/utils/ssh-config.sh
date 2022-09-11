@@ -1,12 +1,17 @@
 #!/bin/sh
 
-# подготовка файла ssh config или preview
+# Подготовка файла ssh config и preview
 # $1 - файл ssh config
 # $2 - файл предпросмотра
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/../_core/role.sh"
 . "${ROOT}/../_core/logger.sh"
+
+__CFG_WORKSTATION__="${ROOT}/../../home/ssh/workstation.txt"
+__CFG_SERVER__="${ROOT}/../../home/ssh/server.txt"
+__CFG_LOCAL__="${ROOT}/../../home/ssh/local.txt"
+CONTENT=
 
 SSH_CONFIG_FILE=$1
 PREVIEW_FILE=$2
@@ -18,11 +23,6 @@ PREVIEW_FILE=$2
 
 [ -n "$PREVIEW_FILE" ] && [ ! -f "$PREVIEW_FILE" ] &&
   __err__ "переданный аргумент \$2 должен быть файлом = '${PREVIEW_FILE}'" && exit 1
-
-__CFG_WORKSTATION__="${ROOT}/../../home/ssh/workstation.txt"
-__CFG_SERVER__="${ROOT}/../../home/ssh/server.txt"
-__CFG_LOCAL__="${ROOT}/../../home/ssh/local.txt"
-CONTENT=
 
 ROLE=$(__core_role_get__)
 [ $? -ne 0 ] && __err__ "Нет установленной роли машины" && exit 1

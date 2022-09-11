@@ -1,32 +1,38 @@
 #!/bin/sh
 
-# Подготовка авторизованных ключей
+# Подготовка файла ssh authorized_keys и preview
+# $1 - файл ssh config
+# $2 - файл предпросмотра
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../_core/conf.sh"
-. "${ROOT}/../_core/func.sh"
 . "${ROOT}/../_core/role.sh"
 . "${ROOT}/../_core/logger.sh"
 
 SOURCE_FILE="${ROOT}/../../home/ssh/keys-pub.txt"
-TARGET_FILE="${HOME}/.ssh/authorized_keys"
-AUTHORIZED_KEYS_FILE=$(mktemp) || exit 1
-PREVIEW=
 
-[ ! -f "$SOURCE_FILE" ] &&
-  __err__ "Нет файла с публичными ключами '$SOURCE_FILE'" &&
-  exit 1
+[ ! -f "$SOURCE_FILE" ] && __err__ "нет файла с публичными ключами [${SOURCE_FILE}]" && exit 1
+
+AUTHORIZED_KEYS_FILE=$1
+PREVIEW_FILE=$2
+
+[ -z "$AUTHORIZED_KEYS_FILE" ] && __err__ "не передан агрумент - файл для \$1" && exit 1
+
+[ ! -f "$AUTHORIZED_KEYS_FILE" ] &&
+  __err__ "переданый аргумент \$1 должен быть файлом = '${AUTHORIZED_KEYS_FILE}'" && exit 1
+
+[ -n "$PREVIEW_FILE" ] && [ ! -f "$PREVIEW_FILE" ] &&
+  __err__ "переданный аргумент \$2 должен быть файлом = '${PREVIEW_FILE}'" && exit 1
 
 ROLE=$(__core_role_get__)
 [ $? -ne 0 ] && __err__ "Нет установленной роли машины" && exit 1
 
-add() {
-  {
-    grep -iA 1 "$1" "$SOURCE_FILE" | grep -viE '(^\-|^#|^$)'
-    echo ""
-  } >>"$AUTHORIZED_KEYS_FILE"
+if [ -n "$PREVIEW_FILE" ]; then
+  echo "Предварительный просмотр: Ключи ssh authorized_keys для роли '$ROLE'" >"$PREVIEW_FILE"
+fi
 
-  PREVIEW="${PREVIEW} $1"
+add() {
+  grep -iA 1 "$1" "$SOURCE_FILE" | grep -viE '(^\-|^#|^$)' >>"$AUTHORIZED_KEYS_FILE"
+  [ -n "$PREVIEW_FILE" ] && echo "$1" >>"$PREVIEW_FILE"
 }
 
 case "$ROLE" in
@@ -58,32 +64,4 @@ case "$ROLE" in
   ;;
 esac
 
-if [ -z "$(cat "$AUTHORIZED_KEYS_FILE")" ]; then
-  __warn__ "Нет данных"
-  __confirm__ "Удалить файл ssh ключей '${TARGET_FILE}' ?"
-  [ $? -ne 0 ] && exit 0
-
-  rm -f "$TARGET_FILE" || exit 1
-
-  exit 0
-fi
-
-echo "Предварительный просмотр: Ключи ssh authorized_keys для роли '$ROLE'"
-for IT in $PREVIEW; do
-  echo "-- $IT"
-done
-
-cat "$AUTHORIZED_KEYS_FILE"
-
-# Подтверждение при перезаписи файла
-if [ -f "$TARGET_FILE" ]; then
-  __confirm__ "файл ssh ключей '${TARGET_FILE}' уже существует, перезаписать ? "
-
-  [ $? -ne 0 ] && __info__ "Отмена сохранения нового файла ssh authorized_keys" && exit 0
-fi
-
-cat "$AUTHORIZED_KEYS_FILE" >"$TARGET_FILE" || exit 1
-
-chmod 0600 "$TARGET_FILE"
-
-__info__ "Записан новый файл ssh authorized_keys [${TARGET_FILE}]"
+exit 0
