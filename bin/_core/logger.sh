@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# логгер
+# использует __QUIET__=1 для подавления вывода
+
 CORE_LOGGER_NAME="self"
 CORE_LOGGER_USE_DATA=
 
@@ -12,22 +15,22 @@ core_logger_sub_system_name() {
   echo "$output"
 }
 
-core_logger_use_data() {
-  [ -n "$CORE_LOGGER_USE_DATA" ] && echo "[$(date)]"
-}
-
 __err__() {
-  echo "[$CORE_LOGGER_NAME][ERRO]$(core_logger_sub_system_name) $*"
+  [ -z "$__QUIET__" ] &&
+    echo "[$CORE_LOGGER_NAME][ERRO]$(core_logger_sub_system_name) $*"
 }
 
 __warn__() {
-  echo "[$CORE_LOGGER_NAME][WARN]$(core_logger_sub_system_name) $*"
+  [ -z "$__QUIET__" ] &&
+    echo "[$CORE_LOGGER_NAME][WARN]$(core_logger_sub_system_name) $*"
 }
 
 __info__() {
-  echo "[$CORE_LOGGER_NAME][INFO]$(core_logger_sub_system_name) $*"
+  [ -z "$__QUIET__" ] &&
+    echo "[$CORE_LOGGER_NAME][INFO]$(core_logger_sub_system_name) $*"
 }
 
 __debug__() {
-  echo "[$CORE_LOGGER_NAME][DEBU]$(core_logger_sub_system_name) $*"
+  [ -z "$__QUIET__" ] &&
+    echo "[$CORE_LOGGER_NAME][DEBU]$(core_logger_sub_system_name) $*"
 }
