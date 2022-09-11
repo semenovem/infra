@@ -8,7 +8,7 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 . "${ROOT}/../_core/role.sh"
 . "${ROOT}/../_core/logger.sh"
 
-TARGET_FILE="${HOME}/.ssh/authorized-keys"
+TARGET_FILE="${HOME}/.ssh/authorized_keys"
 
 AUTHORIZED_KEYS_FILE=$(mktemp) || exit 1
 PREVIEW_FILE=$(mktemp) || exit 1
