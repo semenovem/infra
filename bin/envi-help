@@ -12,4 +12,4 @@ pipe() {
   done
 }
 
-echo "[cert scanLocalNet temp envi-utils]"
+echo "[li cert scanLocalNet temp envi-utils]"

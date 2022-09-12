@@ -1,4 +1,3 @@
-
 diskutil list
 
 exit 0
@@ -15,6 +14,18 @@ sudo dd status=progress if=rasbp.img of=/dev/disk4
 
 sudo diskutil eject /dev/disk4
 
+# ------------------------
+# сжатие образа
+# https://askubuntu.com/questions/1174487/re-size-the-img-for-smaller-sd-card-how-to-shrink-a-bootable-sd-card-image
 
-#----- shrink of image
-# https://github.com/Drewsif/PiShrink
+sudo apt install gparted
+
+sudo modprobe loop
+sudo losetup -f
+sudo losetup /dev/loop0 myimage.img
+sudo partprobe /dev/loop0
+sudo gparted /dev/loop0
+
+sudo losetup -d /dev/loop0
+fdisk -l myimage.img
+truncate --size=$(((9181183 + 1) * 512)) myimage.img
