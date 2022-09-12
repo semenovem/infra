@@ -1,3 +1,5 @@
 #!/bin/sh
 
-du -xhd 1 2> /dev/null | sort -rh
+[ -n "$1" ] && DIR="$1" || DIR="."
+
+du -xhd 1 "$DIR" 2> /dev/null | sort -rh
