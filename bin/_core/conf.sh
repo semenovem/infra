@@ -45,6 +45,7 @@ for p in "$@"; do
   "-debug") __DEBUG__=1 ;;
   "-yes") __YES__=1 ;;
   "-quiet") __QUIET__=1 ;;
+  "-force") __FORCE__=1 ;;
   esac
 done
 unset p

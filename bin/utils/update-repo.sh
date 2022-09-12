@@ -15,7 +15,7 @@ fi
 [ -z "$PREV" ] && PREV=0
 
 DIFF=$((NOW - PREV))
-[ "$DIFF" -eq 0 ] && exit 0
+[ "$DIFF" -eq 0 ] && [ -z "$__FORCE__" ] && exit 0
 
 BRANCH=$(git rev-parse --abbrev-ref HEAD) || exit 1
 git pull origin "$BRANCH" || exit 1

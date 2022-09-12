@@ -69,7 +69,7 @@ MENU="
 TASK=
 main || exit 1
 
-task "1." && confirm && sh "${ROOT}/utils/update-repo.sh"
+task "1." && sh "${ROOT}/utils/update-repo.sh" -force
 task "2." && sh "${ROOT}/utils/get-role.sh"
 task "3." && sh "${ROOT}/utils/set-role.sh"
 task "4." && sh "${ROOT}/utils/ssh-config-upd.sh" $@
