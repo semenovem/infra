@@ -16,11 +16,14 @@ PREVIEW_FILE=$(mktemp) || exit 1
 sh "${ROOT}/ssh-authorized-keys.sh" "$AUTHORIZED_KEYS_FILE" "$PREVIEW_FILE" || exit 1
 
 if [ -z "$(cat "$AUTHORIZED_KEYS_FILE")" ]; then
-  __warn__ "Нет данных"
-  __confirm__ "Удалить файл ssh ключей '${TARGET_FILE}' ?"
-  [ $? -ne 0 ] && exit 0
+  __warn__ "Нет ssh публичных ключей для добавления"
 
-  rm -f "$TARGET_FILE" || exit 1
+  if [ -f "$TARGET_FILE" ]; then
+    __confirm__ "Удалить файл ssh ключей '${TARGET_FILE}' ?"
+    [ $? -ne 0 ] && exit 0
+
+    rm -f "$TARGET_FILE" || exit 1
+  fi
 
   exit 0
 fi
