@@ -28,6 +28,10 @@ __YES__=
 # тихий режим, не выводить сообщения
 __QUIET__=
 
+__HELP__=
+
+__SHORT__=
+
 # создать директорию данных окружения, если не существует
 if [ ! -d "$__CORE_CONF_STATE_DIR__" ]; then
   mkdir "$__CORE_CONF_STATE_DIR__" || exit 1
@@ -46,6 +50,8 @@ for p in "$@"; do
   "-yes") __YES__=1 ;;
   "-quiet") __QUIET__=1 ;;
   "-force") __FORCE__=1 ;;
+  "help" | "-help" | "--help" | "h" | "-h") __HELP__=1 ;;
+  "-short") __SHORT__=1 ;;
   esac
 done
 unset p

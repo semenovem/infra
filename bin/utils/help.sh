@@ -1,8 +1,7 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/_core/os.sh"
-. "${ROOT}/_core/logger.sh"
+. "${ROOT}/../_core/conf.sh"
 
 EXCLUDE="install-local help utils"
 
@@ -12,4 +11,8 @@ pipe() {
   done
 }
 
-echo "[li cert scanLocalNet temp envi-utils]"
+short() {
+  [ -n "$__SHORT__" ] && echo "-- help: "
+}
+
+echo "$(short)[li cert scanLocalNet temp envi-utils]"

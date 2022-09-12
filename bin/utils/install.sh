@@ -5,11 +5,11 @@
 #
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/_core/conf.sh"
-. "${ROOT}/_core/os.sh"
-. "${ROOT}/_core/logger.sh"
-. "${ROOT}/_core/role.sh"
-. "${ROOT}/_core/func.sh"
+. "${ROOT}/../_core/conf.sh"
+. "${ROOT}/../_core/os.sh"
+. "${ROOT}/../_core/logger.sh"
+. "${ROOT}/../_core/role.sh"
+. "${ROOT}/../_core/func.sh"
 
 USER_PROFILE_FILE=
 BIN_DIRS="$ROOT"
@@ -62,8 +62,12 @@ add_source_file_to_profile() {
 
 # ----------------
 # Выбрать роль устройства
-sh "${ROOT}/utils/set-role.sh"
-ROLE=$(__core_role_get__) || __warn__ "Не выбрана роль устройства"
+ROLE=$(__core_role_get__)
+if [ $? -ne 0 ]; then
+  sh "${ROOT}/utils/set-role.sh"
+  ROLE=$(__core_role_get__)
+  [ $? -ne 0 ] && __err__ "Не выбрана роль устройства" && exit 1
+fi
 
 case "$ROLE" in
 "$__CORE_ROLE_MINI_SERVER_CONST__")
@@ -76,6 +80,10 @@ case "$ROLE" in
 
 "$__CORE_ROLE_HOME_SERVER_CONST__" | "$__CORE_ROLE_STANDBY_SERVER_CONST__")
   BIN_DIRS="${BIN_DIRS} ${ROOT}/home_server"
+  ;;
+
+"$__CORE_ROLE_WORKSTATION_CONST__")
+  BIN_DIRS="${BIN_DIRS} ${ROOT}/workstation"
   ;;
 
 esac
@@ -94,7 +102,7 @@ case "$__CORE_OS_KIND__" in
   ;;
 
 *)
-  __err__ "Не определен тип OS"$()
+  __err__ "Не определен тип OS"
   exit 1
   ;;
 esac
