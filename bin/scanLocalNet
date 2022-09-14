@@ -1,31 +1,32 @@
-#!/bin/sh
+#!/bin/bash
+
+# Сканирование локальной сети
+# echo "192.168.1".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/_core/os.sh"
-. "${ROOT}/_core/logger.sh"
+. "${ROOT}/_core/os.sh" || exit 1
+. "${ROOT}/_core/logger.sh" || exit 1
 
 case "$__CORE_OS_KIND__" in
 "$__CORE_OS_KIND_MACOS_CONST__")
-  IP=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}')
+  IP=$(netstat -nr | grep default | awk '{print $2}' | grep -E '^(\d{1,3}\.){3}\d{1,3}$') || exit 1
   ;;
 
 "$__CORE_OS_KIND_LINUX_CONST__")
-  IP=$(hostname -I | awk '{print $1}')
+  IP=$(hostname -I | awk '{print $1}') || exit 1
   ;;
-
 esac
 
+# TODO если получено несколько IP - то предложить выбор
+
 while true; do
-  echo "$IP" | grep -iE -q '^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}.[0-9]{1,3}$' && break
+  echo "$IP" | grep -iE -q '^(\d{1,3}\.){3}\d{1,3}$' && break
   echo "enter IP address manually in format [xxx.xxx.xxx.xxx]: "
   read IP
 done
 
 NET="${IP%.*}"
 
-echo ": start-****************************************"
+echo "start **************************************** IP = $IP"
 echo "${NET}".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
-echo ": end-******************************************"
-
-
-# echo "192.168.1".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
+echo "end ******************************************"

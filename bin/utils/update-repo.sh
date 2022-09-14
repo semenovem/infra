@@ -2,7 +2,7 @@
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 [ -d "$1" ] && ROOT=$1
-. "${ROOT}/../_core/conf.sh"
+. "${ROOT}/../_core/conf.sh" || exit 1
 
 cd "$ROOT" || exit 1
 
