@@ -40,6 +40,9 @@ if [ -f "$CORE_OS_RELEASE" ]; then
     __CORE_OS_IS_FEDORA__=1 &&
     __CORE_OS_LINUX_DISTR__="$__CORE_OS_LINUX_DISTR_FEDORA_CONST__"
 
+  # пустая команда нужна что бы возвратить код ответа 0
+  :
+
 else
 
   # TODO проверить, что является OS macos

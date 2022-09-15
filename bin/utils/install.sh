@@ -10,7 +10,7 @@ BIN_DIR=$(dirname "$ROOT") || exit 1
 [ ! -d "$BIN_DIR" ] && echo "[${BIN_DIR}] is not a directory" 1>&2 && exit 1
 
 . "${BIN_DIR}/_core/conf.sh" || exit 1
-. "${BIN_DIR}/_core/os.sh" || exit 1
+. "${BIN_DIR}/_core/os.sh"
 . "${BIN_DIR}/_core/logger.sh" || exit 1
 . "${BIN_DIR}/_core/role.sh" || exit 1
 . "${BIN_DIR}/_core/func.sh" || exit 1

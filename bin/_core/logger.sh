@@ -8,6 +8,21 @@ CORE_LOGGER_USE_DATA=
 
 __CORE_LOGGER_SUB_SYSTEM_NAME__=$(basename "$0")
 
+__YELLOW__='\033[1;33m'
+__LIGHT__BLUE__='\033[1;34m'
+__RED__='\033[0;31m'
+__GREEN__='\033[0;32m'
+__RED__='\033[0;31m'
+__GREEN__='\033[0;32m'
+__BLUE__='\033[0;34m'
+__PURPLE__='\033[0;35m'
+__CYAN__='\033[0;36m'
+__LIGHT__GRAY__='\033[0;37m'
+__DARK__GRAY__='\033[1;30m'
+__LIGHT__RED__='\033[1;31m'
+__LIGHT__GREEN__='\033[1;32m'
+__NC__='\033[0m'
+
 core_logger_sub_system_name() {
   output=
   [ -n "$CORE_LOGGER_USE_DATA" ] && output="[$(date)]"
