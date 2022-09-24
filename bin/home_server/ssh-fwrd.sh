@@ -9,7 +9,6 @@
 
 __BIN__=$(dirname "$([[ $0 == /* ]] && echo "$0" || echo "$PWD/${0#./}")")
 . "${__BIN__:?}/../_core/conf.sh"
-. "${__BIN__:?}/../_core/logger.sh"
 
 __SERVICE_NAME__="ssh-fwrd"
 __SYSTEMMD_DIR__="/etc/systemd/system"

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+#
+# работа с QR кодами (сканирование и генерация)
+#
+# docker run -it --rm -v $PWD:/app -w /app ubuntu:22.04 bash
+# apt update && apt -y install qrencode zbar-tools
+#
+## generate
+# qrencode -s 6 -l H -o "qr.png" "otpauth://totp/........@gmail.com?secret=...........&issuer=Org"
+## read qr codes
+# zbarimg qrcode.png --nodbus  -q
+
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+
+# shellcheck disable=SC2068
+sh "${ROOT}/../_services/qr_code/qr_code.sh" $@

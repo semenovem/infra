@@ -11,7 +11,6 @@ BIN_DIR=$(dirname "$ROOT") || exit 1
 
 . "${BIN_DIR}/_core/conf.sh" || exit 1
 . "${BIN_DIR}/_core/os.sh"
-. "${BIN_DIR}/_core/logger.sh" || exit 1
 . "${BIN_DIR}/_core/role.sh" || exit 1
 . "${BIN_DIR}/_core/func.sh" || exit 1
 
