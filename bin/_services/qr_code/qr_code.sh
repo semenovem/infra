@@ -19,6 +19,7 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 FILE_ABSOLUTE_PATH=
 FILE_PATH=
 FILE_NAME=
+FILE_REST_ARGS=
 HASH=
 ISSUER=
 ACCOUNT=
@@ -53,49 +54,53 @@ debug() {
 }
 
 # Разбор параметров
-prev=
-line=
-while read -r line; do
-  if [ -n "$prev" ]; then
-    case $prev in
-    "issuer") ISSUER="$line" ;;
-    "account") ACCOUNT="$line" ;;
-    *)
-      __err__ "аргумент '$prev' не имеет ключа"
-      ERR=1
-      exit 1
-      ;;
-    esac
-
-    prev=
-    continue
-  fi
-
-  case $line in
-  "scan" | "generate")
-    [ -n "$OPER" ] && ERR=1 && __err__ "дважды указана операция '$OPER' и '$line'" && exit 1
-    OPER="$line"
-    ;;
-  "-issuer") prev="issuer" ;;
-  "-user" | "-account") prev="account" ;;
-  "-raw") RAW=1 ;;
-  *)
-    # проверка на файл
-    if [ -f "$line" ] || [ -d "$(dirname "$line")" ]; then
-      [ -n "$FILE_PATH" ] &&
-        __err__ "в аргументах передано 2 файла '$FILE_PATH' и '$line'" &&
+FILE_REST_ARGS=$(__core_conf_get_rest_args__)
+if [ $? -eq 0 ]; then
+  prev=
+  line=
+  while read -r line; do
+    if [ -n "$prev" ]; then
+      case $prev in
+      "issuer") ISSUER="$line" ;;
+      "account") ACCOUNT="$line" ;;
+      *)
+        __err__ "аргумент '$prev' не имеет ключа"
+        ERR=1
         exit 1
+        ;;
+      esac
 
-      FILE_PATH="$line"
+      prev=
       continue
     fi
 
-    __err__ "неизвестный аргумент '$line'"
-    ERR=1
-    ;;
-  esac
-done <"$(__core_conf_get_rest_args__)"
-unset prev line
+    case $line in
+    "scan" | "generate")
+      [ -n "$OPER" ] && ERR=1 && __err__ "дважды указана операция '$OPER' и '$line'" && exit 1
+      OPER="$line"
+      ;;
+    "-issuer") prev="issuer" ;;
+    "-user" | "-account") prev="account" ;;
+    "-raw") RAW=1 ;;
+    *)
+      # проверка на файл
+      if [ -f "$line" ] || [ -d "$(dirname "$line")" ]; then
+        [ -n "$FILE_PATH" ] &&
+          __err__ "в аргументах передано 2 файла '$FILE_PATH' и '$line'" &&
+          exit 1
+
+        FILE_PATH="$line"
+        continue
+      fi
+
+      __err__ "неизвестный аргумент '$line'"
+      ERR=1
+      ;;
+    esac
+  done <"$FILE_REST_ARGS"
+
+  unset prev line
+fi
 
 [ -z "$OPER" ] && ERR=1 && __err__ "не указана операция"
 
@@ -125,14 +130,17 @@ case $OPER in
   ;;
 
 "generate")
-  if [ -n "$RAW" ]; then
+  [ -n "$RAW" ] && [ -n "$ISSUER" ] && ERR=1 && __err__ "флаги -raw и -issuer не совместимы"
+  [ -n "$RAW" ] && [ -n "$ACCOUNT" ] && ERR=1 && __err__ "флаги -raw и -account не совместимы"
+
+  if [ -n "$RAW" ] && [ -z "$ERR" ]; then
     while true; do
       read -rp "copy paste raw string for generate QR code: " RAW_VALUE
       [ -n "$RAW_VALUE" ] && break
     done
   fi
 
-  if [ -z "$RAW" ]; then
+  if [ -z "$RAW" ] && [ -z "$ERR" ]; then
     if [ -z "$ISSUER" ]; then
       :
       while true; do
@@ -145,7 +153,7 @@ case $OPER in
           while true; do
             read -rp "установить issuer=$ans ? [y/N] " ans2
             case $ans2 in
-            "y" | "Y") choice=1 && ISSUER=ans && break ;;
+            "y" | "Y") choice=1 && ISSUER="$ans" && break ;;
             "" | "n" | "N") break ;;
             *) ;;
             esac
@@ -221,12 +229,12 @@ case $OPER in
     param="$RAW_VALUE"
   else
     param="otpauth://totp"
-    [ -n "$ACCOUNT" ] && param="${param}/${ACCOUNT}"
+    [ -n "$ACCOUNT" ] && param="${param}/${ACCOUNT}" || param="${param}/${ISSUER}"
     param="${param}?secret=${HASH}"
-    [ -n "$ISSUER" ] && param="${param}&issuer=${ISSUER}"
+    [ -n "$ACCOUNT" ] && [ -n "$ISSUER" ] && param="${param}&issuer=${ISSUER}"
 
-    [ -n "$__DEBUG__" ] && __debug__ "param=$param"
-    [ -z "$__DEBUG__" ] && [ -z "$__QUIET__" ] && __info__ "param=$param"
+    [ -n "$__DEBUG__" ] && __debug__ "query: $param"
+    [ -z "$__DEBUG__" ] && [ -z "$__QUIET__" ] && __info__ "query: $param"
   fi
 
   [ -n "$__DRY__" ] && exit 0

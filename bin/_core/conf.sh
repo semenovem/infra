@@ -145,6 +145,7 @@ __core_show_variables__() {
 # получить файл с не обработанными аргументами командной строки
 __core_conf_get_rest_args__() {
   [ -f "$CORE_CONF_REST_ARGS_FILE" ] && echo "$CORE_CONF_REST_ARGS_FILE" && return 0
+  return 1
 }
 
 # получить название доступного приложения виртуализации (podman/docker)
