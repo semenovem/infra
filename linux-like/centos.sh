@@ -25,7 +25,8 @@ yum -y install epel-release \
 yum -y update \
 yum -y upgrade \
 yum -y install \
-  squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf firewalld mc htop sshfs
+  squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf \
+  firewalld mc htop sshfs git
 
 systemctl enable firewalld
 reboot
@@ -46,6 +47,8 @@ adman ALL=(ALL) NOPASSWD: ALL
 vim /etc/ssh/sshd_config
 PasswordAuthentication no
 PermitRootLogin no
+
+# setenforce 0 - если ошибка по новому порту
 systemctl restart sshd.service
 
 

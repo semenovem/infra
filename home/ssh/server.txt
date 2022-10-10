@@ -47,3 +47,9 @@ Host msk1
   Port         2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
+
+Host kz2
+  HostName     kz2.evgio.dev
+  Port         2257
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
