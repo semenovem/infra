@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../_core/conf.sh" || exit 1
+. "${ROOT}/../../_core/conf.sh" || exit 1
 
 #sudo systemctl list-units 'openvpn-server*' -all
 #ssh -t adman@176.53.162.51 -p 2257 sudo ls /etc/openvpn/
@@ -14,6 +14,10 @@ SERVER_KEY_FILE="${DIR}/server.key"
 TA_KEY_FILE="${DIR}/ta.key"
 
 TARGET_DIR="/etc/openvpn/server"
+
+__info__ "zdfadfsd"
+
+exit
 
 # копировать содержимое файла на удаленный сервер
 copy_to_server() {

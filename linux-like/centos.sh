@@ -21,9 +21,7 @@ exit 0
 
 # --------------------------------------------------------------
 
-yum -y install epel-release \
-yum -y update \
-yum -y upgrade \
+yum -y update && yum -y install epel-release && yum -y update && yum -y upgrade && \
 yum -y install \
   squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf \
   firewalld mc htop sshfs git
