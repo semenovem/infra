@@ -24,9 +24,9 @@ chmod 0700 "$__CORE_CONF_VPN_PKI_DIR__" || exit 1
 $DOCKER_CMD run -it --rm \
   --user "$(id -u):$(id -g)" \
   -w /app \
-  -e "__SECRET_TA__=/app/easy_rsa/pki/ta.key" \
-  -e "__PKI_DIR__=/app/easy_rsa/pki" \
-  -v "${__CORE_CONF_VPN_PKI_DIR__}:/app/easy_rsa:rw" \
+  -e "__SECRET_TA__=/app/pki/ta.key" \
+  -e "__PKI_DIR__=/app/pki" \
+  -v "${__CORE_CONF_VPN_PKI_DIR__}:/app/pki:rw" \
   -v "${PWD}/oper/install_pki.sh:/app/install_pki.sh:ro" \
   -v "${PWD}/oper/issue_server_certs.sh:/app/issue_server_certs.sh:ro" \
   -v "${PWD}/oper/issue_client_certs.sh:/app/issue_client_certs.sh:ro" \

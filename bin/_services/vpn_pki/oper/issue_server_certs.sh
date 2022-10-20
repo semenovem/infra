@@ -12,6 +12,7 @@ server_issue_cert() {
     --days="365" \
     --use-algo="ec" \
     --curve="prime256v1" \
+    --digest="sha512" \
     gen-req "$name" nopass || return 1
 
   easyrsa --batch --pki-dir="$__PKI_DIR__" sign-req server "$name" || return 1

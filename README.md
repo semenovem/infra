@@ -3,7 +3,7 @@
 ```
 git clone https://github.com/semenovem/environment.git _environment
 
-sh _environment/bin/envi-install
+sh _environment/bin/envi
 ```  
 
 #### See new commands in terminal
