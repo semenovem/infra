@@ -3,7 +3,9 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/../../_core/conf.sh" || exit 1
 
-[ ! -d "$__CORE_CONF_VPN_PKI_DIR__" ] && __err__ "empty dir with vpn-pki: [$__CORE_CONF_VPN_PKI_DIR__]"
+[ ! -d "$__CORE_CONF_VPN_PKI_DIR__" ] &&
+  __err__ "empty dir with vpn-pki: [$__CORE_CONF_VPN_PKI_DIR__]" &&
+  exit 1
 
 OPER_COPY_FILES=
 OPER_START=
@@ -12,7 +14,7 @@ OPER_STOP=
 DIR="$__CORE_CONF_VPN_PKI_DIR__"
 
 # TODO это CN серверного комплекта
-NAME="evgio-server1-evg"
+CN_NAME="evgio-server1-evg"
 
 CA_CERT_FILE="${DIR}/ca.crt"
 TA_KEY_FILE="${DIR}/ta.key"
@@ -38,8 +40,8 @@ if [ -n "$OPER_COPY_FILES" ]; then
 
   copy_to_server "$TA_KEY_FILE" "${REMOTE_DIR}/ta.key"
   copy_to_server "$CA_CERT_FILE" "${REMOTE_DIR}/ca.crt"
-  copy_to_server "${DIR}/issued/${NAME}.crt" "${REMOTE_DIR}/server.crt"
-  copy_to_server "${DIR}/private/${NAME}.key" "${REMOTE_DIR}/server.key"
+  copy_to_server "${DIR}/issued/${CN_NAME}.crt" "${REMOTE_DIR}/server.crt"
+  copy_to_server "${DIR}/private/${CN_NAME}.key" "${REMOTE_DIR}/server.key"
 
   copy_to_server "${ROOT}/cfg/server-443-tcp.conf" "${REMOTE_DIR}/server-443-tcp.conf"
   copy_to_server "${ROOT}/cfg/server-443-udp.conf" "${REMOTE_DIR}/server-443-udp.conf"
