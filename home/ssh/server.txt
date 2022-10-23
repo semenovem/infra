@@ -6,8 +6,7 @@
 # 5.45.120.70
 Host eu eu1
   HostName     eu1.evgio.dev
-#  TODO after back forwarding from home
-#  Port        2257
+  Port         2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 

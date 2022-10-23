@@ -38,6 +38,7 @@ function debug {
 
 function tmpl {
   local a=$1 b=$2
+  # не работает на macos
   sed -i "s^{%\s*${a}\s*%}^${b}^gi" "$__TMP_FILE__"
 }
 

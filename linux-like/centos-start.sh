@@ -10,7 +10,12 @@ usermod -aG wheel adman
 
 runuser -l adman -c 'whoami'
 runuser -l adman -c 'git clone https://github.com/semenovem/environment.git _environment'
-runuser -l adman -c 'sh _environment/bin/envi'
+#runuser -l adman -c 'sh _environment/bin/envi'
+
+# -------------------------------
+echo "LANG=en_US.utf-8" >>"/etc/environment"
+echo "LC_ALL=en_US.utf-8" >>"/etc/environment"
+
 
 # -------------------------------
 grep -Eiq 'net.ipv4.ip_forward\s*=\s*1' /etc/sysctl.conf ||
@@ -22,11 +27,12 @@ sysctl -p
 # firewall-cmd --permanent --list-all
 
 firewall-cmd --zone=public --permanent \
-  --add-port 80/tcp \
-  --add-port 80/tcp \
+  --add-port 8080/tcp \
   --add-port 443/tcp \
   --add-port 443/udp \
   --add-port 2257/tcp \
+  --add-port 33440/tcp \
+  --add-port 33440/tcp \
   --add-port 33443/tcp \
   --add-port 33443/udp \
   --add-port 43443/tcp \
@@ -69,3 +75,19 @@ firewall-cmd --reload
 
 # ------------------
 mkdir -p /var/log/openvpn
+
+
+# ################################
+# ################################
+
+# sudo without pass
+visudo
+adman ALL=(ALL) NOPASSWD: ALL
+
+# SSH
+vim /etc/ssh/sshd_config
+PasswordAuthentication no
+PermitRootLogin no
+
+# setenforce 0 - если ошибка по новому порту
+systemctl restart sshd.service

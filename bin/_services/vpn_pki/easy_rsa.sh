@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Запускает контейнер для работы с easy_rsa
+
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/../../_core/conf.sh" || exit 1
 
@@ -24,15 +26,15 @@ chmod 0700 "$__CORE_CONF_VPN_PKI_DIR__" || exit 1
 $DOCKER_CMD run -it --rm \
   --user "$(id -u):$(id -g)" \
   -w /app \
-  -e "__SECRET_TA__=/app/pki/ta.key" \
   -e "__PKI_DIR__=/app/pki" \
+  -e "__SECRET_TA__=/app/pki/ta.key" \
   -v "${__CORE_CONF_VPN_PKI_DIR__}:/app/pki:rw" \
   -v "${PWD}/oper/install_pki.sh:/app/install_pki.sh:ro" \
   -v "${PWD}/oper/issue_server_certs.sh:/app/issue_server_certs.sh:ro" \
   -v "${PWD}/oper/issue_client_certs.sh:/app/issue_client_certs.sh:ro" \
   "$IMAGE" bash
 
-# запуск скриптов
+# запуск скриптов в запущенном контейнере
 #
 # sh install_pki.sh
 # sh issue_server_certs.sh

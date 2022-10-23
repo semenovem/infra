@@ -15,4 +15,7 @@ short() {
   [ -n "$__SHORT__" ] && echo "-- help: "
 }
 
-echo "$(short)[li cert scanLocalNet temp envi-utils]"
+echo "$(short)[li cert scanLocalNet temp envi-utils !]"
+
+echo ""
+echo "sudo netstat -lntup  # список приложений, использующих порты"

@@ -24,6 +24,7 @@ __YES__=
 
 # дебаг режим. конфликтует с QUIET
 __DEBUG__=
+__DEBUG_ARG__=
 
 # тихий режим, не выводить сообщения. конфликтует с DEBUG
 __QUIET__=
@@ -33,6 +34,7 @@ __FORCE__=
 
 # не производить изменений
 __DRY__=
+__DRY_ARG__=
 
 # вывод подсказки
 __HELP__=
@@ -60,10 +62,16 @@ fi
 for p in "$@"; do
   case $p in
   "-yes") __YES__=1 ;;
-  "-debug") __DEBUG__=1 ;;
+  "-debug")
+    __DEBUG__=1
+    __DEBUG_ARG__="-debug"
+    ;;
   "-quiet") __QUIET__=1 ;;
   "-force") __FORCE__=1 ;;
-  "-dry") __DRY__=1 ;;
+  "-dry")
+    __DRY__=1
+    __DRY_ARG__="-dry"
+    ;;
   "help" | "-help" | "--help" | "h" | "-h") __HELP__=1 ;;
   "-short") __SHORT__=1 ;;
   *)
@@ -79,7 +87,7 @@ done
 unset p
 
 [ -n "$__QUIET__" ] && [ -n "$__DEBUG__" ] &&
-  __err__ "конфликт флагов -quiet и -debug не могут быть установлены одновременно" &&
+  __err__ "flag conflict -quiet and -debug cannot be set at the same time" &&
   exit 1
 
 #
@@ -198,6 +206,20 @@ __core_has_docker_image__() {
   CORE_CONF_HAS=$($CORE_CONF_CMD image ls --filter=reference="$CORE_CONF_NAME" -q) || return 2
   [ -n "$CORE_CONF_HAS" ] && return 0
   return 1
+}
+
+# Вернет директорию vpn_pki
+# return 1 - нет директории или пуста
+__core_conf_vpn_pki_dir__() {
+  [ ! -d "$__CORE_CONF_VPN_PKI_DIR__" ] &&
+    __err__ "dir vpn pki is not exist [${__CORE_CONF_VPN_PKI_DIR__}]" &&
+    return 1
+
+  [ "$(find "$__CORE_CONF_VPN_PKI_DIR__" -maxdepth 1 | wc -l)" -le 1 ] &&
+    __err__ "dir vpn pki is empty [${__CORE_CONF_VPN_PKI_DIR__}]" &&
+    return 1
+
+  echo "$__CORE_CONF_VPN_PKI_DIR__"
 }
 
 #
