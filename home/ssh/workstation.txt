@@ -19,13 +19,21 @@ Host open
   Port          2257
   User          adman
   IdentityFile  ~/.ssh/id_ecdsa
-  LocalForward  2022 127.0.0.1:2022
-  LocalForward  3389 127.0.0.1:2025
-  LocalForward  10090 127.0.0.1:2023
-  LocalForward  10080 127.0.0.1:2024
-  LocalForward  2030 127.0.0.1:2030
-  LocalForward  2035 127.0.0.1:2035
   RequestTTY    yes
+  # --- home
+  LocalForward  12022 127.0.0.1:5522
+  LocalForward  13389 127.0.0.1:5551
+  LocalForward  10080 127.0.0.1:5551
+  LocalForward  10090 127.0.0.1:5552
+  LocalForward  13389 127.0.0.1:5565
+  # --- srv1
+  LocalForward  5122 127.0.0.1:5122
+  LocalForward  5143 127.0.0.1:5143
+  LocalForward  5170 127.0.0.1:5170
+  # --- srv2
+  LocalForward  5222 127.0.0.1:5222
+  LocalForward  5243 127.0.0.1:5243
+  LocalForward  5270 127.0.0.1:5270
 
 Host open-eu
   HostName      eu1.evgio.dev

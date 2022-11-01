@@ -10,12 +10,12 @@ Host home.local
   IdentityFile ~/.ssh/id_ecdsa
 
 Host srv1.local
-  HostName     192.168.1.30
+  HostName     srv1.local
   User         adm
   IdentityFile ~/.ssh/id_ecdsa
 
 Host srv2.local
-  HostName     192.168.1.32
+  HostName     srv1.local
   User         adm
   IdentityFile ~/.ssh/id_ecdsa
 
