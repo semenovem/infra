@@ -13,6 +13,7 @@ Host mini mini.local
 # ----------------------------------
 # FORWARDING - home
 # ----------------------------------
+
 # forwarding to home
 Host open
   HostName      rr4.evgio.dev
@@ -21,46 +22,83 @@ Host open
   IdentityFile  ~/.ssh/id_ecdsa
   RequestTTY    yes
   # --- home
-  LocalForward  12022 127.0.0.1:5522
-  LocalForward  13389 127.0.0.1:5551
-  LocalForward  10080 127.0.0.1:5551
-  LocalForward  10090 127.0.0.1:5552
-  LocalForward  13389 127.0.0.1:5565
-  # --- srv1
-  LocalForward  5122 127.0.0.1:5122
-  LocalForward  5143 127.0.0.1:5143
-  LocalForward  5170 127.0.0.1:5170
+  LocalForward  10022 127.0.0.1:10022  # ssh   22
+  LocalForward  10443 127.0.0.1:10443  # https 443
+  LocalForward  10080 127.0.0.1:11080  # xeoma 10080
+  LocalForward  10090 127.0.0.1:11090  # xeoma 10090
+  LocalForward  13389 127.0.0.1:13389  # rdp
+  LocalForward  15900 127.0.0.1:15900  # vnc
   # --- srv2
-  LocalForward  5222 127.0.0.1:5222
-  LocalForward  5243 127.0.0.1:5243
-  LocalForward  5270 127.0.0.1:5270
+  LocalForward  20022 127.0.0.1:20022  # ssh
+  LocalForward  20443 127.0.0.1:20443  # https 443
+  LocalForward  21051 127.0.0.1:21051  # openvpn
+  # --- srv1
+  LocalForward  30022 127.0.0.1:30022  # ssh
+  LocalForward  30443 127.0.0.1:30443  # https 443
+  LocalForward  31051 127.0.0.1:31051  # openvpn
 
-Host open-eu
-  HostName      eu1.evgio.dev
+
+Host open-msk1
+  HostName      msk1.evgio.dev
+  User          adman
+  Port          2257
   User          adman
   IdentityFile  ~/.ssh/id_ecdsa
-  LocalForward  2022 127.0.0.1:2022
-  LocalForward  3389 127.0.0.1:2025
-  LocalForward  10090 127.0.0.1:2023
-  LocalForward  10080 127.0.0.1:2024
-  LocalForward  2030 127.0.0.1:2030
-  LocalForward  2035 127.0.0.1:2035
   RequestTTY    yes
+  # --- home
+  LocalForward  10022 127.0.0.1:10022  # ssh   22
+  LocalForward  10443 127.0.0.1:10443  # https 443
+  LocalForward  10080 127.0.0.1:11080  # xeoma 10080
+  LocalForward  10090 127.0.0.1:11090  # xeoma 10090
+  LocalForward  13389 127.0.0.1:13389  # rdp
+  LocalForward  15900 127.0.0.1:15900  # vnc
+  # --- srv2
+  LocalForward  20022 127.0.0.1:20022  # ssh
+  LocalForward  20443 127.0.0.1:20443  # https 443
+  LocalForward  21051 127.0.0.1:21051  # openvpn
+  # --- srv1
+  LocalForward  30022 127.0.0.1:30022  # ssh
+  LocalForward  30443 127.0.0.1:30443  # https 443
+  LocalForward  31051 127.0.0.1:31051  # openvpn
+
+
+Host open-kz2
+  HostName      kz2.evgio.dev
+  User          adman
+  Port          2257
+  User          adman
+  IdentityFile  ~/.ssh/id_ecdsa
+  RequestTTY    yes
+  # --- home
+  LocalForward  10022 127.0.0.1:10022  # ssh   22
+  LocalForward  10443 127.0.0.1:10443  # https 443
+  LocalForward  10080 127.0.0.1:11080  # xeoma 10080
+  LocalForward  10090 127.0.0.1:11090  # xeoma 10090
+  LocalForward  13389 127.0.0.1:13389  # rdp
+  LocalForward  15900 127.0.0.1:15900  # vnc
+  # --- srv2
+  LocalForward  20022 127.0.0.1:20022  # ssh
+  LocalForward  20443 127.0.0.1:20443  # https 443
+  LocalForward  21051 127.0.0.1:21051  # openvpn
+  # --- srv1
+  LocalForward  30022 127.0.0.1:30022  # ssh
+  LocalForward  30443 127.0.0.1:30443  # https 443
+  LocalForward  31051 127.0.0.1:31051  # openvpn
 
 Host home
   HostName     localhost
-  Port         2022
+  Port         10022
   User         evg
-  IdentityFile ~/.ssh/id_ecdsa
-
-Host srv1
-  HostName     localhost
-  Port         2030
-  User         adm
   IdentityFile ~/.ssh/id_ecdsa
 
 Host srv2
   HostName     localhost
-  Port         2035
+  Port         20022
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv1
+  HostName     localhost
+  Port         30022
   User         adm
   IdentityFile ~/.ssh/id_ecdsa
