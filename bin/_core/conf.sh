@@ -260,3 +260,11 @@ __absolute_path__() {
   [ -z "$1" ] && __err__ "Path to file/directory not passed" && return 1
   echo "$1" | grep -E "^/" -q && echo "$1" || echo "${PWD}/$1"
 }
+
+# Нормализация пути
+__realpath__() {
+  echo "$(
+    cd "$(dirname "$1")" || return 1
+    pwd
+  )/$(basename "$1")"
+}

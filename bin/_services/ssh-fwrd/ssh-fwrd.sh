@@ -14,7 +14,7 @@ __SERVICE_NAME__="ssh-fwrd"
 __SYSTEMMD_DIR__="/etc/systemd/system"
 
 __FILE_CONF__="${ROOT:?}/configs/${__SERVICE_NAME__}.conf"
-__WORKING_DIRECTORY__="$ROOT"
+__WORKING_DIRECTORY__="$(__realpath__ "$ROOT")" || exit 1
 __USER__="$(whoami)"
 __GROUP__="$(whoami)"
 __PROPS_FILE__="${ROOT}/configs/${__SERVICE_NAME__}.properties"
@@ -198,5 +198,5 @@ case "$__OPER__" in
   ;;
 "__del") ;;
 
-  *) readProps ;;
+*) readProps ;;
 esac
