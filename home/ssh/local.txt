@@ -18,3 +18,8 @@ Host srv2.local
   HostName     192.168.1.32
   User         adm
   IdentityFile ~/.ssh/id_ecdsa
+
+Host inno16
+  HostName     inno16.local
+  User         esemenov
+  IdentityFile ~/.ssh/id_ecdsa
