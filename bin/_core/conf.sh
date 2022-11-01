@@ -55,7 +55,7 @@ fi
 # Создать .ssh директорию, если не существует
 if [ ! -d "${HOME}/.ssh" ]; then
   mkdir "${HOME}/.ssh" || exit 1
-  chmod 0600 "${HOME}/.ssh" || exit 1
+  chmod 0700 "${HOME}/.ssh" || exit 1
 fi
 
 # Разбор параметров

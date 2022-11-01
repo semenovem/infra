@@ -15,7 +15,10 @@ fi
 case "$__CORE_OS_LINUX_DISTR__" in
 "") __warn__ "Дистрибутив LINUX не определен" ;;
 
-"$__CORE_OS_LINUX_DISTR_DEBIAN_CONST__") ;;
+"$__CORE_OS_LINUX_DISTR_DEBIAN_CONST__")
+# TODO добавить проверку, установленно ли ПО + установить
+  sensors
+  ;;
 
 "$__CORE_OS_LINUX_DISTR_RASPBIAN_CONST__")
   watch -t -n 1 vcgencmd measure_temp

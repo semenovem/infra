@@ -2,6 +2,7 @@
 exit
 
 # https://habr.com/ru/post/584162/
+# https://obu4alka.ru/probros-portov-port-forwarding-v-linux-ispolzuya-iptables.html
 
 sudo /usr/sbin/tun2socks-linux-arm64 -device \
   tun://gatewaytun -proxy socks5://172.0.0.1:1080 \

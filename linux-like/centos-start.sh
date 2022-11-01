@@ -1,9 +1,13 @@
 #!/bin/sh
 
+# -------------------------------
+echo "LANG=en_US.utf-8" >>"/etc/environment"
+echo "LC_ALL=en_US.utf-8" >>"/etc/environment"
+
 yum -y update && yum -y install epel-release && yum -y update && yum -y upgrade &&
   yum -y install \
     squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf \
-    firewalld mc htop sshfs git
+    firewalld mc htop sshfs git vim
 
 adduser adman
 usermod -aG wheel adman
@@ -12,10 +16,14 @@ runuser -l adman -c 'whoami'
 runuser -l adman -c 'git clone https://github.com/semenovem/environment.git _environment'
 #runuser -l adman -c 'sh _environment/bin/envi'
 
-# -------------------------------
-echo "LANG=en_US.utf-8" >>"/etc/environment"
-echo "LC_ALL=en_US.utf-8" >>"/etc/environment"
+# ------------------
+#
+# sudo without pass - manual
+# visudo
+# adman ALL=(ALL) NOPASSWD: ALL
 
+echo "# sudo for adman" >> /etc/sudoers.d/10-adman
+echo "adman ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/10-adman
 
 # -------------------------------
 grep -Eiq 'net.ipv4.ip_forward\s*=\s*1' /etc/sysctl.conf ||
@@ -79,10 +87,6 @@ mkdir -p /var/log/openvpn
 
 # ################################
 # ################################
-
-# sudo without pass
-visudo
-adman ALL=(ALL) NOPASSWD: ALL
 
 # SSH
 vim /etc/ssh/sshd_config
