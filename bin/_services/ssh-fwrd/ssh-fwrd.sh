@@ -112,11 +112,6 @@ function action {
     sudo systemctl daemon-reload
     ;;
 
-  "restart")
-    action "stop" "$host" "$port" "$sshPort"
-    action "start" "$host" "$port" "$sshPort"
-    ;;
-
   "status")
     query=$(sudo systemctl status "$serviceName" 2>&1)
     __info__ "[status for '${conns} $host'] ${query}"
