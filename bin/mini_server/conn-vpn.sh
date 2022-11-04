@@ -12,7 +12,7 @@ _PID_FILE_="${HOME}/openvpn-client.pid"
   echo "[ERRO] нет файла конфиграции '$_CONFIG_FILE_'" &&
   exit 1
 
-_SERVER_NAMES="spb msk1 rr4"
+_SERVER_NAMES="spb msk1 rr4 kz2"
 _VPN_PORTS_="443 33440"
 
 _VPN_HOST_=

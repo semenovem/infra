@@ -109,6 +109,12 @@ sudo iptables -t nat -L -v
 
 sudo ip route add default dev wlan0 metric 50
 
+# удалить роут для конфигурации это не требуется)
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.178.1   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         160.98.123.1    0.0.0.0         UG    600    0        0 wlan0
+sudo route del -net 0.0.0.0 gw 192.168.178.1 netmask 0.0.0.0 dev eth0
 
 # -----------------------------------------------
 # -----------------------------------------------

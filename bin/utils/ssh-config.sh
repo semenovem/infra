@@ -51,7 +51,7 @@ case "$ROLE" in
   add "$__CFG_LOCAL__"
   ;;
 
-"$__CORE_ROLE_WORKSTATION_CONST__")
+"$__CORE_ROLE_WORKSTATION_CONST__" | "$__CORE_ROLE_MINI_SERVER_CONST__")
   add "$__CFG_SERVER__"
   add "$__CFG_WORKSTATION__"
   add "$__CFG_LOCAL__"
