@@ -49,8 +49,11 @@ sudo dkms install -m rtl88x2bu -v ${VER}
 # ----------------------------------------------------------------------------
 sudo vim /etc/udev/rules.d/70-persistent-net.rules
 ```
-# built-in
+# built-in old
 SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="dc:a6:32:a2:4a:54", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
+
+# built-in on 8gb
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="e4:5f:01:ad:61:29", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
 
 # ASUSTek Computer, Inc. 802.11ac NIC
 SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="04:42:1a:5b:95:fc", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan2"
