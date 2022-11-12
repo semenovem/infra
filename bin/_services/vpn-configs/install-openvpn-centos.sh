@@ -16,12 +16,14 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 PKI_DIR=$(__core_conf_vpn_pki_dir__) || exit 1
 
 OPER_COPY_FILES=0
+SSH_HOST="srv1"
+SSH_PORT=""
 
 help() {
   __info__ "[help] use: [-hosts msk1|rr1|spb|...] [-copy] [-restart] [-status]"
 }
 
-exit 0
+#exit 0
 
 # TODO это CN серверного комплекта
 CN_NAME="evgio-server1-evg"
@@ -37,8 +39,8 @@ copy_to_server() {
 
   # shellcheck disable=SC2002
   # shellcheck disable=SC2029
-  cat "$FILE" | ssh msk1 "sudo tee ${TO} >/dev/null"
-  #  cat "$FILE" | ssh adman@176.53.162.51 -p 2257 "sudo tee ${TO} >/dev/null"
+  # shellcheck disable=SC2086
+  cat "$FILE" | ssh "$SSH_HOST" $SSH_PORT "sudo tee ${TO} >/dev/null"
 }
 
 # Копирование файлов
@@ -56,6 +58,8 @@ if [ -n "$OPER_COPY_FILES" ]; then
 fi
 
 # TODO раздельная инсталяция сервисов по номеру порта
+
+exit 0
 
 # Остановка / запуск служб
 #ssh adman@176.53.162.51 -p 2257 "systemctl list-units 'openvpn-server*' -all"

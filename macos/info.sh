@@ -20,7 +20,7 @@ sshfs evg@192.168.1.8:/ ~/_mount
 # cancel
 umount ~/_mount
 
-
+# -----------------------------------
 # режим сна
 https://www.iphones.ru/iNotes/rezhim-sna-i-gibernaciya-na-mac-chem-otlichaetsya-i-kak-nastroit-04-08-2020
 
@@ -39,3 +39,7 @@ sudo pmset hibernatemode Х
 
 # настройка сети
 networksetup
+
+#-----------------------------------------
+# Список сетей
+/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -s

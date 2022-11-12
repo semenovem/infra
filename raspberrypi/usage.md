@@ -10,9 +10,13 @@ http://dmitrysnotes.ru/raspberry-pi-3-obzor-i-nachalo-raboty
 
 ------------------------------------  
 ##### wi-fi
+>> compatible adapters
+https://elinux.org/RPi_USB_Wi-Fi_Adapters
+
 > drivers for wifi dongles
-https://github.com/aircrack-ng/rtl8812au  
-https://github.com/Mange/rtl8192eu-linux-driver
+- https://github.com/aircrack-ng/rtl8812au  
+- https://github.com/Mange/rtl8192eu-linux-driver
+- https://github.com/lwfinger/rtl8188eu
 
 --- 
 ASUSTek Computer, Inc. 802.11ac NIC  
@@ -27,9 +31,6 @@ https://brainbucket.xyz/how-to-use-an-asus-usb-ac53-nano-on-a-raspberry-pi
 https://raspberrypi.ru/wireless_access_point
 https://help.ubuntu.ru/wiki/wifi_ap
 https://www.raspberrypi.com/documentation/computers/configuration.html
-
->> compatible adapters
-https://elinux.org/RPi_USB_Wi-Fi_Adapters
   
 
 > connect to wifi  
@@ -73,3 +74,9 @@ sudo vim /etc/lightdm/lightdm.conf
 [SeatDefaults]
 xserver-command=X -s 0 dpms
 ```
+
+------------------------------------  
+> посмотреть доступные сети
+`sudo iwlist wlan0 scan | grep ESSID`
+
+

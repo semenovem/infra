@@ -1,0 +1,204 @@
+
+
+
+
+
+
+Host eu eu1
+  HostName     eu1.evgio.dev
+  Port         2257
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+
+
+Host rr rr1
+  HostName     rr1.evgio.dev
+
+
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+
+Host rr3
+  HostName     rr3.evgio.dev
+  Port         22
+
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+
+Host rr4
+  HostName     rr4.evgio.dev
+  Port         2257
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+
+Host spb
+  HostName     spb.evgio.dev
+  Port         2257
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host msk1
+  HostName     msk1.evgio.dev
+  Port         2257
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host kz2
+  HostName     kz2.evgio.dev
+  Port         2257
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+
+
+
+
+
+
+Host mini mini.local
+  HostName     mini.local
+  User         adman
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host home
+  HostName     localhost
+  Port         10022
+  User         evg
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv2
+  HostName     localhost
+  Port         20022
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv1
+  HostName     localhost
+  Port         30022
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv1
+  HostName     localhost
+  Port         30022
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+
+
+
+
+
+
+
+
+Host open
+  HostName      rr4.evgio.dev
+  Port          2257
+  User          adman
+  IdentityFile  ~/.ssh/id_ecdsa
+  RequestTTY    yes
+  
+  LocalForward  10022 127.0.0.1:10022  
+  LocalForward  10443 127.0.0.1:10443  
+  LocalForward  10080 127.0.0.1:10080  
+  LocalForward  10090 127.0.0.1:10090  
+  LocalForward  13389 127.0.0.1:13389  
+  LocalForward  15900 127.0.0.1:15900  
+  LocalForward  17001 127.0.0.1:17001  
+  
+  LocalForward  20022 127.0.0.1:20022  
+  LocalForward  20443 127.0.0.1:20443  
+  LocalForward  21051 127.0.0.1:21051  
+  LocalForward  27001 127.0.0.1:27001  
+  
+  LocalForward  30022 127.0.0.1:30022  
+  LocalForward  30443 127.0.0.1:30443  
+  LocalForward  31051 127.0.0.1:31051  
+  LocalForward  37001 127.0.0.1:37001  
+
+
+Host open-msk1
+  HostName      msk1.evgio.dev
+  User          adman
+  Port          2257
+  User          adman
+  IdentityFile  ~/.ssh/id_ecdsa
+  RequestTTY    yes
+  
+  LocalForward  10022 127.0.0.1:10022  
+  LocalForward  10443 127.0.0.1:10443  
+  LocalForward  10080 127.0.0.1:10080  
+  LocalForward  10090 127.0.0.1:10090  
+  LocalForward  13389 127.0.0.1:13389  
+  LocalForward  15900 127.0.0.1:15900  
+  LocalForward  17001 127.0.0.1:17001  
+  
+  LocalForward  20022 127.0.0.1:20022  
+  LocalForward  20443 127.0.0.1:20443  
+  LocalForward  21051 127.0.0.1:21051  
+  LocalForward  27001 127.0.0.1:27001  
+  
+  LocalForward  30022 127.0.0.1:30022  
+  LocalForward  30443 127.0.0.1:30443  
+  LocalForward  31051 127.0.0.1:31051  
+  LocalForward  37001 127.0.0.1:37001  
+
+
+Host open-kz2
+  HostName      kz2.evgio.dev
+  User          adman
+  Port          2257
+  User          adman
+  IdentityFile  ~/.ssh/id_ecdsa
+  RequestTTY    yes
+  
+  LocalForward  10022 127.0.0.1:10022  
+  LocalForward  10443 127.0.0.1:10443  
+  LocalForward  10080 127.0.0.1:10080  
+  LocalForward  10090 127.0.0.1:10090  
+  LocalForward  13389 127.0.0.1:13389  
+  LocalForward  15900 127.0.0.1:15900  
+  LocalForward  17001 127.0.0.1:17001  
+  
+  LocalForward  20022 127.0.0.1:20022  
+  LocalForward  20443 127.0.0.1:20443  
+  LocalForward  21051 127.0.0.1:21051  
+  LocalForward  27001 127.0.0.1:27001  
+  
+  LocalForward  30022 127.0.0.1:30022  
+  LocalForward  30443 127.0.0.1:30443  
+  LocalForward  31051 127.0.0.1:31051  
+  LocalForward  37001 127.0.0.1:37001  
+
+
+
+
+
+
+
+Host home.local
+  HostName     evg-srv.local
+  User         evg
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv1.local
+  HostName     192.168.1.30
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv2.local
+  HostName     192.168.1.32
+  User         adm
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host inno16
+  HostName     inno16.local
+  User         esemenov
+  IdentityFile ~/.ssh/id_ecdsa

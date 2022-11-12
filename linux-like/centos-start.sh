@@ -43,8 +43,6 @@ firewall-cmd --zone=public --permanent \
   --add-port 33440/tcp \
   --add-port 33443/tcp \
   --add-port 33443/udp \
-  --add-port 43443/tcp \
-  --add-port 43443/udp \
   --add-port 5001/tcp \
   --add-port 5001/udp
 
@@ -92,6 +90,8 @@ mkdir -p /var/log/openvpn
 vim /etc/ssh/sshd_config
 PasswordAuthentication no
 PermitRootLogin no
+# для проброса внутреннего порта на внешний
+GatewayPorts yes
 
 # setenforce 0 - если ошибка по новому порту
 systemctl restart sshd.service

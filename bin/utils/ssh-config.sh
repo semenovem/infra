@@ -33,7 +33,8 @@ ROLE=$(__core_role_get__)
 add() {
   {
     [ -n "$CONTENT" ] && echo "" && echo ""
-    cat "$1"
+#    cat "$1"
+    sed 's/#.*//g' "$1"
   } >>"$SSH_CONFIG_FILE"
   CONTENT=1
 
