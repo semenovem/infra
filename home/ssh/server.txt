@@ -11,11 +11,9 @@ Host eu eu1
   IdentityFile ~/.ssh/id_ecdsa
 
 # makecloud.ru 130.255.170.133
-# TODO delete user `centos`
 Host rr rr1
   HostName     rr1.evgio.dev
-#  TODO after back forwarding from home
-#  Port         2257
+  Port         2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 

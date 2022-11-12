@@ -33,8 +33,28 @@ ROLE=$(__core_role_get__)
 add() {
   {
     [ -n "$CONTENT" ] && echo "" && echo ""
-#    cat "$1"
-    sed 's/#.*//g' "$1"
+    # cat "$1"
+
+    PREV=
+    while IFS="" read -r p || [ -n "$p" ]; do
+      # пропуск двойных пустых строк
+      [ -z "$p" ] && [ -n "$PREV" ] && continue
+      if [ -z "$p" ]; then
+        PREV=1
+        echo
+        continue
+      fi
+
+      PREV=
+
+      # пропуск комментариев
+      echo "$p" | grep -iEq '^\s*#.*' && echo "$p" && continue
+
+      echo "$p" | grep -iEo \
+        '^(\s*[0-9a-z!"$%&()*+,-./:;<=>?@\^_{|}~.]+\s+)+[^#]*'
+
+    done <"$1"
+
   } >>"$SSH_CONFIG_FILE"
   CONTENT=1
 
