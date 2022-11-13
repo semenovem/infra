@@ -10,6 +10,10 @@ ROLE=$(__core_role_get__) && __info__ "role: ${ROLE}" || __err__ "role: got erro
 
 SSH_CONFIG_FILE="${HOME}/.ssh/config"
 
+
+__parse_yaml__ "${ROOT}/_core/conf.yml"
+#| grep -iE '^ssh'
+
 #TMP_FILE=$(mktemp) 2> ERR_DAT
 #if [ $? -eq 0 ]; then
 #  sh "${ROOT}/utils/"

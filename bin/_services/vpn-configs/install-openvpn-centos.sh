@@ -16,7 +16,7 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 PKI_DIR=$(__core_conf_vpn_pki_dir__) || exit 1
 
 OPER_COPY_FILES=0
-SSH_HOST="srv1"
+SSH_HOST="home"
 SSH_PORT=""
 
 help() {
@@ -104,7 +104,7 @@ exit 0
 systemctl list-units 'openvpn-server*' -all | grep -i 'openvpn-server' | awk '{print $1}'
 
 systemctl -f enable openvpn-server@server-443-tcp.service
-systemctl start openvpn-server@server-443-tcp.service
+systemctl restart openvpn-server@server-443-tcp.service
 systemctl status openvpn-server@server-443-tcp.service
 
 systemctl -f enable openvpn-server@server-443-udp.service

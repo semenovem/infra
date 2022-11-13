@@ -1,6 +1,8 @@
 #!/bin/sh
 
+# Установка openvpn на сервер
+
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 
 # shellcheck disable=SC2068
-sh "${ROOT}/../_services/vpn_pki/install-openvpn-centos.sh" $@
+sh "${ROOT}/../_services/vpn-configs/install-openvpn-centos.sh" $@
