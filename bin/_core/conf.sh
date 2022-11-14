@@ -139,7 +139,7 @@ core_conf_logger() {
   coreConfMsg="[$CORE_LOGGER_NAME][$coreConfLoggerType]$(core_logger_sub_system_name) $*"
 
   if [ -n "$CORE_CONF_LOGGER_COLOR_TERMINAL" ]; then
-    echo "${coreConfColor}${coreConfMsg}${__NC__}"
+    echo -e "${coreConfColor}${coreConfMsg}${__NC__}"
   else
     echo "$coreConfMsg"
   fi
@@ -162,6 +162,7 @@ __info__() {
 
 __debug__() {
   [ -n "$__QUIET__" ] && return 0
+  [ -z "$__DEBUG__" ] && return 0
   core_conf_logger "DEBU" "$__DARK__GRAY__" "$*"
 }
 
