@@ -22,5 +22,5 @@ highlight CursorLine guibg=lightblue ctermbg=lightgray
 highlight CursorLine term=none cterm=none
 set history=200
 set wildmenu
-set list listchars=tab:→\ ,trail:·
+" set list listchars=tab:→\ ,trail:·
 filetype plugin on

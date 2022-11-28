@@ -1,0 +1,167 @@
+# не использовать в ключах - (дефис) не парсится
+# не использовать в ключах _ (нижнее подчеркивание) - невозможно правильно работать с ключами
+### Машины - proxy
+cpi:
+  rr1:
+    roles: PROXY_SERVER
+    host: rr1.evgio.dev
+    ip: 130.255.170.133
+    ipv6:
+    ssh:
+      port: 2257
+      main:
+        user: adman
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHxkXrO9sNfrmnPF1Q3hDEmkxzaeXAjftsf43+mxXOPbRoXf4z4gcyNuPxuD8YCydhW+XaQBspdUoR31XB5VDIklUsVxMT31g+M0oiiWlFXuF1DdQ5ovcR/pIt5Ri3CmMg== adman@rr1
+      remote:
+        user: remote
+        pub_key:
+
+  rr3:
+    roles: PROXY_SERVER
+    host: rr3.evgio.dev
+    ip: 194.67.205.149
+    ipv6:
+    ssh:
+      port: 2257
+      main:
+        user: adman
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHCra2LmweOd+PIFkVQWFH4Gjwqj3Hflp0Jpx0to+VlXmlpy/RIb0AkK4AAbgROTqBPhZZFsNTFM4WopSoC0+GijI13LP9ATskDZHP4Hh1ziDEuESvLnugfIkS3Cip8SJQ== adman@rr3.evgio.dev
+      remote:
+        user: remote
+        pub_key:
+
+  rr4:
+    roles: PROXY_SERVER
+    host: rr4.evgio.dev
+    ip: 185.87.51.94
+    ipv6:
+    ssh:
+      port: 2257
+      main:
+        user: adman
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHJSfDV9l7r4MljCeXNHKxPlXcqTFofVqrSn+QTZSgSjD6kLN0t91i88ZT20s20vKvR5fkYMgSDEwKZz+Lr454fmsxQVLaAeDFAbtL4gtDFfqG/6FSREyngoAD+aRqqqOg== adman@rr4.evgio.dev
+      remote:
+        user: remote
+        pub_key:
+
+  spb:
+    roles: PROXY_SERVER
+    host: spb.evgio.dev
+    ip: 188.225.36.94
+    ipv6:
+    ssh:
+      port: 2257
+      main:
+        user: adman
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBDWkMaRIg37gN+BG6jRHzlUvli5ivpQzCyGVjaJIXjxu/mGPs/tUzd+0j7nv8kdldJpiV2bWpNCtfXZmUrp/plJ3y+xK1+rYbwz7jZalszXvJtKhroKT2DjB49cTZWvEIA== adman@spb.evgio.dev
+      remote:
+        user: remote
+        pub_key:
+
+  msk1:
+    roles: PROXY_SERVER
+    host: msk1.evgio.dev
+    ip: 195.133.46.87
+    ipv6:
+    ssh:
+      port: 2257
+      main:
+        user: adman
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBI7eZR81lTDng2ibGoWsKUVPv2p5BOrgvdkPcZLceyqk1mRWOo98jH020d6G4Fwrd/peq3PL9Ergcav/Lc92LU2F09TD39sWgLhTPqJ1T5hyJXIL2MErp0p9nq5TSg28Zw== adman@msk1.evgio.dev
+      remote:
+        user: remote
+        pub_key:
+
+  kz2:
+    roles: PROXY_SERVER
+    host: kz2.evgio.dev
+    ip: 93.170.72.108
+    ipv6:
+    ssh:
+      port: 2257
+      main:
+        user: adman
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOXynokGGUu4Zq3GmqABFydfU1oCDyS3CYAMP0fhlzisN0K4Ovc68qWoA4DzFnpk2K0zQipp8NyP+H0WdBFLcURU3i62ygfQAVy//y1xig3SaWzweTVpeIZerA9++dNeMg== adman@kz2
+      remote:
+        user: remote
+        pub_key:
+
+  eu1:
+    roles: PROXY_SERVER
+    host: eu1.evgio.dev
+    ip: 5.45.120.70
+    ipv6:
+    ssh:
+      port: 2257
+      main:
+        user: adman
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPpbwyFmbVB3ABe2rzyOd7Gm/oHr60swOw8B3J7pPBTsCSKjTNYcub+q4F7M44Q7Pam3VS4f0vgQkZMjduTWgvOQTWWAq/5Qv7jkNVX5tFhICFR2d3Bxas3Kj3/Vs/rkIg== adman@eu1.evgio.dev
+      remote:
+        user: remote
+        pub_key:
+
+  #
+  #
+  #
+  #
+  ### Машины - рабочие станции
+  home:
+    hostname: srv-evg.local
+    roles: STANDBY_SERVER HOME_SERVER GIT_REPO
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGyQMkD1kkI6cti/Srn8FNX8RzjUjlKq6ynoROeXHvp9aJHqMdETId1PFiJQjfPNCNKlVVDA8lyTkn9GZtaQSi8l7NoUsPfgGvfnBVmJpy2MlnDW83QOAwUc6fDI5oM8Kg== evg@home
+    ssh_forwarding:
+      proxy: rr4 spb
+      ports:
+        1: 0.0.0.0:10022::22 # ssh
+        2: 10443::443        # https
+        3: 13389:3389        # rdp
+        4: 15900:5900        # vnc
+        5: 18090:8090        # development
+        6: 10080:10080
+        7: 10090:10090
+        8: 17001:17001
+        9: 17002:17002
+
+  srv2:
+    hostname: srv2.local
+    roles: STANDBY_SERVER
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGm16LDGpzavDoaqmDwHRswdSXjCJlcSFNFPHsJONoZs6DKJaveJk4ndqrLjoUKMcCCDnkprTNSG03jwO0VQGEd/2IA8tuGIwNQW8G4dKPvxzoUiN37uhYj3w8khUIHAqA== adm@srv2
+    ssh_forwarding:
+      proxy: rr4 spb
+      ports:
+        1: 0.0.0.0:10022::22 # ssh
+        2: 10443::443        # https
+
+  # пока имеет имя srv1
+  srv3:
+    hostname: srv3.local
+    roles: STANDBY_SERVER
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBIMVsRQ2FzF/qKVAwUwASQ2Tk1JBiCKHkphOdXYzUFmGHM5wWM8e/6UBD/zdfrz3Tgtv7M8X4wbA4cnC8TzPCY0xlklB35criLsE1L7IZRGP7ghNo9SPuRbtybIdNJQ1yg== adm@srv1
+    ssh_forwarding:
+      proxy: rr4 spb
+      ports:
+        1: 0.0.0.0:10022::22 # ssh
+        2: 10443::443        # https
+
+  mini:
+    hostname: mini.local
+    roles: MINI_SERVER
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
+
+  # personal 14
+  laptop:
+    hostname: ibtv-8.local
+    roles: WORKSTATION
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBLlqKam9sMUGEN629GpWOpDywtwKSlCnT26lFALkrAdvskn4BBW8j6KpcV2lJ5lBXepxU6yl8W/qJlzWdwZBjmmFmrqx9vXZeWKG01g4vJPVS9aFd9XYXPMFvFe6pjOlHw== sem@ibtv-8.local
+
+  # personal 13-2015
+  laptop13:
+    hostname: TODO =
+    roles: WORKSTATION
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBJ8xEA1vYvFiJbbj960sNcLIoo790KmFWSgxxAFvvq+AcdoEQW4/Tfv0rB0/bOZ9D2jYxMLxQnaLaXyvm3VUMmk816i/+EjyOGRJxZzo4LCgDhr9p74725fZ9uh7hElmEg== evg@evg13-15.local
+
+  # work 16"
+  laptop16Work:
+    hostname: inno16.local
+    roles: WORKSTATION
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBN6lOSYXGRyyKWrdPzau1ja7AIuFL6Rchm7LKGbe7M/VHVJVzhXIcLDNX/XQKoyMp3Aw7HRgiIrXpHow5KfoPYDsaQsC5UAa0P4v6vlxwplssSFJgjCXzUmcdZS2bWtVdg== user@inno16

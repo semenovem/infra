@@ -4,8 +4,8 @@
 # echo "192.168.1".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/_core/conf.sh" || exit 1
-. "${ROOT}/_core/os.sh" || exit 1
+. "${ROOT}/_lib/core.sh" || exit 1
+. "${ROOT}/_lib/os.sh" || exit 1
 
 case "$__CORE_OS_KIND__" in
 "$__CORE_OS_KIND_MACOS_CONST__")

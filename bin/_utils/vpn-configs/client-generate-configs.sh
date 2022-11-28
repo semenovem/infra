@@ -3,9 +3,9 @@
 # Создать файлы конфигурации подключения клиента
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../../_core/conf.sh" || exit 1
+. "${ROOT}/../../_lib/core.sh" || exit 1
 
-CFG_DIR="$(__core_conf_vpn_pki_dir__)/clients" || exit 1
+CFG_DIR="$(__CORE_VPN_PKI_DIR__)/clients" || exit 1
 if [ ! -d "$CFG_DIR" ]; then
   mkdir "$CFG_DIR" || exit 1
 fi

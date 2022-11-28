@@ -10,6 +10,10 @@ sh _environment/bin/envi
 
 `envi-help`
 
+#### Global environment
+```
+__ENVI_BIN__
+```
 ---------------------------------------------------------
 
 ```

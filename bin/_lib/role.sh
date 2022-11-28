@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# TODO дублирует значение из conf.sh __CORE_CONF_STATE_DIR__
+# TODO дублирует значение из conf.sh __CORE_STATE_DIR__
 CORE_ROLE_PATH_DIR="${HOME}/_envi_state"
 
 CORE_ROLE_FILE="role"

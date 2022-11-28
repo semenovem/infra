@@ -11,9 +11,9 @@
 # -status   - показать статус openvpn
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../../_core/conf.sh" || exit 1
+. "${ROOT}/../../_lib/core.sh" || exit 1
 
-PKI_DIR=$(__core_conf_vpn_pki_dir__) || exit 1
+PKI_DIR=$(__CORE_VPN_PKI_DIR__) || exit 1
 
 OPER_COPY_FILES=0
 SSH_HOST="home"

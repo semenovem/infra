@@ -3,9 +3,8 @@
 # Подготовка авторизованных ключей
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../_core/conf.sh" || exit 1
-. "${ROOT}/../_core/func.sh" || exit 1
-. "${ROOT}/../_core/role.sh" || exit 1
+. "${ROOT}/../_lib/core.sh" || exit 1
+. "${ROOT}/../_lib/role.sh" || exit 1
 
 TARGET_FILE="${HOME}/.ssh/authorized_keys"
 

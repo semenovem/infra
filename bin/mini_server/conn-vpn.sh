@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../_core/conf.sh" || exit 1
+. "${ROOT}/../_lib/core.sh" || exit 1
 
 _SELF_NAME_="conn-vpn"
 _MONITOR_PORT_=21021
@@ -62,8 +62,8 @@ isVpnWork() {
 
 disconnect() {
   [ -n "$1" ] || __info__ "disconn"
-  pid=$(pidVpn) && sudo kill -2 "$pid"
-  [ -n "$_SSH_FORWARD_" ] && pid=$(pidSsh) && kill -2 "$pid"
+  pid=$(pidVpn) && sudo kill -SIGTERM "$pid"
+  [ -n "$_SSH_FORWARD_" ] && pid=$(pidSsh) && kill -SIGTERM "$pid"
   sleep 1
 }
 

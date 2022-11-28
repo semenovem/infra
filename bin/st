@@ -3,20 +3,37 @@
 # общий статус системы
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/_core/conf.sh" || exit 1
-. "${ROOT}/_core/role.sh" || exit 1
+. "${ROOT}/_lib/core.sh" || exit 1
+#. "${ROOT}/_lib/role.sh" || exit 1
 
-ROLE=$(__core_role_get__) && __info__ "role: ${ROLE}" || __err__ "role: got error $ROLE"
+#ROLE=$(__core_role_get__) && __info__ "role: ${ROLE}" || __err__ "role: got error $ROLE"
 
-SSH_CONFIG_FILE="${HOME}/.ssh/config"
+handler() {
+  echo "..handler.. $*"
+}
 
 
-__parse_yaml__ "${ROOT}/_core/conf.yml"
+#__config__ "" "cpi" ""
+__config__ "" "cpi_rr4_ssh_main_pub_key"
+
+#"ssh_forwarding"
+#"ssh_forwarding"
+echo "ret code = $?"
+
+#__config__ "handler" "cpi_home_hostname"
+
+
+#echo ">>> $CORE_HANDLER"
+
+
+
+
+
 #| grep -iE '^ssh'
 
 #TMP_FILE=$(mktemp) 2> ERR_DAT
 #if [ $? -eq 0 ]; then
-#  sh "${ROOT}/utils/"
+#  sh "${ROOT}/_utils/"
 #
 #
 #else

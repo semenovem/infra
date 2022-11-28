@@ -14,4 +14,4 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 
 # shellcheck disable=SC2068
-sh "${ROOT}/../_services/qr_code/qr_code.sh" $@
+sh "${ROOT}/_utils/qr_code/qr_code.sh" $@

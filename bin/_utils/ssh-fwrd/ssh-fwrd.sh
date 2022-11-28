@@ -8,7 +8,7 @@
 #************************************************************
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../../_core/conf.sh" || exit 1
+. "${ROOT}/../../_lib/core.sh" || exit 1
 
 __SERVICE_NAME__="ssh-fwrd"
 __SYSTEMMD_DIR__="/etc/systemd/system"
@@ -44,12 +44,12 @@ function tmpl {
 
 function getPathAutosshLogFile {
   local host=$1
-  echo "${__CORE_CONF_STATE_DIR__}/${__SERVICE_NAME__}-${host}.log"
+  echo "${__CORE_STATE_DIR__}/${__SERVICE_NAME__}-${host}.log"
 }
 
 function getPathAutosshPidFile {
   local host=$1
-  echo "${__CORE_CONF_STATE_DIR__}/${__SERVICE_NAME__}-${host}.pid"
+  echo "${__CORE_STATE_DIR__}/${__SERVICE_NAME__}-${host}.pid"
 }
 
 function getCmd {

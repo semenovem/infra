@@ -3,8 +3,8 @@
 #
 # работа с QR кодами
 #
-# sh bin/_services/qr_code/qr_code.sh scan bin/_tmp_dir/amazon-in.png -yes -debug  -hash 'sdfs dsdf' -issuer 'sadfsadf__sdfsf'
-# sh bin/_services/qr_code/qr_code.sh generate bin/_tmp_dir/qr-output.png -yes -debug -hash 'TY3LB3HQS7ZO4TTZD4PEVH3CWP7BSI3IQFD36LVJWFDLCTOKK37Q' -issuer 'Amazon'
+# sh bin/_utils/qr_code/qr_code.sh scan bin/_tmp_dir/amazon-in.png -yes -debug  -hash 'sdfs dsdf' -issuer 'sadfsadf__sdfsf'
+# sh bin/_utils/qr_code/qr_code.sh generate bin/_tmp_dir/qr-output.png -yes -debug -hash 'TY3LB3HQS7ZO4TTZD4PEVH3CWP7BSI3IQFD36LVJWFDLCTOKK37Q' -issuer 'Amazon'
 #
 # QR-Code:otpauth://totp/Amazon%3Asemenovem%40gmail.com?secret=TY3LB3HQS7ZO4TTZD4PEVH3CWP7BSI3IQFD36LVJWFDLCTOKK37Q&issuer=Amazon
 #
@@ -14,7 +14,7 @@
 # otpauth://totp/semenovem@gmail.com/Test3?secret=TY3LB3HQS7ZO4TTZD4PEVH3CWP7BSI3IQFD36LVJWFDLCTOKK37Q
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../../_core/conf.sh" || exit 1
+. "${ROOT}/../../_lib/core.sh" || exit 1
 
 FILE_ABSOLUTE_PATH=
 FILE_PATH=

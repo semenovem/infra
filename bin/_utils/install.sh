@@ -9,10 +9,10 @@ BIN_DIR=$(dirname "$ROOT") || exit 1
 
 [ ! -d "$BIN_DIR" ] && echo "[${BIN_DIR}] is not a directory" 1>&2 && exit 1
 
-. "${BIN_DIR}/_core/conf.sh" || exit 1
-. "${BIN_DIR}/_core/os.sh"
-. "${BIN_DIR}/_core/role.sh" || exit 1
-. "${BIN_DIR}/_core/func.sh" || exit 1
+. "${BIN_DIR}/_lib/core.sh" || exit 1
+. "${BIN_DIR}/_lib/os.sh" || exit 1
+. "${BIN_DIR}/_lib/role.sh" || exit 1
+. "${BIN_DIR}/_lib/func.sh" || exit 1
 
 USER_PROFILE_FILE=
 ADDITIONAL_BIN_DIRS=
@@ -32,21 +32,21 @@ gen_profile_with_bin_dirs() {
   # shellcheck disable=SC2068
   for dir in $@; do
     echo "## ${envi_bin}/$dir"
-    dirs="${dirs}:\${ENVI_BIN}/${dir}"
+    dirs="${dirs}:\${__ENVI_BIN__}/${dir}"
   done
 
   echo
-  echo "ENVI_BIN=\"${envi_bin}\""
+  echo "export __ENVI_BIN__=\"${envi_bin}\""
   echo
   echo "export PATH=\"\${PATH}:${dirs}\""
 
   echo
   echo "## additional profile"
-  echo "source \"\${ENVI_BIN}/../home/profile\""
+  echo "source \"\${__ENVI_BIN__}/../home/profile\""
 
   echo
   echo "## repository update"
-  echo "sh \"\${ENVI_BIN}/utils/update-repo.sh\" \"${envi_bin}/utils\""
+  echo "sh \"\${__ENVI_BIN__}/_utils/update-repo.sh\" \"${envi_bin}/_utils\""
 }
 
 add_source_file_to_profile() {
@@ -73,7 +73,7 @@ add_source_file_to_profile() {
 # Выбрать роль устройства
 ROLE=$(__core_role_get__)
 if [ $? -ne 0 ]; then
-  sh "${BIN_DIR}/utils/set-role.sh"
+  sh "${BIN_DIR}/_utils/set-role.sh"
   ROLE=$(__core_role_get__)
   [ $? -ne 0 ] && __err__ "Не выбрана роль устройства" && exit 1
 fi
@@ -121,13 +121,15 @@ esac
   exit 1
 
 # shellcheck disable=SC2086
-gen_profile_with_bin_dirs "$BIN_DIR" $ADDITIONAL_BIN_DIRS >"$__CORE_CONF_PROFILE_FILE__"
+gen_profile_with_bin_dirs "$BIN_DIR" $ADDITIONAL_BIN_DIRS >"$CORE_PROFILE_FILE"
+
+echo ">>> CORE_PROFILE_FILE = $CORE_PROFILE_FILE"
 
 # добавление в profile PATH
 add_source_file_to_profile \
   "$USER_PROFILE_FILE" \
   "source" \
-  "${__CORE_CONF_PROFILE_FILE__}" \
+  "${CORE_PROFILE_FILE}" \
   "adding PATH paths to bin utilities" ||
   exit 1
 
