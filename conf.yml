@@ -165,3 +165,9 @@ cpi:
     hostname: inno16.local
     roles: WORKSTATION
     pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBN6lOSYXGRyyKWrdPzau1ja7AIuFL6Rchm7LKGbe7M/VHVJVzhXIcLDNX/XQKoyMp3Aw7HRgiIrXpHow5KfoPYDsaQsC5UAa0P4v6vlxwplssSFJgjCXzUmcdZS2bWtVdg== user@inno16
+
+  # work 16" 
+  laptop16WorkTemp:
+    hostname: jon.local
+    roles: WORKSTATION
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBNAvYur9yaBJ8ILDYXx70kvI5LkA7YR11DQsgQb9A2wGEhz2uKfkKwDPyaY1s3UjQnE9E1zXQu4lTS4Ggz54Xn54hpNa+ViW/YPLM+j3zpplOHkd3/9yzU8umTYXae97DA== jon@jon.local
