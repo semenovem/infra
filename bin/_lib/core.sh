@@ -188,7 +188,7 @@ __core_get_virtualization_app__() {
 
 # проверить, есть ли образ
 # $1 - название образа [name:1.0]
-# return 1 - нет образа
+# return 1 - нет образа TODO - изменить на 99
 # return 2 - ошибка
 __core_has_docker_image__() {
   CORE_CONF_NAME=$1
