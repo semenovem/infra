@@ -117,7 +117,7 @@ case "$__CORE_OS_KIND__" in
 esac
 
 [ ! -f "$USER_PROFILE_FILE" ] &&
-  __err__ "Файла профиля не существует '$profileFile'" &&
+  __err__ "Файла профиля не существует '$USER_PROFILE_FILE'" &&
   exit 1
 
 # shellcheck disable=SC2086
