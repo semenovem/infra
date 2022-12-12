@@ -166,7 +166,7 @@ cpi:
     roles: WORKSTATION
     pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBN6lOSYXGRyyKWrdPzau1ja7AIuFL6Rchm7LKGbe7M/VHVJVzhXIcLDNX/XQKoyMp3Aw7HRgiIrXpHow5KfoPYDsaQsC5UAa0P4v6vlxwplssSFJgjCXzUmcdZS2bWtVdg== user@inno16
 
-  # work 16" 
+  # work 16"
   laptop16WorkTemp:
     hostname: jon.local
     roles: WORKSTATION
