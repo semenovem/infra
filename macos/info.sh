@@ -15,7 +15,7 @@ exit
 
 
 # execute
-sshfs evg@192.168.1.8:/ ~/_mount
+sshfs evg@192.168.11.100:/mnt ~/_mount
 
 # cancel
 umount ~/_mount

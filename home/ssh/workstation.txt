@@ -9,24 +9,6 @@ Host mini mini.local
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
 
-Host home
-  HostName     localhost
-  Port         10022
-  User         evg
-  IdentityFile ~/.ssh/id_ecdsa
-
-Host srv2
-  HostName     localhost
-  Port         20022
-  User         adm
-  IdentityFile ~/.ssh/id_ecdsa
-
-Host srv1
-  HostName     localhost
-  Port         30022
-  User         adm
-  IdentityFile ~/.ssh/id_ecdsa
-
 # ssh -fN -L 17001:localhost:5900 esemenov@192.168.1.16
 # ps -aux | grep ssh | grep 17001:l
 

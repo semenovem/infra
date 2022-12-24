@@ -26,3 +26,7 @@ vnstat  # show traffic
 iperf -s      # server (5001) open port on firewall
 iperf -c host # client
 
+
+
+######################
+journalctl -b -p err
