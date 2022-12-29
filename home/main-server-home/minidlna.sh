@@ -15,3 +15,6 @@ systemctl status minidlna
 
 sudo ss -4lnp | grep minidlna
 
+
+# TODO проработать запуск без sudo
+#sudo /sbin/minidlnad -R -f /etc/minidlna.conf

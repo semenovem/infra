@@ -6,10 +6,6 @@ exit 0
 # 10080  - connect for clients
 /usr/local/Xeoma
 
-Executable file's path: /home/evg/bin/Xeoma/xeoma
-Created symlink /etc/systemd/system/multi-user.target.wants/XeomaCoreService.service → /etc/systemd/system/XeomaCoreService.service
-Current password for network access: -H6-=qqFKO
-
 
 # - лицензии
 # https://felenasoft.com/xeoma/ru/support/activation-issues/
