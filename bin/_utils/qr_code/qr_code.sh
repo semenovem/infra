@@ -64,7 +64,7 @@ if [ $? -eq 0 ]; then
       "issuer") ISSUER="$line" ;;
       "account") ACCOUNT="$line" ;;
       *)
-        __err__ "аргумент '$prev' не имеет ключа"
+        __err__ "argument '$prev' has no key"
         ERR=1
         exit 1
         ;;
@@ -76,7 +76,7 @@ if [ $? -eq 0 ]; then
 
     case $line in
     "scan" | "generate")
-      [ -n "$OPER" ] && ERR=1 && __err__ "дважды указана операция '$OPER' и '$line'" && exit 1
+      [ -n "$OPER" ] && ERR=1 && __err__ "operation listed twice '$OPER' и '$line'" && exit 1
       OPER="$line"
       ;;
     "-issuer") prev="issuer" ;;
@@ -86,14 +86,14 @@ if [ $? -eq 0 ]; then
       # проверка на файл
       if [ -f "$line" ] || [ -d "$(dirname "$line")" ]; then
         [ -n "$FILE_PATH" ] &&
-          __err__ "в аргументах передано 2 файла '$FILE_PATH' и '$line'" &&
+          __err__ "2 files passed in arguments '$FILE_PATH' и '$line'" &&
           exit 1
 
         FILE_PATH="$line"
         continue
       fi
 
-      __err__ "неизвестный аргумент '$line'"
+      __err__ "unknown argument '$line'"
       ERR=1
       ;;
     esac
@@ -102,14 +102,14 @@ if [ $? -eq 0 ]; then
   unset prev line
 fi
 
-[ -z "$OPER" ] && ERR=1 && __err__ "не указана операция"
+[ -z "$OPER" ] && ERR=1 && __err__ "no operation specified"
 
 if [ -n "$FILE_PATH" ]; then
   FILE_NAME=$(basename "$FILE_PATH")
-  [ $? -ne 0 ] && ERR=1 && __err__ "не удалось получить имя файла"
+  [ $? -ne 0 ] && ERR=1 && __err__ "failed to get filename"
 
   FILE_ABSOLUTE_PATH=$(__absolute_path__ "$FILE_PATH")
-  [ $? -ne 0 ] && ERR=1 && __err__ "не удалось получить абсолютный путь к файлу [${FILE_PATH}]"
+  [ $? -ne 0 ] && ERR=1 && __err__ "unable to get absolute path to file [${FILE_PATH}]"
 fi
 
 if [ -n "$ERR" ]; then
@@ -122,7 +122,7 @@ fi
 case $OPER in
 "scan")
   if [ -z "$FILE_ABSOLUTE_PATH" ]; then
-    __err__ "не указан файл с qr кодом"
+    __err__ "file with qr code is not specified"
     ERR=1
   else
     [ ! -f "$FILE_ABSOLUTE_PATH" ] && ERR=1 && __err__ "файл не существует '$FILE_ABSOLUTE_PATH'"
@@ -130,8 +130,8 @@ case $OPER in
   ;;
 
 "generate")
-  [ -n "$RAW" ] && [ -n "$ISSUER" ] && ERR=1 && __err__ "флаги -raw и -issuer не совместимы"
-  [ -n "$RAW" ] && [ -n "$ACCOUNT" ] && ERR=1 && __err__ "флаги -raw и -account не совместимы"
+  [ -n "$RAW" ] && [ -n "$ISSUER" ] && ERR=1 && __err__ "flags -raw and -issuer are not compatible"
+  [ -n "$RAW" ] && [ -n "$ACCOUNT" ] && ERR=1 && __err__ "flags -raw and -account are not compatible"
 
   if [ -n "$RAW" ] && [ -z "$ERR" ]; then
     while true; do
@@ -175,18 +175,17 @@ case $OPER in
   fi
 
   if [ -n "$FILE_ABSOLUTE_PATH" ] && [ -f "$FILE_ABSOLUTE_PATH" ] && [ -z "$ERR" ]; then
-    __confirm__ "файл [${FILE_PATH}] уже существует, перезаписать ?" || CANCEL=1
+    __confirm__ "file [${FILE_PATH}] already exists, overwrite ?" || CANCEL=1
   fi
 
   if [ -z "$FILE_ABSOLUTE_PATH" ] && [ -z "$ERR" ]; then
     FILE_ABSOLUTE_PATH=$(mktemp)
-    [ $? -ne 0 ] && ERR=1 && __err__ "не удалось создать временый файл для qr кода"
+    [ $? -ne 0 ] && ERR=1 && __err__ "failed to create temporary file for qr code"
 
     FILE_NAME=$(basename "$FILE_ABSOLUTE_PATH")
-    [ $? -ne 0 ] && ERR=1 && __err__ "не удалось получить имя файла"
+    [ $? -ne 0 ] && ERR=1 && __err__ "failed to get filename"
 
-    [ -z "$ERR" ] && [ -z "$__DEBUG__" ] && [ -z "$__QUIET__" ] &&
-      __info__ "path to qr-code: ${FILE_ABSOLUTE_PATH}"
+    [ -z "$ERR" ] && __info__ "path to file with qr code: ${FILE_ABSOLUTE_PATH}"
   fi
   ;;
 esac
@@ -199,7 +198,7 @@ __core_has_docker_image__ "$IMAGE"
 case $? in
 0) ;;
 1)
-  [ -n "$__DRY__" ] && __info__ "сборка образа" && exit 0
+  [ -n "$__DRY__" ] && __info__ "image assembly" && exit 0
   $CMD build -f "${ROOT}/qr_code.dockerfile" -t "$IMAGE" "$ROOT" || exit 1
   ;;
 *) exit 1 ;;
@@ -222,7 +221,7 @@ case $OPER in
 "generate")
   if [ ! -f "$FILE_ABSOLUTE_PATH" ]; then
     touch "$FILE_ABSOLUTE_PATH"
-    [ $? -ne 0 ] && __err__ "не удалось создать фал [${FILE_ABSOLUTE_PATH}]" && exit 1
+    [ $? -ne 0 ] && __err__ "failed to create file [${FILE_ABSOLUTE_PATH}]" && exit 1
   fi
 
   if [ -n "$RAW" ]; then
@@ -233,8 +232,7 @@ case $OPER in
     param="${param}?secret=${HASH}"
     [ -n "$ACCOUNT" ] && [ -n "$ISSUER" ] && param="${param}&issuer=${ISSUER}"
 
-    [ -n "$__DEBUG__" ] && __debug__ "query: $param"
-    [ -z "$__DEBUG__" ] && [ -z "$__QUIET__" ] && __info__ "query: $param"
+    __debug__ "query: $param"
   fi
 
   [ -n "$__DRY__" ] && exit 0

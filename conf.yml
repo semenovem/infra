@@ -108,40 +108,45 @@ cpi:
   home:
     hostname: srv-evg.local
     roles: STANDBY_SERVER HOME_SERVER GIT_REPO
+    description: перезагрузка каждую неделю
     pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGyQMkD1kkI6cti/Srn8FNX8RzjUjlKq6ynoROeXHvp9aJHqMdETId1PFiJQjfPNCNKlVVDA8lyTkn9GZtaQSi8l7NoUsPfgGvfnBVmJpy2MlnDW83QOAwUc6fDI5oM8Kg== evg@home
     ssh_forwarding:
-      proxy: rr4 spb
+      proxy: rr1 rr4 msk1 kz2 eu1
       ports:
-        1: 0.0.0.0:10022::22 # ssh
-        2: 10443::443        # https
-        3: 13389:3389        # rdp
-        4: 15900:5900        # vnc
-        5: 18090:8090        # development
-        6: 10080:10080
-        7: 10090:10090
-        8: 17001:17001
-        9: 17002:17002
+        1: 0.0.0.0:5022::22  # ssh
+        2: 5443::443         # https
+        3: 0.0.0.0:5194:1194 # vpn
+        4: 10080:10080
+        5: 10090:10090
+
+  srv1:
+    hostname: srv1.local
+    roles: STANDBY_SERVER
+    description: перезагрузка каждый второй день
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBIMVsRQ2FzF/qKVAwUwASQ2Tk1JBiCKHkphOdXYzUFmGHM5wWM8e/6UBD/zdfrz3Tgtv7M8X4wbA4cnC8TzPCY0xlklB35criLsE1L7IZRGP7ghNo9SPuRbtybIdNJQ1yg== adman@srv1
+    ssh_forwarding:
+      proxy: rr1 rr4 msk1 kz2 eu1
+      ports:
+        1: 0.0.0.0:10022::22   # ssh
+        2: 0.0.0.0:10443::1194 # vpn
 
   srv2:
     hostname: srv2.local
     roles: STANDBY_SERVER
-    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGm16LDGpzavDoaqmDwHRswdSXjCJlcSFNFPHsJONoZs6DKJaveJk4ndqrLjoUKMcCCDnkprTNSG03jwO0VQGEd/2IA8tuGIwNQW8G4dKPvxzoUiN37uhYj3w8khUIHAqA== adm@srv2
+    description: перезагрузка каждый второй день
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGm16LDGpzavDoaqmDwHRswdSXjCJlcSFNFPHsJONoZs6DKJaveJk4ndqrLjoUKMcCCDnkprTNSG03jwO0VQGEd/2IA8tuGIwNQW8G4dKPvxzoUiN37uhYj3w8khUIHAqA== adman@srv2
     ssh_forwarding:
-      proxy: rr4 spb
+      proxy: rr1 rr4 msk1 kz2 eu1
       ports:
-        1: 0.0.0.0:10022::22 # ssh
-        2: 10443::443        # https
+        1: 0.0.0.0:20022::22   # ssh
+        2: 0.0.0.0:20443::1194 # vpn
 
-  # пока имеет имя srv1
-  srv3:
-    hostname: srv3.local
-    roles: STANDBY_SERVER
-    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBIMVsRQ2FzF/qKVAwUwASQ2Tk1JBiCKHkphOdXYzUFmGHM5wWM8e/6UBD/zdfrz3Tgtv7M8X4wbA4cnC8TzPCY0xlklB35criLsE1L7IZRGP7ghNo9SPuRbtybIdNJQ1yg== adm@srv1
-    ssh_forwarding:
-      proxy: rr4 spb
-      ports:
-        1: 0.0.0.0:10022::22 # ssh
-        2: 10443::443        # https
+  srv21:
+    hostname: srv21.local
+    roles: VPN_SERVER
+    description: перезагрузка каждую неделю
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBBDEl++6Wjat47aJ/V2EKY4yMLVoC8oxHYIcPJuTphQN++dkNLPMdUkilcjkO1ge8TKI1Nwo+OOAWmGh2FitIX29kwEizIpdq3tmSO3smPJvTHjS6L4zTqyvG74Qtva0GQ== adman@srv21
+
 
   mini:
     hostname: mini.local

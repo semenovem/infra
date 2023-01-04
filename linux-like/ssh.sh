@@ -3,27 +3,19 @@
 
 # https://man7.org/linux/man-pages/man5/ssh_config.5.html
 
-# trouble with ssh at Debian
-apt-get install openssh-server
-service ssh start
-# and need create user for access at ssh
-
 sudo vim /etc/ssh/sshd_config
 PasswordAuthentication no
 PermitRootLogin no
 systemctl restart sshd.service
 
 
+### показать логи ssh
+journalctl -u ssh -f
+
+
 ############################################################
 # SSH: Run Commands or Scripts Remotely
 # https://www.shellhacks.com/ru/ssh-execute-remote-command-script-linux/
-
-ssh root@192.168.1.1 'uptime'
-ssh root@192.168.1.1 'reboot'
-
-
-ssh root@192.168.1.1 'uptime; df -h'
-ssh root@192.168.1.1 'free -m | cat /proc/loadavg'
 
 
 ssh root@192.168.1.1 << EOF
@@ -41,12 +33,6 @@ ssh root@192.168.1.1 'bash -s' < script.sh
 # https://habr.com/ru/post/331348/
 
 # -fN флаг для работы в фоне
-
-# RDP
-ssh -L 3389:localhost:13389 evg@192.168.1.10
-
-
-ssh -R 2022:localhost:22 root@89.223.122.250
 
 # проверка настройки обратного ssh
 # relay-server

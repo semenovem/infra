@@ -9,12 +9,12 @@ Host home
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
 
-Host srv01
+Host srv1
   HostName     192.168.11.101
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-Host srv02
+Host srv2
   HostName     192.168.11.102
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
@@ -29,14 +29,6 @@ Host srv22
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-
-
-# deprecated
-# 192.168.1.30
-Host srv3
-  HostName     srv3.local
-  User         adman
-  IdentityFile ~/.ssh/id_ecdsa
 
 Host inno16
   HostName     inno16.local
