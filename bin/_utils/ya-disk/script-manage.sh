@@ -33,8 +33,9 @@ help() {
   __info__ "Use arguments: [status|stop|start]"
 }
 
+# shellcheck disable=SC2120
 is_running() {
-  HAS=$(docker ps --filter=name="$CONTAINER_NAME" -q)
+  HAS=$(docker ps --filter=name="$CONTAINER_NAME" -q $@)
   [ -n "$HAS" ]
 }
 
@@ -67,7 +68,11 @@ case $OPER in
   __confirm__ "Stop container ${CONTAINER_NAME} ?" || exit 0
 
   if is_running; then
-    docker stop "$CONTAINER_NAME"
+    docker stop "$CONTAINER_NAME" || exit 1
+  fi
+
+  if is_running -a; then
+    docker rm "$CONTAINER_NAME" || exit 1
   fi
   ;;
 
@@ -78,6 +83,10 @@ case $OPER in
   fi
 
   __confirm__ "Run a container ${CONTAINER_NAME} ?" || exit 0
+
+  if is_running -a; then
+    docker rm "$CONTAINER_NAME" || exit 1
+  fi
 
   docker run --detach --restart unless-stopped --platform=linux/amd64 \
     --name "$CONTAINER_NAME" \
@@ -90,7 +99,12 @@ case $OPER in
     -v "${DISK_DIR}:/ya/disk:rw" \
     -v "${ROOT}/config.cfg:/home/app/.config/yandex-disk/config.cfg:rw" \
     -v "${YA_CONFIG_DIR}:/home/app/.config/yandex-disk:rw" \
-    "$IMAGE" yandex-disk start --no-daemon --dir=/ya/disk
+    "$IMAGE" yandex-disk start --no-daemon \
+    --dir=/ya/disk \
+    --exclude-dirs=__only_cloud \
+    --config=/home/app/.config/yandex-disk/config.cfg
+
+  #  yandex-disk start --no-daemon --dir=/ya/disk --exclude-dirs=__only_cloud --config=/home/app/.config/yandex-disk/config.cfg
   ;;
 
 *)
