@@ -99,7 +99,11 @@ case $OPER in
     -v "${DISK_DIR}:/ya/disk:rw" \
     -v "${ROOT}/config.cfg:/home/app/.config/yandex-disk/config.cfg:rw" \
     -v "${YA_CONFIG_DIR}:/home/app/.config/yandex-disk:rw" \
-    "$IMAGE" yandex-disk start --no-daemon --dir=/ya/disk
+    "$IMAGE" yandex-disk start \
+    --no-daemon \
+    --dir=/ya/disk \
+    --config=/home/app/.config/yandex-disk/config.cfg \
+    --exclude-dirs=__only_cloud,__only_cloud2
 
   #    yandex-disk start --no-daemon \
   #    --dir=/ya/disk \
