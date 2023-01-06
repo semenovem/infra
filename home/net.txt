@@ -29,4 +29,4 @@ port forwarding:
 (443,1194,33400):srv21:1194
 home server       ..120    a0:a3:f0:a9:d1:aa
 srv21             ..121    e4:5f:01:ce:2a:14   (ufw: 1194 openvpn, 22)
-srv22             ..122                        (ufw: 1194 openvpn, 22)
+srv22             ..122    e4:5f:01:ce:43:5e   (ufw: 1194 openvpn, 22)
