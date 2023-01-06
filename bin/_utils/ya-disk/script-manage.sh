@@ -88,9 +88,7 @@ case $OPER in
     docker rm "$CONTAINER_NAME" || exit 1
   fi
 
-#--detach --restart unless-stopped
-
-  docker run -it --rm --platform=linux/amd64 \
+  docker run --detach --restart unless-stopped --platform=linux/amd64 \
     --name "$CONTAINER_NAME" \
     -w /ya \
     -u "$(id -u):$(id -g)" \
@@ -101,12 +99,12 @@ case $OPER in
     -v "${DISK_DIR}:/ya/disk:rw" \
     -v "${ROOT}/config.cfg:/home/app/.config/yandex-disk/config.cfg:rw" \
     -v "${YA_CONFIG_DIR}:/home/app/.config/yandex-disk:rw" \
-    "$IMAGE" bash
+    "$IMAGE" yandex-disk start --no-daemon --dir=/ya/disk
 
-#    yandex-disk start --no-daemon \
-#    --dir=/ya/disk \
-#    --exclude-dirs=__only_cloud,__only_cloud2 \
-#    --config=/home/app/.config/yandex-disk/config.cfg
+  #    yandex-disk start --no-daemon \
+  #    --dir=/ya/disk \
+  #    --exclude-dirs=__only_cloud,__only_cloud2 \
+  #    --config=/home/app/.config/yandex-disk/config.cfg
 
   #  yandex-disk start --no-daemon --dir=/ya/disk --exclude-dirs=__only_cloud --config=/home/app/.config/yandex-disk/config.cfg
   ;;
