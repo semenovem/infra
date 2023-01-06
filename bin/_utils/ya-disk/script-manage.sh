@@ -5,7 +5,7 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 
 IMAGE="envi/ya-disk:0.0"
 CONTAINER_NAME="ya-disk"
-DISK_DIR="/mnt/raid4t_hard/ya.cloud"
+DISK_DIR="/mnt/raid4t_hard/ya-disk"
 YA_CONFIG_DIR="${HOME}/.config/yandex-disk"
 CMD=$(__core_get_virtualization_app__) || exit 1
 
@@ -88,7 +88,9 @@ case $OPER in
     docker rm "$CONTAINER_NAME" || exit 1
   fi
 
-  docker run --detach --restart unless-stopped --platform=linux/amd64 \
+#--detach --restart unless-stopped
+
+  docker run -it --rm --platform=linux/amd64 \
     --name "$CONTAINER_NAME" \
     -w /ya \
     -u "$(id -u):$(id -g)" \
@@ -99,10 +101,12 @@ case $OPER in
     -v "${DISK_DIR}:/ya/disk:rw" \
     -v "${ROOT}/config.cfg:/home/app/.config/yandex-disk/config.cfg:rw" \
     -v "${YA_CONFIG_DIR}:/home/app/.config/yandex-disk:rw" \
-    "$IMAGE" yandex-disk start --no-daemon \
-    --dir=/ya/disk \
-    --exclude-dirs=__only_cloud \
-    --config=/home/app/.config/yandex-disk/config.cfg
+    "$IMAGE" bash
+
+#    yandex-disk start --no-daemon \
+#    --dir=/ya/disk \
+#    --exclude-dirs=__only_cloud,__only_cloud2 \
+#    --config=/home/app/.config/yandex-disk/config.cfg
 
   #  yandex-disk start --no-daemon --dir=/ya/disk --exclude-dirs=__only_cloud --config=/home/app/.config/yandex-disk/config.cfg
   ;;
