@@ -70,7 +70,10 @@ case $OPER in
   __confirm__ "Stop container ${CONTAINER_NAME} ?" || exit 0
 
   if is_running; then
+    docker exec -it ya-disk yandex-disk stop
+    sleep 1
     docker stop "$CONTAINER_NAME" || exit 1
+    sleep 1
   fi
 
   if is_running -a; then
