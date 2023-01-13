@@ -24,7 +24,7 @@ exit 0
 yum -y update && yum -y install epel-release && yum -y update && yum -y upgrade && \
 yum -y install \
   squid httpd-tools net-tools lsof bind-utils vnstat openvpn iperf \
-  firewalld mc htop sshfs git
+  firewalld mc htop sshfs git vim
 
 systemctl enable firewalld
 reboot
@@ -158,3 +158,12 @@ sudo swapon --show
 # постоянный swap файл
 sudo vim /etc/fstab
 /swapfile swap swap defaults 0 0
+
+
+###################################
+ yum provides /usr/sbin/semanage
+ yum whatprovides /usr/sbin/semanage
+ yum install policycoreutils-python-utils
+ yum install policycoreutils-python
+
+semanage port -a -t ssh_port_t -p tcp 2257
