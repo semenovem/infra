@@ -26,7 +26,7 @@ sudo firewall-cmd --add-masquerade --permanent
 sudo firewall-cmd --query-masquerade
 
 DEVICE=$(ip route | awk '/^default via/ {print $5}')
-sudo firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -s 10.8.0.0/24 -o $DEVICE -j MASQUERADE
+sudo firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -s 10.8.5.0/24 -o $DEVICE -j MASQUERADE
 sudo firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -s 10.8.1.0/24 -o $DEVICE -j MASQUERADE
 sudo firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -s 10.8.6.0/24 -o $DEVICE -j MASQUERADE
 sudo firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -s 10.8.7.0/24 -o $DEVICE -j MASQUERADE
@@ -34,8 +34,8 @@ sudo firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING 
 sudo firewall-cmd --reload
 
 #
-sudo systemctl -f enable openvpn-server@server-443-tcp
-sudo systemctl start openvpn-server@server-443-tcp
+sudo systemctl -f enable openvpn-server@server-udp
+sudo systemctl start openvpn-server@server-udp
 sudo systemctl stop openvpn-server@server-443-tcp
 sudo systemctl status openvpn-server@server-443-tcp
 
