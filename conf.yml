@@ -146,8 +146,16 @@ cpi:
   srv21:
     hostname: srv21.local
     roles: VPN_SERVER
-    description: перезагрузка каждую неделю
+    description: перезагрузка в четверг
+    crontab: 0 4 * * 6 /usr/bin/systemctl reboot
     pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBBDEl++6Wjat47aJ/V2EKY4yMLVoC8oxHYIcPJuTphQN++dkNLPMdUkilcjkO1ge8TKI1Nwo+OOAWmGh2FitIX29kwEizIpdq3tmSO3smPJvTHjS6L4zTqyvG74Qtva0GQ== adman@srv21
+
+  srv21:
+    hostname: srv21.local
+    roles: VPN_SERVER
+    description: перезагрузка в воскресение
+    crontab: 0 4 * * 0 /usr/bin/systemctl reboot
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGYSB8fOYrYGKZ9SCGlOTa5YGscOwCfov2gSupi8kjlPwL3Deg+FqaFKKiU1iAHl/OXHIItTx/MdNGuBLFfAStd4XF7RKyljeyv54bCDC+Ydsn2aVAyvTm02431biL1k6g== adman@srv22
 
 
   mini:

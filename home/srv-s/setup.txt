@@ -5,7 +5,7 @@ sudo apt update && sudo apt -y upgrade
 sudo DEBIAN_FRONTEND=noninteractive apt -y install hostapd \
   dnsmasq openvpn netfilter-persistent iptables-persistent lshw vim mc iptraf-ng \
   git raspberrypi-kernel-headers build-essential dkms autossh iperf bc sshfs openvpn \
-  dnsutils telnet
+  dnsutils telnet pwgen
 
 # ---------------------------------
 
@@ -58,9 +58,10 @@ sudo iptables -t nat -L -v
 
 #
 sudo iptables -t nat -A POSTROUTING -s 10.8.0.0/16 -o eth0 -j MASQUERADE
-
-sudo iptables -t nat -A POSTROUTING -o gatewaytun -j MASQUERADE
 sudo netfilter-persistent save
+
+# ? do not need use
+sudo iptables -t nat -A POSTROUTING -o gatewaytun -j MASQUERADE
 
 # ---------------------------------
 
@@ -69,3 +70,8 @@ sudo systemctl start openvpn-server@server-tcp
 sudo systemctl stop openvpn-server@server-tcp
 sudo systemctl status openvpn-server@server-tcp
 
+
+sudo systemctl -f enable openvpn-server@server-udp
+sudo systemctl start openvpn-server@server-udp
+sudo systemctl stop openvpn-server@server-udp
+sudo systemctl status openvpn-server@server-udp
