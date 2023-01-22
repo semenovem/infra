@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Сканирование локальной сети
-# echo "192.168.1".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
+# echo "192.168.12".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/_lib/core.sh" || exit 1

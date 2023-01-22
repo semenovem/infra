@@ -160,7 +160,7 @@ for p in $@; do
 
     stop=
     for it in $_SERVER_NAMES; do
-      [ "$it" = "$p" ] && _VPN_HOST_="${p}.evgio.dev"
+      [ "$it" = "$p" ] && _VPN_HOST_="${p}.evgio.com"
       _SSH_HOST_="$p" && stop=0
     done
     [ "$stop" ] && continue

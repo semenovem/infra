@@ -4,7 +4,7 @@
 cpi:
   rr1:
     roles: PROXY_SERVER
-    host: rr1.evgio.dev
+    host: rr1.evgio.com
     ip: 130.255.170.133
     ipv6:
     ssh:
@@ -18,63 +18,63 @@ cpi:
 
   rr3:
     roles: PROXY_SERVER
-    host: rr3.evgio.dev
+    host: rr3.evgio.com
     ip: 194.67.205.149
     ipv6:
     ssh:
       port: 2257
       main:
         user: adman
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHCra2LmweOd+PIFkVQWFH4Gjwqj3Hflp0Jpx0to+VlXmlpy/RIb0AkK4AAbgROTqBPhZZFsNTFM4WopSoC0+GijI13LP9ATskDZHP4Hh1ziDEuESvLnugfIkS3Cip8SJQ== adman@rr3.evgio.dev
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHCra2LmweOd+PIFkVQWFH4Gjwqj3Hflp0Jpx0to+VlXmlpy/RIb0AkK4AAbgROTqBPhZZFsNTFM4WopSoC0+GijI13LP9ATskDZHP4Hh1ziDEuESvLnugfIkS3Cip8SJQ== adman@rr3.evgio.com
       remote:
         user: remote
         pub_key:
 
   rr4:
     roles: PROXY_SERVER
-    host: rr4.evgio.dev
+    host: rr4.evgio.com
     ip: 185.87.51.94
     ipv6:
     ssh:
       port: 2257
       main:
         user: adman
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHJSfDV9l7r4MljCeXNHKxPlXcqTFofVqrSn+QTZSgSjD6kLN0t91i88ZT20s20vKvR5fkYMgSDEwKZz+Lr454fmsxQVLaAeDFAbtL4gtDFfqG/6FSREyngoAD+aRqqqOg== adman@rr4.evgio.dev
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHJSfDV9l7r4MljCeXNHKxPlXcqTFofVqrSn+QTZSgSjD6kLN0t91i88ZT20s20vKvR5fkYMgSDEwKZz+Lr454fmsxQVLaAeDFAbtL4gtDFfqG/6FSREyngoAD+aRqqqOg== adman@rr4.evgio.com
       remote:
         user: remote
         pub_key:
 
   spb:
     roles: PROXY_SERVER
-    host: spb.evgio.dev
+    host: spb.evgio.com
     ip: 188.225.36.94
     ipv6:
     ssh:
       port: 2257
       main:
         user: adman
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBDWkMaRIg37gN+BG6jRHzlUvli5ivpQzCyGVjaJIXjxu/mGPs/tUzd+0j7nv8kdldJpiV2bWpNCtfXZmUrp/plJ3y+xK1+rYbwz7jZalszXvJtKhroKT2DjB49cTZWvEIA== adman@spb.evgio.dev
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBDWkMaRIg37gN+BG6jRHzlUvli5ivpQzCyGVjaJIXjxu/mGPs/tUzd+0j7nv8kdldJpiV2bWpNCtfXZmUrp/plJ3y+xK1+rYbwz7jZalszXvJtKhroKT2DjB49cTZWvEIA== adman@spb.evgio.com
       remote:
         user: remote
         pub_key:
 
   msk1:
     roles: PROXY_SERVER
-    host: msk1.evgio.dev
+    host: msk1.evgio.com
     ip: 195.133.46.87
     ipv6:
     ssh:
       port: 2257
       main:
         user: adman
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBI7eZR81lTDng2ibGoWsKUVPv2p5BOrgvdkPcZLceyqk1mRWOo98jH020d6G4Fwrd/peq3PL9Ergcav/Lc92LU2F09TD39sWgLhTPqJ1T5hyJXIL2MErp0p9nq5TSg28Zw== adman@msk1.evgio.dev
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBI7eZR81lTDng2ibGoWsKUVPv2p5BOrgvdkPcZLceyqk1mRWOo98jH020d6G4Fwrd/peq3PL9Ergcav/Lc92LU2F09TD39sWgLhTPqJ1T5hyJXIL2MErp0p9nq5TSg28Zw== adman@msk1.evgio.com
       remote:
         user: remote
         pub_key:
 
   kz2:
     roles: PROXY_SERVER
-    host: kz2.evgio.dev
+    host: kz2.evgio.com
     ip: 93.170.72.108
     ipv6:
     ssh:
@@ -88,14 +88,14 @@ cpi:
 
   eu1:
     roles: PROXY_SERVER
-    host: eu1.evgio.dev
+    host: eu1.evgio.com
     ip: 5.45.120.70
     ipv6:
     ssh:
       port: 2257
       main:
         user: adman
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPpbwyFmbVB3ABe2rzyOd7Gm/oHr60swOw8B3J7pPBTsCSKjTNYcub+q4F7M44Q7Pam3VS4f0vgQkZMjduTWgvOQTWWAq/5Qv7jkNVX5tFhICFR2d3Bxas3Kj3/Vs/rkIg== adman@eu1.evgio.dev
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPpbwyFmbVB3ABe2rzyOd7Gm/oHr60swOw8B3J7pPBTsCSKjTNYcub+q4F7M44Q7Pam3VS4f0vgQkZMjduTWgvOQTWWAq/5Qv7jkNVX5tFhICFR2d3Bxas3Kj3/Vs/rkIg== adman@eu1.evgio.com
       remote:
         user: remote
         pub_key:
@@ -122,7 +122,8 @@ cpi:
   srv1:
     hostname: srv1.local
     roles: STANDBY_SERVER
-    description: перезагрузка каждый второй день
+    description: перезагрузка в среду в 3:00
+    crontab: 0 3 * * 3 /usr/bin/systemctl reboot
     pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBIMVsRQ2FzF/qKVAwUwASQ2Tk1JBiCKHkphOdXYzUFmGHM5wWM8e/6UBD/zdfrz3Tgtv7M8X4wbA4cnC8TzPCY0xlklB35criLsE1L7IZRGP7ghNo9SPuRbtybIdNJQ1yg== adman@srv1
     ssh_forwarding:
       proxy: rr1 rr4 msk1 kz2 eu1
@@ -133,7 +134,8 @@ cpi:
   srv2:
     hostname: srv2.local
     roles: STANDBY_SERVER
-    description: перезагрузка каждый второй день
+    description: перезагрузка в субботу
+    crontab: 0 3 * * 6 /usr/bin/systemctl reboot
     pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGm16LDGpzavDoaqmDwHRswdSXjCJlcSFNFPHsJONoZs6DKJaveJk4ndqrLjoUKMcCCDnkprTNSG03jwO0VQGEd/2IA8tuGIwNQW8G4dKPvxzoUiN37uhYj3w8khUIHAqA== adman@srv2
     ssh_forwarding:
       proxy: rr1 rr4 msk1 kz2 eu1

@@ -4,7 +4,8 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 . "${ROOT}/_lib/os.sh" || exit 1
 . "${ROOT}/_lib/core.sh" || exit 1
 
-
+# for raspbian
+#vcgencmd measure_temp
 
 if [ -n "$__CORE_OS_IS_MACOS__" ]; then
   __info__ "TODO Работает только на поцессоре intel"

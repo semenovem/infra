@@ -18,7 +18,7 @@ Host mini mini.local
 
 # forwarding to home
 Host open
-  HostName      rr4.evgio.dev
+  HostName      rr4.evgio.com
   Port          2257
   User          adman
   IdentityFile  ~/.ssh/id_ecdsa
@@ -44,7 +44,7 @@ Host open
 
 
 Host open-msk1
-  HostName      msk1.evgio.dev
+  HostName      msk1.evgio.com
   User          adman
   Port          2257
   User          adman
@@ -71,7 +71,7 @@ Host open-msk1
 
 
 Host open-kz2
-  HostName      kz2.evgio.dev
+  HostName      kz2.evgio.com
   User          adman
   Port          2257
   User          adman
