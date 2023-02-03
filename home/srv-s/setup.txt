@@ -67,11 +67,13 @@ sudo iptables -t nat -A POSTROUTING -o gatewaytun -j MASQUERADE
 
 sudo systemctl -f enable openvpn-server@server-tcp
 sudo systemctl start openvpn-server@server-tcp
+sudo systemctl restart openvpn-server@server-tcp
 sudo systemctl stop openvpn-server@server-tcp
 sudo systemctl status openvpn-server@server-tcp
 
 
 sudo systemctl -f enable openvpn-server@server-udp
 sudo systemctl start openvpn-server@server-udp
+sudo systemctl restart openvpn-server@server-udp
 sudo systemctl stop openvpn-server@server-udp
 sudo systemctl status openvpn-server@server-udp
