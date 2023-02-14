@@ -163,6 +163,11 @@ cpi:
     roles: MINI_SERVER
     pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
 
+  mini2:
+    hostname: mini2.local
+    roles: MINI_SERVER
+    pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOBZ12+aQ6LtTJoaWsvmnFotA0kzQedTYFaf2BjrQlUPrp91TFyF16N7jkiAHxQrc2EGhMIJw7PjpJ5Jzfwr+OPfDZyQyIO4XDqoyu7CPlHk94BqwlS+A1a2PiaqJnT6dw== adman@mini2
+
   # personal 14
   laptop:
     hostname: ibtv-8.local
