@@ -47,7 +47,10 @@ SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="dc:a6:32:a2:4a:5
 #SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="04:42:1a:48:b6:8a", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan2"
 
 # TP-Link TL-WN722N v2/v3 [Realtek RTL8188EUS]
-SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="14:eb:b6:54:da:69", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan5"
+#SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="14:eb:b6:54:da:69", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan5"
+
+# TP-Link TL-WN722N v2/v3 [Realtek RTL8188EUS]
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="b4:b0:24:e7:24:52", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan5"
 
 
 # ----------------------------------------------------------------------------
@@ -82,7 +85,7 @@ make && sudo make install
 sudo vim /etc/dhcpcd.conf
 #```
 interface wlan5
-    static ip_address=192.168.4.1/24
+    static ip_address=192.168.202.1/24
     nohook wpa_supplicant
 #```
 
@@ -90,7 +93,7 @@ interface wlan5
 sudo vim /etc/dnsmasq.conf
 #```
 interface=wlan5
-  dhcp-range=192.168.4.100,192.168.4.199,255.255.255.0,24h
+  dhcp-range=192.168.202.100,192.168.202.199,255.255.255.0,24h
 #```
 
 
@@ -129,7 +132,7 @@ ieee80211ac=1
 # TP-Link TL-WN722N v2/v3 [Realtek RTL8188EUS]
 #```
 interface=wlan5
-# для: ASUSTek Computer, Inc. 802.11ac NIC
+# for: ASUSTek Computer, Inc. 802.11ac NIC
 driver=nl80211
 ssid=apt025
 hw_mode=g
