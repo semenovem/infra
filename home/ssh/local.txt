@@ -9,6 +9,12 @@ Host home
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
 
+Host home2
+  HostName     192.168.12.120
+  User         evg
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa
+
 Host srv1
   HostName     192.168.11.101
   User         adman
@@ -29,20 +35,14 @@ Host srv22
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-
-Host inno16
-  HostName     inno16.local
-  User         esemenov
-  IdentityFile ~/.ssh/id_ecdsa
-
-# -----------------
-
-Host home7
-  HostName     192.168.11.10
-  User         evg
+Host mini
+  HostName     mini.local
+  User         adman
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
 
-# sudo route -n add 192.168.1.0/24 192.168.4.1
-# sudo route -n delete 192.168.1.0/24 192.168.4.1
-
+Host mini2
+  HostName     mini2.local
+  User         adman
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa

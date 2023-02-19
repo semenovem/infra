@@ -5,6 +5,7 @@
 # sudo systemctl list-units --all --state=inactive
 # sudo systemctl daemon-reload
 # sudo systemctl reset-failed
+# файлы сервисов: /usr/lib/systemd/system/...
 #************************************************************
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")

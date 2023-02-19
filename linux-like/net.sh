@@ -37,3 +37,8 @@ ipconfig getifaddr en0
 # external ip - one of
 curl ifconfig.me
 curl ipecho.net/plain
+
+###############################
+sudo route -n add 192.168.1.0/24 192.168.4.1
+sudo route -n delete 192.168.1.0/24 192.168.4.1
+
