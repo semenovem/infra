@@ -280,7 +280,7 @@ __get_lib_file__() {
 
 # Возвращает путь к файлу конфигурации
 __get_config_file__() {
-  CORE_TMP_CONFIG_FILE="$(__realpath__ "${__ENVI_BIN__}/../conf.yml")"
+  CORE_TMP_CONFIG_FILE="$(__realpath__ "${__ENVI_BIN__}/../config/main.yml")"
   [ -f "$CORE_TMP_CONFIG_FILE" ] && echo "$CORE_TMP_CONFIG_FILE" && return 0
   return 1
 }
