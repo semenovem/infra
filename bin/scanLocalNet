@@ -1,32 +1,89 @@
-#!/bin/bash
+#!/bin/sh
 
-# Сканирование локальной сети
+# Простое сканирование сети
 # echo "192.168.12".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/_lib/core.sh" || exit 1
 . "${ROOT}/_lib/os.sh" || exit 1
 
-case "$__CORE_OS_KIND__" in
+CORE_OS_KIND="$__CORE_OS_KIND__"
+IP_ADDRS=
+IP=
+TARGET_IP=
+
+is_ip() {
+  echo "$1" | grep -E -q "^([0-9]{1,3}.){3}[0-9]{1,3}$"
+}
+
+is_ip $1 && CORE_OS_KIND= && TARGET_IP=$1
+
+case "$CORE_OS_KIND" in
+# for unix
 "$__CORE_OS_KIND_MACOS_CONST__")
-  IP=$(netstat -nr | grep default | awk '{print $2}' | grep -E '^(\d{1,3}\.){3}\d{1,3}$') || exit 1
+  TARGET_IP=$(netstat -nr | grep default | awk '{print $2}' | grep -E '^(\d{1,3}\.){3}\d{1,3}$') || exit 1
   ;;
 
+  # for linux
 "$__CORE_OS_KIND_LINUX_CONST__")
-  IP=$(hostname -I | awk '{print $1}') || exit 1
+  COUNT=0
+  for ip in $(hostname -I); do
+    COUNT=$((COUNT + 1))
+  done
+
+  if [ "$COUNT" -eq 1 ]; then
+    TARGET_IP=$(hostname -I | awk '{print $1}') || exit 1
+  else
+    IP_ADDRS=$(hostname -I)
+  fi
   ;;
 esac
 
-# TODO если получено несколько IP - то предложить выбор
+#
+if [ -z "$TARGET_IP" ]; then
+  find_ip() {
+    COUNT=1
+    for IP in $IP_ADDRS; do
+      [ "$COUNT" -eq "$1" ] && TARGET_IP="$IP" && return 0
+      COUNT=$((COUNT + 1))
+    done
+    return 1
+  }
 
-while true; do
-  echo "$IP" | grep -iE -q '^(\d{1,3}\.){3}\d{1,3}$' && break
-  echo "enter IP address manually in format [xxx.xxx.xxx.xxx]: "
-  read IP
-done
+  COUNT=0
+  for IP in $IP_ADDRS; do
+    is_ip "$IP" || continue
+    COUNT=$((COUNT + 1))
+    echo "  ${COUNT}) $IP"
+  done
 
-NET="${IP%.*}"
+  QUANTITY="$COUNT"
 
-echo "start **************************************** IP = $IP"
-echo "${NET}".{1..254} | xargs -n1 -P0 ping -c1 | grep "bytes from"
-echo "end ******************************************"
+  while true; do
+    is_ip "$INPUT" && TARGET_IP="$INPUT" && break
+    read -p "> enter IP address [xxx.xxx.xxx.xxx] or [index number 1-${QUANTITY}]: " INPUT
+    echo "$INPUT" | grep -Eq "^[0-9]{1,3}$" && find_ip "$INPUT" && break
+  done
+fi
+
+# ------------------------------------------
+[ -z "$TARGET_IP" ] && __err__ "IP address not defined" && exit 1
+
+gen_ips() {
+  NETWORK="${TARGET_IP%.*}"
+  COUNT=1
+  while [ "$COUNT" -le 254 ]; do
+    echo "${NETWORK}.${COUNT}"
+    COUNT=$((COUNT + 1))
+  done
+}
+
+pipe() {
+  while read -r data; do
+    echo "$data" | grep "bytes from" | grep -Eo "([0-9]{1,3}.){3}[0-9]{1,3}"
+  done
+}
+
+echo "************** start: IP = $TARGET_IP"
+gen_ips | xargs -n1 -P0 ping -c1 | pipe
+echo "************** end "

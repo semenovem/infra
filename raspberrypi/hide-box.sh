@@ -104,7 +104,7 @@ sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 sudo iptables -t nat -A POSTROUTING -o gatewaytun -j MASQUERADE
 sudo netfilter-persistent save
 
-sudo iptables -t nat -D POSTROUTING 1
+sudo iptables -t nat -D POSTROUTING 2
 sudo iptables -t nat -L -v
 
 sudo ip route add default dev wlan0 metric 50

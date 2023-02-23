@@ -28,7 +28,7 @@ if [ -f "$CORE_OS_RELEASE" ]; then
   __CORE_OS_KIND__="$__CORE_OS_KIND_LINUX_CONST__"
   __OS_LINUX_KIND__="$__CORE_OS_KIND_LINUX_CONST__"
 
-  grep -iE "^ID_LIKE=debian" "$CORE_OS_RELEASE" -q &&
+  grep -iE "^ID=debian" "$CORE_OS_RELEASE" -q &&
     __CORE_OS_IS_DEBIAN__=1 &&
     __CORE_OS_LINUX_DISTR__="$__CORE_OS_LINUX_DISTR_DEBIAN_CONST__"
 

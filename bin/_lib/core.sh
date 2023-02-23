@@ -126,7 +126,7 @@ core_conf_logger() {
   shift
   shift
 
-  coreConfMsg="[$CORE_LOGGER_NAME][$coreConfLoggerType]$(core_logger_sub_system_name) $*"
+  coreConfMsg="[${CORE_LOGGER_NAME}][${coreConfLoggerType}]$(core_logger_sub_system_name) $*"
 
   if [ -n "$CORE_LOGGER_COLOR_TERMINAL" ]; then
     echo "${coreConfColor}${coreConfMsg}${__NC__}"

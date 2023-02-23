@@ -1,15 +1,14 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/_lib/os.sh" || exit 1
 . "${ROOT}/_lib/core.sh" || exit 1
+. "${ROOT}/_lib/os.sh" || exit 1
 
-# for raspbian
-#vcgencmd measure_temp
+echo "__CORE_OS_LINUX_DISTR__ = $__CORE_OS_LINUX_DISTR__"
 
 if [ -n "$__CORE_OS_IS_MACOS__" ]; then
-  __info__ "TODO Работает только на поцессоре intel"
-  #  sudo powermetrics | grep -i "CPU die temperature"
+  __info__ "TODO Работает только на процессоре intel"
+  sudo powermetrics | grep -i "CPU die temperature"
   exit 0
 fi
 
@@ -17,15 +16,17 @@ case "$__CORE_OS_LINUX_DISTR__" in
 "") __warn__ "Дистрибутив LINUX не определен" ;;
 
 "$__CORE_OS_LINUX_DISTR_DEBIAN_CONST__")
-# TODO добавить проверку, установленно ли ПО + установить
-  sensors
+  if which vcgencmd >/dev/null; then
+    watch -t -n 1 vcgencmd measure_temp
+  else
+    if ! which sensors >/dev/null; then
+      sudo apt update || exit 1
+      sudo apt -y install sensors || exit 1
+    fi
+
+    sensors
+  fi
   ;;
 
-"$__CORE_OS_LINUX_DISTR_RASPBIAN_CONST__")
-  watch -t -n 1 vcgencmd measure_temp
-  ;;
-
-"$__CORE_OS_LINUX_DISTR_FEDORA_CONST__") ;;
-
-*) __warn__ "Не поддерживается для OS = '$__CORE_OS_LINUX_DISTR__'" ;;
+*) __warn__ "Not supported for OS [${__CORE_OS_LINUX_DISTR__}]" ;;
 esac
