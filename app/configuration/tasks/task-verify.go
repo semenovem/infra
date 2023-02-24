@@ -1,14 +1,15 @@
 package tasks
 
-func newVerifierTask() *task {
-	return &task{
-		name:  "verifier",
+func newVerifierTask() *Task {
+	return &Task{
+		name:  "verify",
+		usage: "проверяет валидность файла конфигурации",
 		flags: []flagSet{},
 		run:   verifierTask,
 	}
 }
 
-func verifierTask(t *task) error {
+func verifierTask(t *Task) error {
 	cfg, err := t.getConfigFile()
 	if err != nil {
 		return err

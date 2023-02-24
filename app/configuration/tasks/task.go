@@ -1,60 +1,68 @@
 package tasks
 
 import (
-	"configuration/configs"
+	"errors"
 	"flag"
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"io"
 	"log"
-	"os"
-	"strconv"
+
+	"configuration/configs"
 )
 
 var (
-	loggerErr, loggerInfo, loggerDebug *log.Logger
+	loggerInfo, loggerDebug *log.Logger
 )
-
-type ITask interface {
-	Init([]string) error
-	Run() error
-	Name() string
-	Help() string
-}
 
 type flagSet func(*flag.FlagSet)
 
-func New() []ITask {
-	return []ITask{
+type Task struct {
+	fs      *flag.FlagSet
+	isDebug bool
+	name    string
+	usage   string
+	flags   []flagSet
+	run     func(*Task) error
+}
+
+func New() []*Task {
+	return []*Task{
+		newHelpTask(),
+		newVersionTask(),
 		newVerifierTask(),
-		newSSHConfig(),
+		newSSHConfigTask(),
+		newSSHAuthorizedKeysTask(),
 	}
 }
 
-func SetLoggers(logErr, logInfo, logDebug *log.Logger) {
-	loggerErr = logErr
+func SetLoggers(logInfo, logDebug *log.Logger) {
 	loggerInfo = logInfo
 	loggerDebug = logDebug
 }
 
-type task struct {
-	fs      *flag.FlagSet
-	isDebug bool
-	name    string
-	flags   []flagSet
-	run     func(*task) error
+func Help() {
+	loggerInfo.Printf("Команды: ")
+
+	for _, task := range New() {
+		loggerInfo.Printf("%-20s # %s", task.name, task.usage)
+	}
 }
 
-func (t *task) Name() string {
+func (t *Task) Name() string {
 	return t.name
 }
 
-func (t *task) Init(args []string) error {
+func (t *Task) Init(args []string) error {
 	t.fs = flag.NewFlagSet(t.name, flag.ContinueOnError)
 	t.fs.SetOutput(io.Discard)
 
-	addDebugFlag(t.fs)
-	addConfigFileFlag(t.fs)
+	switch t.name {
+	case versionTaskName, helpTaskName:
+	default:
+		t.fs.BoolVar(&t.isDebug, debugFlagName, false, debugFlagUsage)
+		t.fs.StringVar(new(string), configFileFlagName, "", configFileFlagUsage)
+	}
 
 	for _, f := range t.flags {
 		f(t.fs)
@@ -62,27 +70,15 @@ func (t *task) Init(args []string) error {
 
 	err := t.fs.Parse(args)
 	if err != nil {
-		//if errors.Is(err, flag.ErrHelp) {
-		//    return err
-		//}
+		if errors.Is(err, flag.ErrHelp) {
+			return err
+		}
 
-		loggerErr.Println("parse: ", err)
-
-		t.fs.VisitAll(func(f *flag.Flag) {
-			loggerDebug.Printf("%s=%s", f.Name, f.Value)
-		})
-
-		return err
-	}
-
-	t.isDebug, err = strconv.ParseBool(t.fs.Lookup(debugFlagName).Value.String())
-	if err != nil {
-		loggerErr.Println(err)
-		return err
+		return fmt.Errorf("tasks.Init(parse args): %s", err.Error())
 	}
 
 	if t.isDebug {
-		loggerInfo.Println("DEBUG:")
+		loggerDebug.Println("DEBUG:")
 		t.fs.VisitAll(func(f *flag.Flag) {
 			loggerDebug.Printf("%s=%s", f.Name, f.Value)
 		})
@@ -91,25 +87,29 @@ func (t *task) Init(args []string) error {
 	return nil
 }
 
-func (t *task) Run() error {
+func (t *Task) Run() error {
 	return t.run(t)
 }
 
-func (t *task) Help() string {
+func (t *Task) Help() string {
+	loggerInfo.Printf(" %-21s # %s", t.name, t.usage)
 	t.fs.VisitAll(func(f *flag.Flag) {
-		_, _ = fmt.Fprintln(os.Stdout, f.Usage)
-		//fmt.Println(f.Usage)
+		def := ""
+		if f.DefValue != "" {
+			def = "(default: " + f.DefValue + ")"
+		}
+		loggerInfo.Printf(" -%-20s # %s %s", f.Name, f.Usage, def)
 	})
+
 	return ""
 }
 
-func (t *task) getConfigFile() (*configs.Config, error) {
+func (t *Task) getConfigFile() (*configs.Config, error) {
 	fileName := t.fs.Lookup(configFileFlagName).Value.String()
 
 	config, err := configs.ParseConfigFile(fileName)
 	if err != nil {
-		loggerErr.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("tasks.getConfigFile: %s", err.Error())
 	}
 
 	// TODO для отладки
@@ -117,4 +117,26 @@ func (t *task) getConfigFile() (*configs.Config, error) {
 	fmt.Println(string(p))
 
 	return config, err
+}
+
+func newVersionTask() *Task {
+	return &Task{
+		name:  versionTaskName,
+		usage: versionFlagUsage,
+		run: func(_ *Task) error {
+			loggerInfo.Println("configuration v1.0.0")
+			return nil
+		},
+	}
+}
+
+func newHelpTask() *Task {
+	return &Task{
+		name:  helpTaskName,
+		usage: helpFlagUsage,
+		run: func(_ *Task) error {
+			Help()
+			return nil
+		},
+	}
 }

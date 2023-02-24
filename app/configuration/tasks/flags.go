@@ -3,18 +3,21 @@ package tasks
 import "flag"
 
 const (
-	configFileFlagUsage = "# файл конфигурации"
-	debugFlagUsage      = "# отладочный вывод"
-	hostFlagUsage       = "# название хоста"
+	configFileFlagUsage = "файл конфигурации"
+	debugFlagUsage      = "отладочный вывод"
+	hostFlagUsage       = "название хоста"
+	helpFlagUsage       = "список команд"
+	versionFlagUsage    = "версия приложения"
 
+	// флаги
 	debugFlagName      = "debug"
-	configFileFlagName = "config-file"
 	hostFlagName       = "host"
-)
+	configFileFlagName = "config-file"
 
-func addDebugFlag(fs *flag.FlagSet) {
-	fs.BoolVar(new(bool), debugFlagName, false, debugFlagUsage)
-}
+	// команды
+	versionTaskName = "version"
+	helpTaskName    = "help"
+)
 
 func addConfigFileFlag(fs *flag.FlagSet) {
 	fs.StringVar(new(string), configFileFlagName, "", configFileFlagUsage)

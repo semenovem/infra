@@ -1,14 +1,15 @@
 package tasks
 
-func newSSHConfig() *task {
-	return &task{
+func newSSHConfigTask() *Task {
+	return &Task{
 		name:  "ssh-config",
+		usage: "создать файл ssh config",
 		flags: []flagSet{addHostFlag},
 		run:   sshConfigTask,
 	}
 }
 
-func sshConfigTask(t *task) error {
+func sshConfigTask(t *Task) error {
 	cfg, err := t.getConfigFile()
 	if err != nil {
 		return err
