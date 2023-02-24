@@ -12,24 +12,26 @@ type Config struct {
 }
 
 type Host struct {
-	Role           string          `yaml:"role"`
 	Name           string          `yaml:"name"`
-	Public         *URL            `yaml:"public"`
-	Local          *URL            `yaml:"local"`
-	SSH            *SSH            `yaml:"ssh"`
-	PortForwarding *PortForwarding `yaml:"port_forwarding"`
+	Role           string          `yaml:"role"`
+	Description    string          `yaml:"description,omitempty"`
+	Crontab        string          `yaml:"crontab,omitempty"`
+	Public         *URL            `yaml:"public,omitempty"`
+	Local          *URL            `yaml:"local,omitempty"`
+	SSH            *SSH            `yaml:"ssh,omitempty"`
+	PortForwarding *PortForwarding `yaml:"port_forwarding,omitempty"`
 }
 
 type URL struct {
-	URL  string `yaml:"url"`
-	IP   string `yaml:"ip"`
-	IPv6 string `yaml:"ipv6"`
+	URL  string `yaml:"url,omitempty"`
+	IP   string `yaml:"ip,omitempty"`
+	IPv6 string `yaml:"ipv6,omitempty"`
 }
 
 type SSH struct {
-	Port   int      `yaml:"port"`
-	Main   *SSHUser `yaml:"main"`
-	Remote *SSHUser `yaml:"remote"`
+	Port   int      `yaml:"port,omitempty"`
+	Main   *SSHUser `yaml:"main,omitempty"`
+	Remote *SSHUser `yaml:"remote,omitempty"`
 }
 
 type SSHUser struct {
@@ -38,17 +40,17 @@ type SSHUser struct {
 }
 
 type Role struct {
-	Name                        string `yaml:"name"`
-	AllowIncomingSSHForRolesRaw string `yaml:"allow_incoming_ssh_for_roles"`
+	Name                        string `yaml:"name,omitempty"`
+	AllowIncomingSSHForRolesRaw string `yaml:"allow_incoming_ssh_for_roles,omitempty"`
+}
+
+type PortForwarding struct {
+	HostsRaw string   `yaml:"hosts,omitempty"`
+	Ports    []string `yaml:"ports,omitempty"`
 }
 
 func (o Role) AllowIncomingSSHForRoles() []string {
 	return split(o.AllowIncomingSSHForRolesRaw)
-}
-
-type PortForwarding struct {
-	HostsRaw string   `yaml:"hosts"`
-	Ports    []string `yaml:"ports"`
 }
 
 func (o PortForwarding) Hosts() []string {

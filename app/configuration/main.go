@@ -50,13 +50,15 @@ func run(args []string) error {
 			return task.Run()
 		}()
 
-		if errors.Is(err, flag.ErrHelp) {
-			task.Help()
-			return nil
+		if err != nil {
+			if errors.Is(err, flag.ErrHelp) {
+				task.Help()
+				return nil
+			}
+
+			loggerErr.Println(err)
 		}
 
-		loggerErr.Println(err)
-		tasks.Help()
 		return err
 	}
 
