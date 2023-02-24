@@ -1,5 +1,7 @@
 package configs
 
+import "strings"
+
 type Config struct {
 	CPIs           []*CPI          `yaml:"cpi"`
 	Roles          []*Role         `yaml:"roles"`
@@ -8,11 +10,14 @@ type Config struct {
 
 type CPI struct {
 	RolesRaw string `yaml:"roles"`
-	Roles    string `yaml:"roles_array"`
 	Host     string `yaml:"host"`
 	Public   *URL   `yaml:"public"`
 	Local    *URL   `yaml:"local"`
 	SSH      *SSH   `yaml:"ssh"`
+}
+
+func (o CPI) Roles() []string {
+	return split(o.RolesRaw)
 }
 
 type URL struct {
@@ -33,13 +38,23 @@ type SSHUser struct {
 }
 
 type Role struct {
-	Name                string   `yaml:"name"`
-	AllowIncomingSSHRaw string   `yaml:"allow_incoming_ssh"`
-	AllowIncomingSSH    []string `yaml:"allow_incoming_ssh_array"`
+	Name                string `yaml:"name"`
+	AllowIncomingSSHRaw string `yaml:"allow_incoming_ssh"`
+}
+
+func (o Role) AllowIncomingSSH() []string {
+	return split(o.AllowIncomingSSHRaw)
 }
 
 type PortForwarding struct {
 	ProxiesRaw string   `yaml:"proxies"`
-	Proxies    []string `yaml:"proxies_array"`
 	Ports      []string `yaml:"ports"`
+}
+
+func (o PortForwarding) Proxies() []string {
+	return split(o.ProxiesRaw)
+}
+
+func split(s string) []string {
+	return strings.Split(s, " ")
 }

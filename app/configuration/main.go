@@ -1,6 +1,9 @@
 package main
 
 import (
+	"configuration/tasks"
+	"errors"
+	"flag"
 	"log"
 	"os"
 )
@@ -13,13 +16,37 @@ var (
 	loggerDebug = log.New(os.Stderr, "[DEBU] ", 0)
 )
 
-func main() {
-	var err error
+func init() {
+	tasks.SetLoggers(loggerErr, logger, loggerDebug)
+}
 
-	if err = parseArgs(os.Args[1:]); err != nil {
-		loggerErr.Println(err.Error())
+func main() {
+	if err := run(os.Args[1:]); err != nil {
 		os.Exit(1)
 	}
 
 	os.Exit(0)
+}
+
+func run(args []string) error {
+	if len(args) == 0 {
+		return errors.New("нет аргументов")
+	}
+
+	for _, task := range tasks.New() {
+		if task.Name() == args[0] {
+			if err := task.Init(args[1:]); err != nil {
+				if errors.Is(err, flag.ErrHelp) {
+					task.Help()
+					return nil
+				}
+
+				return err
+			}
+
+			return task.Run()
+		}
+	}
+
+	return errors.New("нет команды")
 }
