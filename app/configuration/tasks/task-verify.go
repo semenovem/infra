@@ -1,5 +1,10 @@
 package tasks
 
+import (
+	"configuration/configs"
+	"errors"
+)
+
 func newVerifierTask() *Task {
 	return &Task{
 		name:  "verify",
@@ -10,7 +15,15 @@ func newVerifierTask() *Task {
 }
 
 func verifierTask(t *Task) error {
-	loggerDebug.Printf("verifierTask")
+	errs := configs.Verify(t.cfg)
+
+	for _, msg := range errs {
+		loggerInfo.Println(msg)
+	}
+
+	if len(errs) != 0 {
+		return errors.New("файл конфигурации содержит ошибки")
+	}
 
 	return nil
 }

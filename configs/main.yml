@@ -4,7 +4,7 @@ version: 1.0.0
 roles:
   - name: EXAMPLE       # Название роли
     # Разрешены входящие соединения
-    allow_incoming_ssh_for_roles: WORKSTATION MINI_SERVER
+    allow_incoming_ssh_for_roles: WORKSTATION MINI_SERVER MINI_SERVER
 
   - name: WORKSTATION
   - name: MINI_SERVER
@@ -70,20 +70,6 @@ hosts:
       ports:
         - 0.0.0.0:20022::22   # ssh
         - 0.0.0.0:20443::1194 # vpn
-
-
-  - name: mini
-    role: MINI_SERVER
-    local:
-      url: mini.local
-    ssh:
-      main:
-        user: adman
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
-    port_forwarding:
-      ports:
-        - 0.0.0.0:2208::22   # ssh
-        - 0.0.0.0:11948::1194 # vpn
 
 
   # work 16"

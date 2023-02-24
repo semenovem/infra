@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -54,6 +55,10 @@ func Help() {
 	}
 }
 
+func ShortHelp() {
+	loggerInfo.Printf("use [help]  # для подробной информации")
+}
+
 func (t *Task) Name() string {
 	return t.name
 }
@@ -84,9 +89,11 @@ func (t *Task) Init(args []string) error {
 	}
 
 	if t.isDebug {
-		loggerDebug.Println("DEBUG:")
+		loggerDebug.SetOutput(os.Stdout)
+
+		loggerDebug.Println("list of flags:")
 		t.fs.VisitAll(func(f *flag.Flag) {
-			loggerDebug.Printf("%s=%s", f.Name, f.Value)
+			loggerDebug.Printf("%-15s= %s", f.Name, f.Value)
 		})
 	}
 
