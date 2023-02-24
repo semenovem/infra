@@ -1,11 +1,14 @@
 package tasks
 
-import "flag"
+import (
+	"flag"
+	"strings"
+)
 
 const (
 	configFileFlagUsage = "файл конфигурации"
 	debugFlagUsage      = "отладочный вывод"
-	hostFlagUsage       = "название хоста"
+	hostFlagUsage       = "имя хоста"
 	helpFlagUsage       = "список команд"
 	versionFlagUsage    = "версия приложения"
 
@@ -19,10 +22,10 @@ const (
 	helpTaskName    = "help"
 )
 
-func addConfigFileFlag(fs *flag.FlagSet) {
-	fs.StringVar(new(string), configFileFlagName, "", configFileFlagUsage)
-}
-
 func addHostFlag(fs *flag.FlagSet) {
 	fs.StringVar(new(string), hostFlagName, "", hostFlagUsage)
+}
+
+func getHostFlag(fs *flag.FlagSet) (host string) {
+	return strings.ToLower(fs.Lookup(hostFlagName).Value.String())
 }

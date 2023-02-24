@@ -10,12 +10,7 @@ func newVerifierTask() *Task {
 }
 
 func verifierTask(t *Task) error {
-	cfg, err := t.getConfigFile()
-	if err != nil {
-		return err
-	}
-
-	loggerDebug.Printf("%+v", cfg)
+	loggerDebug.Printf("verifierTask")
 
 	return nil
 }

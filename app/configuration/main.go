@@ -1,59 +1,70 @@
 package main
 
 import (
-	"configuration/tasks"
-	"errors"
-	"flag"
-	"log"
-	"os"
-	"syscall"
+    "configuration/tasks"
+    "errors"
+    "flag"
+    "log"
+    "os"
+    "syscall"
 )
 
 // go run main.go  -config-file=fgfg/sdfdf.conf verify
 
 var (
-	loggerErr   = log.New(os.Stderr, "[ERRO] ", 0)
-	loggerInfo  = log.New(os.Stdout, "", 0)
-	loggerDebug = log.New(os.Stderr, "[DEBU] ", 0)
+    loggerErr   = log.New(os.Stderr, "[ERRO] ", 0)
+    loggerInfo  = log.New(os.Stdout, "", 0)
+    loggerDebug = log.New(os.Stderr, "[DEBU] ", 0)
 )
 
 func init() {
-	tasks.SetLoggers(loggerInfo, loggerDebug)
+    tasks.SetLoggers(loggerInfo, loggerDebug)
 }
 
 func main() {
-	if err := run(os.Args[1:]); err != nil {
-		loggerErr.Println(err)
-		syscall.Exit(1)
-	}
+    if err := run(os.Args[1:]); err != nil {
+        loggerErr.Println(err)
+        syscall.Exit(1)
+    }
 
-	os.Exit(0)
+    os.Exit(0)
 }
 
 func run(args []string) error {
-	if len(args) == 0 {
-		tasks.Help()
-		return nil
-	}
+    if len(args) == 0 {
+        tasks.Help()
+        return nil
+    }
 
-	for _, task := range tasks.New() {
-		if task.Name() != args[0] {
-			continue
-		}
+    for _, task := range tasks.New() {
+        if task.Name() != args[0] {
+            continue
+        }
 
-		if err := task.Init(args[1:]); err != nil {
-			if errors.Is(err, flag.ErrHelp) {
-				task.Help()
-				return nil
-			}
+        err := func() error {
+            if err := task.Init(args[1:]); err != nil {
+                return err
+            }
 
-			return err
-		}
+            return task.Run()
+        }()
 
-		return task.Run()
-	}
+        if errors.Is(err, flag.ErrHelp) {
+            task.Help()
+            return nil
+        }
 
-	// Проверить версию и
+        //if err := task.Init(args[1:]); err != nil {
+        //	if errors.Is(err, flag.ErrHelp) {
+        //		task.Help()
+        //		return nil
+        //	}
+        //
+        //	return err
+        //}
 
-	return errors.New("main.run: нет команды")
+        return err
+    }
+
+    return errors.New("main.run: нет команды")
 }

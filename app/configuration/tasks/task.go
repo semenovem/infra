@@ -1,14 +1,13 @@
 package tasks
 
 import (
+	"configuration/configs"
 	"errors"
 	"flag"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"io"
 	"log"
-
-	"configuration/configs"
+	"strings"
 )
 
 var (
@@ -18,12 +17,17 @@ var (
 type flagSet func(*flag.FlagSet)
 
 type Task struct {
-	fs      *flag.FlagSet
-	isDebug bool
-	name    string
-	usage   string
-	flags   []flagSet
-	run     func(*Task) error
+	fs                *flag.FlagSet
+	isDebug           bool
+	name              string
+	usage             string
+	flags             []flagSet
+	run               func(*Task) error
+	allowEmptyFlags   []string // Допустимы пустые значения
+	cfg               *configs.Config
+	configFileFlagVal string
+	offConfigFileFlag bool // Не использовать флаг файла конфига
+	offDebugFlag      bool // Не использовать флаг отладки
 }
 
 func New() []*Task {
@@ -33,6 +37,7 @@ func New() []*Task {
 		newVerifierTask(),
 		newSSHConfigTask(),
 		newSSHAuthorizedKeysTask(),
+		newPortForwardingTask(),
 	}
 }
 
@@ -57,11 +62,12 @@ func (t *Task) Init(args []string) error {
 	t.fs = flag.NewFlagSet(t.name, flag.ContinueOnError)
 	t.fs.SetOutput(io.Discard)
 
-	switch t.name {
-	case versionTaskName, helpTaskName:
-	default:
+	if !t.offConfigFileFlag {
+		t.fs.StringVar(&t.configFileFlagVal, configFileFlagName, "", configFileFlagUsage)
+	}
+
+	if !t.offDebugFlag {
 		t.fs.BoolVar(&t.isDebug, debugFlagName, false, debugFlagUsage)
-		t.fs.StringVar(new(string), configFileFlagName, "", configFileFlagUsage)
 	}
 
 	for _, f := range t.flags {
@@ -84,10 +90,34 @@ func (t *Task) Init(args []string) error {
 		})
 	}
 
+	// Проверка заполненности значений
+	emptyFlags := make([]string, 0)
+	t.fs.VisitAll(func(f *flag.Flag) {
+		if f.Value.String() == "" {
+			emptyFlags = append(emptyFlags, "-"+f.Name)
+		}
+	})
+
+	if len(emptyFlags) != 0 {
+		return fmt.Errorf("flag [%s] is empty", strings.Join(emptyFlags, ", "))
+	}
+
 	return nil
 }
 
 func (t *Task) Run() error {
+	if !t.offConfigFileFlag {
+		var err error
+		t.cfg, err = configs.ParseConfigFile(t.configFileFlagVal)
+		if err != nil {
+			return fmt.Errorf("tasks.getConfigFile: %s", err.Error())
+		}
+
+		// TODO для отладки
+		//p, _ := yaml.Marshal(t.cfg)
+		//fmt.Println(string(p))
+	}
+
 	return t.run(t)
 }
 
@@ -102,41 +132,4 @@ func (t *Task) Help() string {
 	})
 
 	return ""
-}
-
-func (t *Task) getConfigFile() (*configs.Config, error) {
-	fileName := t.fs.Lookup(configFileFlagName).Value.String()
-
-	config, err := configs.ParseConfigFile(fileName)
-	if err != nil {
-		return nil, fmt.Errorf("tasks.getConfigFile: %s", err.Error())
-	}
-
-	// TODO для отладки
-	p, _ := yaml.Marshal(config)
-	fmt.Println(string(p))
-
-	return config, err
-}
-
-func newVersionTask() *Task {
-	return &Task{
-		name:  versionTaskName,
-		usage: versionFlagUsage,
-		run: func(_ *Task) error {
-			loggerInfo.Println("configuration v1.0.0")
-			return nil
-		},
-	}
-}
-
-func newHelpTask() *Task {
-	return &Task{
-		name:  helpTaskName,
-		usage: helpFlagUsage,
-		run: func(_ *Task) error {
-			Help()
-			return nil
-		},
-	}
 }

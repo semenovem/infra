@@ -5,5 +5,5 @@ func verify(c Config) error {
 }
 
 // Проверить:
-// - PortForwarding.ProxiesRaw не содержат дубликатов и не существующих значений
-// - CPI.roles = не содержат дубликатов и только значения из roles.
+// - PortForwarding.HostsRaw не содержат дубликатов и не существующих значений
+// - Host.roles = не содержат дубликатов и только значения из roles.

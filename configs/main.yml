@@ -1,29 +1,33 @@
+version: 1.0.0
+
 # Свойства роли
 roles:
   - name: EXAMPLE       # Название роли
     # Разрешены входящие соединения
-    allow_incoming_ssh: WORKSTATION MINI_SERVER
+    allow_incoming_ssh_for_roles: WORKSTATION MINI_SERVER
 
   - name: WORKSTATION
   - name: MINI_SERVER
 
   - name: PROXY_SERVER
-    allow_incoming_ssh: WORKSTATION HOME_SERVER STANDBY_SERVER MINI_SERVER
+    allow_incoming_ssh_for_roles: WORKSTATION HOME_SERVER STANDBY_SERVER MINI_SERVER
 
   - name: HOME_SERVER
-    allow_incoming_ssh: WORKSTATION
+    allow_incoming_ssh_for_roles: WORKSTATION
 
   - name: STANDBY_SERVER
-    allow_incoming_ssh: HOME_SERVER WORKSTATION
+    allow_incoming_ssh_for_roles: HOME_SERVER WORKSTATION
+
 
 # Проброс портов
 port_forwarding:
-  proxies: rr1 rr4 msk1 kz2 eu1
+  hosts: rr1 rr4 msk1 kz2 eu1
 
-cpi:
+
+hosts:
   # Определение
-  - roles: PROXY_SERVER MINI_SERVER
-    host: example
+  - role: PROXY_SERVER
+    name: example
     public: # Публичное подключение
       url: rr1.evgio.com
       ip: 130.255.170.133
@@ -42,20 +46,20 @@ cpi:
         pub_key: ""
 
 
-  - host: rr1
-    roles: PROXY_SERVER
+  - name: rr1
+    role: PROXY_SERVER
     public:
       url: rr1.evgio.com
       ip: 130.255.170.133
-    local: null
     ssh:
       port: 2257
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHxkXrO9sNfrmnPF1Q3hDEmkxzaeXAjftsf43+mxXOPbRoXf4z4gcyNuPxuD8YCydhW+XaQBspdUoR31XB5VDIklUsVxMT31g+M0oiiWlFXuF1DdQ5ovcR/pIt5Ri3CmMg== adman@rr1
 
-  - host: mini
-    roles: MINI_SERVER
+
+  - name: mini
+    role: MINI_SERVER
     local:
       url: mini.local
     ssh:
@@ -66,3 +70,28 @@ cpi:
       ports:
         - 0.0.0.0:20022::22   # ssh
         - 0.0.0.0:20443::1194 # vpn
+
+
+  - name: mini
+    role: MINI_SERVER
+    local:
+      url: mini.local
+    ssh:
+      main:
+        user: adman
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
+    port_forwarding:
+      ports:
+        - 0.0.0.0:2208::22   # ssh
+        - 0.0.0.0:11948::1194 # vpn
+
+
+  # work 16"
+  - name: laptop16WorkTemp
+    role: WORKSTATION
+    local:
+      url: jon.local
+    ssh:
+      main:
+        user: jon
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBNAvYur9yaBJ8ILDYXx70kvI5LkA7YR11DQsgQb9A2wGEhz2uKfkKwDPyaY1s3UjQnE9E1zXQu4lTS4Ggz54Xn54hpNa+ViW/YPLM+j3zpplOHkd3/9yzU8umTYXae97DA== jon@jon.local

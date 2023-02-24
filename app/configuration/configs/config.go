@@ -1,23 +1,23 @@
 package configs
 
-import "strings"
+import (
+	"strings"
+)
 
 type Config struct {
-	CPIs           []*CPI          `yaml:"cpi"`
+	Version        string          `yaml:"version"`
+	Hosts          []*Host         `yaml:"hosts"`
 	Roles          []*Role         `yaml:"roles"`
 	PortForwarding *PortForwarding `yaml:"port_forwarding"`
 }
 
-type CPI struct {
-	RolesRaw string `yaml:"roles"`
-	Host     string `yaml:"host"`
-	Public   *URL   `yaml:"public"`
-	Local    *URL   `yaml:"local"`
-	SSH      *SSH   `yaml:"ssh"`
-}
-
-func (o CPI) Roles() []string {
-	return split(o.RolesRaw)
+type Host struct {
+	Role           string          `yaml:"role"`
+	Name           string          `yaml:"name"`
+	Public         *URL            `yaml:"public"`
+	Local          *URL            `yaml:"local"`
+	SSH            *SSH            `yaml:"ssh"`
+	PortForwarding *PortForwarding `yaml:"port_forwarding"`
 }
 
 type URL struct {
@@ -38,23 +38,31 @@ type SSHUser struct {
 }
 
 type Role struct {
-	Name                string `yaml:"name"`
-	AllowIncomingSSHRaw string `yaml:"allow_incoming_ssh"`
+	Name                        string `yaml:"name"`
+	AllowIncomingSSHForRolesRaw string `yaml:"allow_incoming_ssh_for_roles"`
 }
 
-func (o Role) AllowIncomingSSH() []string {
-	return split(o.AllowIncomingSSHRaw)
+func (o Role) AllowIncomingSSHForRoles() []string {
+	return split(o.AllowIncomingSSHForRolesRaw)
 }
 
 type PortForwarding struct {
-	ProxiesRaw string   `yaml:"proxies"`
-	Ports      []string `yaml:"ports"`
+	HostsRaw string   `yaml:"hosts"`
+	Ports    []string `yaml:"ports"`
 }
 
-func (o PortForwarding) Proxies() []string {
-	return split(o.ProxiesRaw)
+func (o PortForwarding) Hosts() []string {
+	return split(o.HostsRaw)
 }
 
 func split(s string) []string {
 	return strings.Split(s, " ")
+}
+
+func (h *Host) GetMainPubKeyBySSHUserName() string {
+	if h.SSH != nil && h.SSH.Main != nil {
+		return h.SSH.Main.PubKey
+	}
+
+	return ""
 }

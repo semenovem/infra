@@ -21,13 +21,13 @@ func ParseConfigFile(fileName string) (*Config, error) {
 		return nil, fmt.Errorf("Error parsing YAML file: %s\n", err.Error())
 	}
 
-	cpisFiltered := make([]*CPI, 0)
-	for _, cpi := range cfg.CPIs {
-		if !strings.EqualFold(cpi.Host, "example") {
-			cpisFiltered = append(cpisFiltered, cpi)
+	hostsFiltered := make([]*Host, 0)
+	for _, cpi := range cfg.Hosts {
+		if !strings.EqualFold(cpi.Name, "example") {
+			hostsFiltered = append(hostsFiltered, cpi)
 		}
 	}
-	cfg.CPIs = cpisFiltered
+	cfg.Hosts = hostsFiltered
 
 	rolesFiltered := make([]*Role, 0)
 	for _, role := range cfg.Roles {

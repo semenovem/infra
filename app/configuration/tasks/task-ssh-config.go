@@ -10,12 +10,7 @@ func newSSHConfigTask() *Task {
 }
 
 func sshConfigTask(t *Task) error {
-	cfg, err := t.getConfigFile()
-	if err != nil {
-		return err
-	}
-
-	loggerDebug.Printf("%+v", cfg)
+	loggerDebug.Printf("sshConfigTask")
 
 	return nil
 }
