@@ -5,7 +5,7 @@ func newVersionTask() *Task {
 		name:  versionTaskName,
 		usage: versionFlagUsage,
 		run: func(_ *Task) error {
-			loggerInfo.Println("configuration v1.0.0")
+			loggerInfo.Println(GetAppVersion())
 			return nil
 		},
 		offConfigFileFlag: true,

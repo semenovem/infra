@@ -5,21 +5,21 @@ import (
 )
 
 type Config struct {
-	Version        string          `yaml:"version"`
-	Hosts          []*Host         `yaml:"hosts"`
-	Roles          []*Role         `yaml:"roles"`
-	PortForwarding *PortForwarding `yaml:"port_forwarding"`
+	Version         string           `yaml:"version"`
+	Hosts           []*Host          `yaml:"hosts"`
+	Roles           []*Role          `yaml:"roles"`
+	SSHLocalForward *SSHLocalForward `yaml:"ssh_local_forward"`
 }
 
 type Host struct {
-	Name           string          `yaml:"name"`
-	Role           string          `yaml:"role"`
-	Description    string          `yaml:"description,omitempty"`
-	Crontab        string          `yaml:"crontab,omitempty"`
-	Public         *URL            `yaml:"public,omitempty"`
-	Local          *URL            `yaml:"local,omitempty"`
-	SSH            *SSH            `yaml:"ssh,omitempty"`
-	PortForwarding *PortForwarding `yaml:"port_forwarding,omitempty"`
+	Name            string           `yaml:"name"`
+	Role            string           `yaml:"role"`
+	Description     string           `yaml:"description,omitempty"`
+	Crontab         string           `yaml:"crontab,omitempty"`
+	Public          *URL             `yaml:"public,omitempty"`
+	Local           *URL             `yaml:"local,omitempty"`
+	SSH             *SSH             `yaml:"ssh,omitempty"`
+	SSHLocalForward *SSHLocalForward `yaml:"ssh_local_forward,omitempty"`
 }
 
 type URL struct {
@@ -44,21 +44,21 @@ type Role struct {
 	AllowIncomingSSHForRolesRaw string `yaml:"allow_incoming_ssh_for_roles,omitempty"`
 }
 
-type PortForwarding struct {
+type SSHLocalForward struct {
 	HostsRaw string   `yaml:"hosts,omitempty"`
-	Ports    []string `yaml:"ports,omitempty"`
+	PortsRaw []string `yaml:"ports,omitempty"`
 }
 
 func (o Role) AllowIncomingSSHForRoles() []string {
 	return split(o.AllowIncomingSSHForRolesRaw)
 }
 
-func (o PortForwarding) Hosts() []string {
+func (o *SSHLocalForward) Hosts() []string {
 	return split(o.HostsRaw)
 }
 
 func split(s string) []string {
-	return strings.Split(s, " ")
+	return strings.Fields(s)
 }
 
 func (h *Host) GetMainPubKeyBySSHUserName() string {

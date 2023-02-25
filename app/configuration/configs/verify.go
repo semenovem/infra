@@ -2,7 +2,7 @@ package configs
 
 func Verify(cfg *Config) []string {
 	errs := verifyRoles(cfg)
-	errs = append(errs, verifyPortForwarding(cfg)...)
+	errs = append(errs, verifySSHLocalForward(cfg)...)
 	errs = append(errs, verifyHosts(cfg)...)
 
 	return errs
@@ -28,10 +28,18 @@ func duplicates(arr []string) []string {
 func getKnownRoles(cfg *Config) map[string]struct{} {
 	m := make(map[string]struct{})
 
-	if cfg.Roles != nil {
-		for _, role := range cfg.Roles {
-			m[role.Name] = struct{}{}
-		}
+	for _, role := range cfg.Roles {
+		m[role.Name] = struct{}{}
+	}
+
+	return m
+}
+
+func getKnownHosts(cfg *Config) map[string]struct{} {
+	m := make(map[string]struct{})
+
+	for _, host := range cfg.Hosts {
+		m[host.Name] = struct{}{}
 	}
 
 	return m

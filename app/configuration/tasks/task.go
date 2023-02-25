@@ -13,6 +13,7 @@ import (
 
 var (
 	loggerInfo, loggerDebug *log.Logger
+	GetAppVersion           func() string
 )
 
 type flagSet func(*flag.FlagSet)

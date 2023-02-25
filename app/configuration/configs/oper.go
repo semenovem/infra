@@ -59,14 +59,14 @@ func (c *Config) GetPubKeysOfUserMainByRoles(roles []string) []string {
 	return pubKeys
 }
 
-func (c *Config) GetProxyForwardingByHostName(n string) *PortForwarding {
+func (c *Config) GetSSHLocalForwardByHostName(n string) *SSHLocalForward {
 	host := c.GetHostByName(n)
-	if host != nil && host.PortForwarding != nil {
-		var pfw = new(PortForwarding)
-		*pfw = *host.PortForwarding
+	if host != nil && host.SSHLocalForward != nil {
+		var pfw = new(SSHLocalForward)
+		*pfw = *host.SSHLocalForward
 
-		if pfw.HostsRaw == "" && c.PortForwarding != nil {
-			pfw.HostsRaw = c.PortForwarding.HostsRaw
+		if pfw.HostsRaw == "" && c.SSHLocalForward != nil {
+			pfw.HostsRaw = c.SSHLocalForward.HostsRaw
 		}
 
 		return pfw

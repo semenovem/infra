@@ -16,9 +16,15 @@ var (
 	loggerErr   = log.New(os.Stderr, "[ERRO] ", 0)
 	loggerInfo  = log.New(os.Stdout, "", 0)
 	loggerDebug = log.New(os.Stderr, "[DEBU] ", 0)
+	appVersion  = ""
 )
 
+func getAppVersion() string {
+	return appVersion
+}
+
 func init() {
+	tasks.GetAppVersion = getAppVersion
 	loggerDebug.SetOutput(io.Discard)
 	tasks.SetLoggers(loggerInfo, loggerDebug)
 }

@@ -2,16 +2,16 @@ package configs
 
 import "fmt"
 
-func verifyPortForwarding(cfg *Config) []string {
-	if cfg.PortForwarding == nil {
+func verifySSHLocalForward(cfg *Config) []string {
+	if cfg.SSHLocalForward == nil {
 		return nil
 	}
 
 	errs := make([]string, 0)
 
-	dups := duplicates(cfg.PortForwarding.Hosts())
+	dups := duplicates(cfg.SSHLocalForward.Hosts())
 	if len(dups) != 0 {
-		errs = append(errs, fmt.Sprintf("port_forwarding.hosts: дубликаты %s", dups))
+		errs = append(errs, fmt.Sprintf("ssh_local_forward.hosts: дубликаты %s", dups))
 	}
 
 	return errs

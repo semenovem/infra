@@ -1,8 +1,10 @@
 package tasks
 
+import "strings"
+
 func newPortForwardingTask() *Task {
 	return &Task{
-		name:  "port-forwarding",
+		name:  "ssh-local-forward",
 		usage: "данные о пробросе портов",
 		flags: []flagSet{addHostFlag},
 		run:   sshPortForwardingTask,
@@ -11,11 +13,18 @@ func newPortForwardingTask() *Task {
 
 func sshPortForwardingTask(t *Task) error {
 	var (
-		hostName       = getHostFlag(t.fs)
-		portForwarding = t.cfg.GetProxyForwardingByHostName(hostName)
+		hostName     = getHostFlag(t.fs)
+		localForward = t.cfg.GetSSHLocalForwardByHostName(hostName)
 	)
 
-	loggerDebug.Printf("portForwarding = %+v\n", portForwarding)
+	hosts, err := localForward.GetItems()
+	if err != nil {
+		return err
+	}
+
+	for host, ports := range hosts {
+		loggerInfo.Printf("%s %s", host, strings.Join(ports, " "))
+	}
 
 	return nil
 }

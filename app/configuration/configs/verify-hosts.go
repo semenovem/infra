@@ -10,6 +10,7 @@ func verifyHosts(cfg *Config) []string {
 	var (
 		errs       = make([]string, 0)
 		knownRoles = getKnownRoles(cfg)
+		knownHosts = getKnownHosts(cfg)
 		hostNames  = make([]string, 0)
 	)
 
@@ -28,6 +29,28 @@ func verifyHosts(cfg *Config) []string {
 			errs = append(errs, fmt.Sprintf(
 				"hosts.[%s].Role: неизвестная роль %s",
 				host.Name, host.Role))
+		}
+	}
+
+	// Валидность данных хоста
+	for _, host := range cfg.Hosts {
+		if host.SSHLocalForward != nil {
+			// Дубликаты хостов
+			dups = duplicates(host.SSHLocalForward.Hosts())
+			if len(dups) != 0 {
+				errs = append(errs, fmt.Sprintf(
+					"hosts.[%s].ssh_local_forward.hosts: дубликаты %s",
+					host.Name, dups))
+			}
+
+			// Не существующие хосты
+			for _, h := range host.SSHLocalForward.Hosts() {
+				if _, ok := knownHosts[h]; !ok {
+					errs = append(errs, fmt.Sprintf(
+						"hosts.[%s].ssh_local_forward.hosts: неизвестный хост %s",
+						host.Name, h))
+				}
+			}
 		}
 	}
 
