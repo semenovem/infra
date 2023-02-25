@@ -17,13 +17,15 @@ func sshPortForwardingTask(t *Task) error {
 		localForward = t.cfg.GetSSHLocalForwardByHostName(hostName)
 	)
 
-	hosts, err := localForward.GetItems()
-	if err != nil {
-		return err
-	}
+	if localForward != nil {
+		hosts, err := localForward.GetItems()
+		if err != nil {
+			return err
+		}
 
-	for host, ports := range hosts {
-		loggerInfo.Printf("%s %s", host, strings.Join(ports, " "))
+		for host, ports := range hosts {
+			loggerInfo.Printf("%s %s", host, strings.Join(ports, " "))
+		}
 	}
 
 	return nil
