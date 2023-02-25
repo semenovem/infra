@@ -35,9 +35,9 @@ set +o allexport
 docker run -d \
   --restart unless-stopped \
   --name=qbittorrent \
-  --user "${UID}:${GID}" \
-  -e PUID="$UID" \
-  -e PGID="$GID" \
+  --user "$(id -u):$(id -g)" \
+  -e PUID="$(id -u)" \
+  -e PGID="$(id -g)" \
   -e TZ=Etc/UTC \
   -e WEBUI_PORT=8080 \
   -p 8080:8080 \
@@ -47,8 +47,3 @@ docker run -d \
   -v "${DOWNLOADS_DIR}:/downloads" \
   -v "${TORRENT_FILES_DIR}:/torrent-files" \
   lscr.io/linuxserver/qbittorrent:4.5.1
-
-#  --add-host "bt.t-ru.org:185.15.211.203" \
-#  --add-host "bt2.t-ru.org:185.15.211.203" \
-#  --add-host "bt3.t-ru.org:185.15.211.203" \
-#  --add-host "bt4.t-ru.org:185.15.211.203" \

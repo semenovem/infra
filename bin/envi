@@ -74,7 +74,8 @@ MENU="
 3. получить установленную роль
 4. установить роль для машины
 5. обновить ssh config
-6. обновить ssh authorization_keys"
+6. обновить ssh authorization_keys
+7. скомпилировать configuration-app"
 
 TASK=
 main || exit 1
@@ -85,3 +86,4 @@ task "3." && sh "${ROOT}/_utils/get-role.sh"
 task "4." && sh "${ROOT}/_utils/set-role.sh"
 task "5." && sh "${ROOT}/_utils/ssh-config-upd.sh" $@
 task "6." && sh "${ROOT}/_utils/ssh-authorized-keys-upd.sh" $@
+task "7." && sh "${ROOT}/../app/configuration/build.sh"

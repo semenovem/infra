@@ -6,7 +6,7 @@
 # -debug
 # -yes
 #
-# __ENVI_BIN__ = путь к bin, устанавливаетс в профайле
+# __ENVI_BIN__ = путь к bin, устанавливается в профайле
 
 # Директория хранения данных. Есть копии в других файлах
 __CORE_STATE_DIR__="${HOME}/_envi_state"
@@ -283,6 +283,12 @@ __get_config_file__() {
   CORE_TMP_CONFIG_FILE="$(__realpath__ "${__ENVI_BIN__}/../config/main.yml")"
   [ -f "$CORE_TMP_CONFIG_FILE" ] && echo "$CORE_TMP_CONFIG_FILE" && return 0
   return 1
+}
+
+# Возвращает путь к файлу конфигурации
+__run_configuration__() {
+  # shellcheck disable=SC2091
+  $(__realpath__ "${__ENVI_BIN__}/../app/configuration/bin/configuration-app") $@
 }
 
 # Получить конфигурацию
