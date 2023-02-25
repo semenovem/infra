@@ -59,14 +59,14 @@ func (c *Config) GetPubKeysOfUserMainByRoles(roles []string) []string {
 	return pubKeys
 }
 
-func (c *Config) GetSSHLocalForwardByHostName(n string) *SSHLocalForward {
+func (c *Config) GetSSHLocalForwardByHostName(n string) *SSHRemoteForward {
 	host := c.GetHostByName(n)
-	if host != nil && host.SSHLocalForward != nil {
-		var pfw = new(SSHLocalForward)
-		*pfw = *host.SSHLocalForward
+	if host != nil && host.SSHRemoteForward != nil {
+		var pfw = new(SSHRemoteForward)
+		*pfw = *host.SSHRemoteForward
 
-		if pfw.HostsRaw == "" && c.SSHLocalForward != nil {
-			pfw.HostsRaw = c.SSHLocalForward.HostsRaw
+		if pfw.HostsRaw == "" && c.SSHRemoteForward != nil {
+			pfw.HostsRaw = c.SSHRemoteForward.HostsRaw
 		}
 
 		return pfw

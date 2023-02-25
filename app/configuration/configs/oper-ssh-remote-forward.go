@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func (o *SSHLocalForward) GetItems() (map[string][]string, error) {
+func (o *SSHRemoteForward) GetItems() (map[string][]string, error) {
 	hostMap := make(map[string][]string)
 
 	for _, port := range o.PortsRaw {

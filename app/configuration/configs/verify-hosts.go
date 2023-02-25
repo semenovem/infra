@@ -34,20 +34,20 @@ func verifyHosts(cfg *Config) []string {
 
 	// Валидность данных хоста
 	for _, host := range cfg.Hosts {
-		if host.SSHLocalForward != nil {
+		if host.SSHRemoteForward != nil {
 			// Дубликаты хостов
-			dups = duplicates(host.SSHLocalForward.Hosts())
+			dups = duplicates(host.SSHRemoteForward.Hosts())
 			if len(dups) != 0 {
 				errs = append(errs, fmt.Sprintf(
-					"hosts.[%s].ssh_local_forward.hosts: дубликаты %s",
+					"hosts.[%s].ssh_remote_forward.hosts: дубликаты %s",
 					host.Name, dups))
 			}
 
 			// Не существующие хосты
-			for _, h := range host.SSHLocalForward.Hosts() {
+			for _, h := range host.SSHRemoteForward.Hosts() {
 				if _, ok := knownHosts[h]; !ok {
 					errs = append(errs, fmt.Sprintf(
-						"hosts.[%s].ssh_local_forward.hosts: неизвестный хост %s",
+						"hosts.[%s].ssh_remote_forward.hosts: неизвестный хост %s",
 						host.Name, h))
 				}
 			}

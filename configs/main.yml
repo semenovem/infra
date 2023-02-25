@@ -20,7 +20,7 @@ roles:
 
 
 # Проброс портов
-ssh_local_forward:
+ssh_remote_forward:
   hosts: rr1 rr4 msk1 kz2 eu1
 
 
@@ -122,7 +122,7 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
-    ssh_local_forward:
+    ssh_remote_forward:
       hosts: msk1
       ports:
         - 20022:0.0.0.0:22   # ssh
@@ -190,7 +190,7 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGyQMkD1kkI6cti/Srn8FNX8RzjUjlKq6ynoROeXHvp9aJHqMdETId1PFiJQjfPNCNKlVVDA8lyTkn9GZtaQSi8l7NoUsPfgGvfnBVmJpy2MlnDW83QOAwUc6fDI5oM8Kg== evg@home
-    ssh_local_forward:
+    ssh_remote_forward:
       ports:
         - 2200:0.0.0.0:22 # ssh
         - 10080::10080    # xeoma
@@ -207,7 +207,7 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBIMVsRQ2FzF/qKVAwUwASQ2Tk1JBiCKHkphOdXYzUFmGHM5wWM8e/6UBD/zdfrz3Tgtv7M8X4wbA4cnC8TzPCY0xlklB35criLsE1L7IZRGP7ghNo9SPuRbtybIdNJQ1yg== adman@srv1
-    ssh_local_forward:
+    ssh_remote_forward:
       ports:
         - 2201::22           # ssh
         - 11941:0.0.0.0:1194 # openvpn
@@ -224,7 +224,7 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGm16LDGpzavDoaqmDwHRswdSXjCJlcSFNFPHsJONoZs6DKJaveJk4ndqrLjoUKMcCCDnkprTNSG03jwO0VQGEd/2IA8tuGIwNQW8G4dKPvxzoUiN37uhYj3w8khUIHAqA== adman@srv2
-    ssh_local_forward:
+    ssh_remote_forward:
       ports:
         - 2202::22           # ssh
         - 11942:0.0.0.0:1194 # openvpn
@@ -244,7 +244,7 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBBDEl++6Wjat47aJ/V2EKY4yMLVoC8oxHYIcPJuTphQN++dkNLPMdUkilcjkO1ge8TKI1Nwo+OOAWmGh2FitIX29kwEizIpdq3tmSO3smPJvTHjS6L4zTqyvG74Qtva0GQ== adman@srv21
-    ssh_local_forward:
+    ssh_remote_forward:
       ports:
         - 2223::22           # ssh
         - 11943:0.0.0.0:1194 # openvpn
@@ -264,7 +264,7 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGYSB8fOYrYGKZ9SCGlOTa5YGscOwCfov2gSupi8kjlPwL3Deg+FqaFKKiU1iAHl/OXHIItTx/MdNGuBLFfAStd4XF7RKyljeyv54bCDC+Ydsn2aVAyvTm02431biL1k6g== adman@srv22
-    ssh_local_forward:
+    ssh_remote_forward:
       ports:
         - 2224::22           # ssh
         - 11944:0.0.0.0:1194 # openvpn

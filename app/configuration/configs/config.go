@@ -5,21 +5,21 @@ import (
 )
 
 type Config struct {
-	Version         string           `yaml:"version"`
-	Hosts           []*Host          `yaml:"hosts"`
-	Roles           []*Role          `yaml:"roles"`
-	SSHLocalForward *SSHLocalForward `yaml:"ssh_local_forward"`
+	Version          string            `yaml:"version"`
+	Hosts            []*Host           `yaml:"hosts"`
+	Roles            []*Role           `yaml:"roles"`
+	SSHRemoteForward *SSHRemoteForward `yaml:"ssh_remote_forward"`
 }
 
 type Host struct {
-	Name            string           `yaml:"name"`
-	Role            string           `yaml:"role"`
-	Description     string           `yaml:"description,omitempty"`
-	Crontab         string           `yaml:"crontab,omitempty"`
-	Public          *URL             `yaml:"public,omitempty"`
-	Local           *URL             `yaml:"local,omitempty"`
-	SSH             *SSH             `yaml:"ssh,omitempty"`
-	SSHLocalForward *SSHLocalForward `yaml:"ssh_local_forward,omitempty"`
+	Name             string            `yaml:"name"`
+	Role             string            `yaml:"role"`
+	Description      string            `yaml:"description,omitempty"`
+	Crontab          string            `yaml:"crontab,omitempty"`
+	Public           *URL              `yaml:"public,omitempty"`
+	Local            *URL              `yaml:"local,omitempty"`
+	SSH              *SSH              `yaml:"ssh,omitempty"`
+	SSHRemoteForward *SSHRemoteForward `yaml:"ssh_remote_forward,omitempty"`
 }
 
 type URL struct {
@@ -44,7 +44,7 @@ type Role struct {
 	AllowIncomingSSHForRolesRaw string `yaml:"allow_incoming_ssh_for_roles,omitempty"`
 }
 
-type SSHLocalForward struct {
+type SSHRemoteForward struct {
 	HostsRaw string   `yaml:"hosts,omitempty"`
 	PortsRaw []string `yaml:"ports,omitempty"`
 }
@@ -53,7 +53,7 @@ func (o Role) AllowIncomingSSHForRoles() []string {
 	return split(o.AllowIncomingSSHForRolesRaw)
 }
 
-func (o *SSHLocalForward) Hosts() []string {
+func (o *SSHRemoteForward) Hosts() []string {
 	return split(o.HostsRaw)
 }
 
