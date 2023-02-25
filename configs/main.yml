@@ -123,7 +123,7 @@ hosts:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
     ssh_local_forward:
-      hosts: msk1 msk1
+      hosts: msk1
       ports:
         - 20022:0.0.0.0:22   # ssh
         - 20443:0.0.0.0:1194 # vpn

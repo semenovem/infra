@@ -263,131 +263,16 @@ __realpath__() {
   )/$(basename "$1")"
 }
 
-# Возвращает путь к директории библиотек
-__get_lib_dir__() {
-  CORE_TMP_LIB_DIR="$(__realpath__ "${__ENVI_BIN__}/_lib")"
-  [ -d "$CORE_TMP_LIB_DIR" ] && echo "$CORE_TMP_LIB_DIR" && return 0
-  return 1
-}
-
-# Возвращает путь к файлу библиотеки
-__get_lib_file__() {
-  CORE_TMP_LIB_FILE="$(__realpath__ "${__ENVI_BIN__}/_lib/$1")"
-  [ -f "$CORE_TMP_LIB_FILE" ] && echo "$CORE_TMP_LIB_FILE" && return 0
-  __err__ "Нет файла [$CORE_TMP_LIB_FILE]"
-  return 1
-}
-
-# Возвращает путь к файлу конфигурации
-__get_config_file__() {
-  CORE_TMP_CONFIG_FILE="$(__realpath__ "${__ENVI_BIN__}/../config/main.yml")"
-  [ -f "$CORE_TMP_CONFIG_FILE" ] && echo "$CORE_TMP_CONFIG_FILE" && return 0
-  return 1
-}
-
-# Возвращает путь к файлу конфигурации
+# Выполнить конфигуратор
 __run_configuration__() {
-  # shellcheck disable=SC2091
-  $(__realpath__ "${__ENVI_BIN__}/../app/configuration/bin/configuration-app") $@
+  APP=$(__realpath__ "${__ENVI_BIN__}/../app/configuration/bin/configuration-app")
+  $APP $@ -config-file="../../../configs/main.yml"
 }
 
-# Получить конфигурацию
-# $1 - optional обработчик
-# $2 - required префикс запрошенного значения
-# $3 - optional поле для выбора значения
-__config__() {
-  CORE_HANDLER="$1"
-  CORE_PREFIX="$2"
-  CORE_COLUMN="$3"
-
-  if [ -n "$CORE_COLUMN" ]; then
-    echo "$CORE_COLUMN" | grep -iEq "^_|_$" &&
-      __err__ "Имя поля не должен начинаться и заканчиватся с [_]" && return 1
-  fi
-
-  core_parse_yaml_pipe() {
-    data_type=
-    map_used_keys=
-
-    if [ -z "$CORE_HANDLER" ]; then
-      default_handler() { echo "$*"; }
-      CORE_HANDLER="default_handler"
-    fi
-
-    define_data_type() {
-      [ -z "$1" ] && return 0
-      [ -z "$data_type" ] && data_type=$1 && return 0
-      [ "$data_type" != "$1" ] &&
-        __err__ "Смешанный тип значений prefix=[$CORE_PREFIX] val1=[${data_type}], val2[$1]" &&
-        return 1
-      return 0
-    }
-
-    # Вывод одиночного значения (single | array)
-    handler_single_pipe() { while read -r line; do $CORE_HANDLER "$line"; done; }
-
-    # Вывод map (key - value)
-    handler_pair() { $CORE_HANDLER "$1" "$2"; }
-
-    # Возвратить значение из строки
-    rest_val_pipe() { while read -r line; do rest_val "$line"; done; }
-
-    # Возвратить значение из строки (правая часть строки) ......=......
-    # shellcheck disable=SC2046
-    rest_val() { echo "$1" | cut -b $(echo "$1" | grep -iEo "^[^=]*=" | wc -m)-; }
-
-    while read -r line; do
-      t=
-      echo "$line" | grep -iEq "^=" && t="single"    # start with `=` :одно значение
-      echo "$line" | grep -iEq "^_\d+=" && t="array" # start with `_\d+=` :массив значений
-      echo "$line" | grep -iEq "^_[^_]+_" && t="map" # start with `_[^_]+_` :map
-
-      case "$t" in
-      "single")
-        define_data_type "single" || return 1
-        echo "$line" | cut -b 2- | handler_single_pipe
-        ;;
-
-      "array")
-        define_data_type "array" || return 1
-        echo "$line" | grep -iEo "[^=]+$" | handler_single_pipe
-        ;;
-
-      "map")
-        key=$(echo "$line" | grep -iEo "^_[^_]+" | cut -b 2-)
-        echo "$map_used_keys" | grep -iEq "\s${key}\s" && continue # префикс + ключ уже обработан
-
-        if [ -n "$CORE_COLUMN" ]; then
-          echo "$line" | grep -iEq "_${key}_${CORE_COLUMN}" || continue # префикс + поле не найдено
-
-          if echo "$line" | grep -iEq "_${key}_${CORE_COLUMN}="; then
-            define_data_type "map" || return 1
-            handler_pair "$key" "$(rest_val "$line")"
-            continue
-          fi
-        fi
-
-        define_data_type "single" || return 1
-        echo "$key" | handler_single_pipe
-
-        map_used_keys="${map_used_keys} ${key} "
-        ;;
-
-      *)
-        __err__ "unknown type: $line"
-        return 1
-        ;;
-      esac
-    done
-  }
-
-  CORE_LIB_FILE="$(__get_lib_file__ "parse_yaml.sh")" || return 1
-  CORE_CONFIG_FILE="$(__get_config_file__)" || return 1
-
-  set -o pipefail
-  sh "$CORE_LIB_FILE" "$CORE_CONFIG_FILE" "$CORE_PREFIX" | core_parse_yaml_pipe
-
-  unset core_parse_yaml_pipe CORE_HANDLER CORE_PREFIX CORE_COLUMN CORE_LIB_DIR
+# Получить имя хоста
+# TODO сделать указание и сохранение имени в настройках
+__get_hostname__() {
+  cat "/etc/hostname"
 }
 
 #
