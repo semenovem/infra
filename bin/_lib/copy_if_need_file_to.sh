@@ -22,4 +22,3 @@ cp "$SOURCE" "$TARGET" || exit 1
 
 echo "Копирование успешно"
 exit 0
-

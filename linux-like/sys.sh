@@ -53,3 +53,7 @@ sudo journalctl --vacuum-size=100M
 sudo journalctl --vacuum-time=1week
 
 # /еtc/systemd/journald.conf
+
+#--------------------
+# Платформа / архитектура
+uname -sm

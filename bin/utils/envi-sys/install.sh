@@ -6,13 +6,15 @@
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 BIN_DIR=$(dirname "$ROOT") || exit 1
+BIN_DIR=$(dirname "$BIN_DIR") || exit 1
+LIB_DIR="${BIN_DIR}/_lib"
 
 [ ! -d "$BIN_DIR" ] && echo "[${BIN_DIR}] is not a directory" 1>&2 && exit 1
+[ ! -d "$LIB_DIR" ] && echo "[${LIB_DIR}] is not a directory" 1>&2 && exit 1
 
-. "${BIN_DIR}/_lib/core.sh" || exit 1
-. "${BIN_DIR}/_lib/os.sh" || exit 1
-. "${BIN_DIR}/_lib/role.sh" || exit 1
-. "${BIN_DIR}/_lib/func.sh" || exit 1
+. "${LIB_DIR}/core.sh" || exit 1
+. "${LIB_DIR}/os.sh" || exit 1
+. "${LIB_DIR}/role.sh" || exit 1
 
 USER_PROFILE_FILE=
 ADDITIONAL_BIN_DIRS=
@@ -46,7 +48,7 @@ gen_profile_with_bin_dirs() {
 
   echo
   echo "## repository update"
-  echo "sh \"\${__ENVI_BIN__}/_utils/update-repo.sh\" \"${envi_bin}/_utils\""
+  echo "sh \"\${__ENVI_BIN__}/utils/envi-sys/update-repo.sh\" \"${envi_bin}/utils/envi-sys\""
 }
 
 add_source_file_to_profile() {
@@ -123,7 +125,7 @@ esac
 # shellcheck disable=SC2086
 gen_profile_with_bin_dirs "$BIN_DIR" $ADDITIONAL_BIN_DIRS >"$CORE_PROFILE_FILE"
 
-echo ">>> CORE_PROFILE_FILE = $CORE_PROFILE_FILE"
+__info__ "CORE_PROFILE_FILE = $CORE_PROFILE_FILE"
 
 # добавление в profile PATH
 add_source_file_to_profile \
@@ -135,9 +137,9 @@ add_source_file_to_profile \
 
 # ----------------
 # копирование vimrc
-VIMRC_FILE_SOURCE="${BIN_DIR}/../home/vimrc"
+VIMRC_FILE_SOURCE="${BIN_DIR}/../configs/vimrc"
 VIMRC_FILE_TARGET="${HOME}/.vimrc"
-__copy_if_need_file_to__ "$VIMRC_FILE_SOURCE" "$VIMRC_FILE_TARGET" >"$TMP_FILE" 2>&1
+sh "${LIB_DIR}/copy_if_need_file_to.sh" "$VIMRC_FILE_SOURCE" "$VIMRC_FILE_TARGET" >"$TMP_FILE" 2>&1
 OUTPUT="Копирование vimrc: $(cat "$TMP_FILE")"
 if [ $? -eq 0 ]; then
   __info__ "$OUTPUT"

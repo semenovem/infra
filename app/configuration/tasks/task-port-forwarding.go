@@ -4,14 +4,14 @@ import "strings"
 
 func newPortForwardingTask() *Task {
 	return &Task{
-		name:  "ssh-local-forward",
+		name:  "ssh-remote-forward",
 		usage: "данные о пробросе портов",
 		flags: []flagSet{addHostFlag},
-		run:   sshPortForwardingTask,
+		run:   sshRemoteForwardTask,
 	}
 }
 
-func sshPortForwardingTask(t *Task) error {
+func sshRemoteForwardTask(t *Task) error {
 	var (
 		hostName     = getHostFlag(t.fs)
 		localForward = t.cfg.GetSSHLocalForwardByHostName(hostName)

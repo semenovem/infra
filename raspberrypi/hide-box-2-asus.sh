@@ -170,3 +170,13 @@ sudo reboot
 sudo systemctl stop NetworkManager
 sudo killall wpasupplicant | sudo killall wpa_supplicant
 sudo systemctl disable NetworkManager
+
+
+# -------------------------------------------------------
+# -------------------------------------------------------
+# -------------------------------------------------------
+# Отключить ведение журнала логов
+systemctl mask systemd-journald.service
+systemctl mask rsyslog.service
+
+

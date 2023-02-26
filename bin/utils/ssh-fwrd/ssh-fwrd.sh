@@ -121,7 +121,7 @@ case "$ARG" in
       start $data
     done
   }
-  __run_configuration__ ssh-local-forward -host "mini" | pipe
+  __run_configuration__ ssh-remote-forward -host "mini" | pipe
   ;;
 
 "stop")

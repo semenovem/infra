@@ -6,8 +6,6 @@
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/_lib/core.sh" || exit 1
-. "${ROOT}/_lib/os.sh" || exit 1
-. "${ROOT}/_lib/role.sh" || exit 1
 
 pipe() {
   while read -r data; do
@@ -57,11 +55,11 @@ confirm() {
 #
 
 if [ -n "$__HELP__" ]; then
-  sh "${ROOT}/_utils/help.sh"
+  sh "${ROOT}/utils/envi-sys/help.sh"
   exit 0
 fi
 
-sh "${ROOT}/_utils/help.sh" -short
+sh "${ROOT}/utils/envi-sys/help.sh" -short
 
 #
 #
@@ -80,10 +78,10 @@ MENU="
 TASK=
 main || exit 1
 
-task "1." && sh "${ROOT}/_utils/install.sh"
-task "2." && sh "${ROOT}/_utils/update-repo.sh" -force
-task "3." && sh "${ROOT}/_utils/get-role.sh"
-task "4." && sh "${ROOT}/_utils/set-role.sh"
+task "1." && sh "${ROOT}/utils/envi-sys/install.sh"
+task "2." && sh "${ROOT}/utils/envi-sys/update-repo.sh" -force
+task "3." && sh "${ROOT}/utils/envi-sys/get-role.sh"
+task "4." && sh "${ROOT}/utils/envi-sys/set-role.sh"
 task "5." && sh "${ROOT}/_utils/ssh-config-upd.sh" $@
 task "6." && sh "${ROOT}/_utils/ssh-authorized-keys-upd.sh" $@
 task "7." && sh "${ROOT}/../app/configuration/build.sh"

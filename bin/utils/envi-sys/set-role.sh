@@ -1,8 +1,8 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../_lib/core.sh" || exit 1
-. "${ROOT}/../_lib/role.sh" || exit 1
+. "${ROOT}/../../_lib/core.sh" || exit 1
+. "${ROOT}/../../_lib/role.sh" || exit 1
 
 # Получить name роли по id
 get_role_name_by_id() {
