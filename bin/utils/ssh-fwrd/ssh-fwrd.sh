@@ -1,10 +1,10 @@
 #!/bin/sh
 
 #************************************************************
-# ssh-forwarding.service
-# sudo systemctl list-units --all --state=inactive
-# sudo systemctl daemon-reload
-# sudo systemctl reset-failed
+# ssh-fwrd-msk1.service
+# systemctl list-units --all --state=inactive
+# systemctl daemon-reload
+# systemctl reset-failed
 # файлы сервисов: /usr/lib/systemd/system/...
 #************************************************************
 
@@ -59,9 +59,6 @@ getCmd() {
     -N ${conns} $1"
 }
 
-#
-#
-#
 create_file() {
   host=$1
   shift

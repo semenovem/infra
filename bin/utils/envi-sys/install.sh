@@ -28,7 +28,7 @@ gen_profile_with_bin_dirs() {
   echo
   echo "# bin directory:"
 
-  dirs="$envi_bin"
+  dirs="\${__ENVI_BIN__}"
   echo "## $envi_bin"
 
   # shellcheck disable=SC2068
@@ -71,6 +71,10 @@ add_source_file_to_profile() {
   __debug__ "Путь к файлу '${file}' добавлен"
 }
 
+add_dirs() {
+  ADDITIONAL_BIN_DIRS="${ADDITIONAL_BIN_DIRS} $*"
+}
+
 # ----------------
 # Выбрать роль устройства
 ROLE=$(__core_role_get__)
@@ -81,22 +85,10 @@ if [ $? -ne 0 ]; then
 fi
 
 case "$ROLE" in
-"$__CORE_ROLE_MINI_SERVER_CONST__")
-  ADDITIONAL_BIN_DIRS="${ADDITIONAL_BIN_DIRS} mini_server"
-  ;;
-
-"$__CORE_ROLE_PROXY_SERVER_CONST__")
-  ADDITIONAL_BIN_DIRS="${ADDITIONAL_BIN_DIRS} proxy_server"
-  ;;
-
-"$__CORE_ROLE_HOME_SERVER_CONST__" | "$__CORE_ROLE_STANDBY_SERVER_CONST__")
-  ADDITIONAL_BIN_DIRS="${ADDITIONAL_BIN_DIRS} home_server"
-  ;;
-
-"$__CORE_ROLE_WORKSTATION_CONST__")
-  ADDITIONAL_BIN_DIRS="${ADDITIONAL_BIN_DIRS} workstation"
-  ;;
-
+"$__CORE_ROLE_MINI_SERVER_CONST__") add_dirs "roles/mini_server" ;;
+"$__CORE_ROLE_PROXY_SERVER_CONST__") add_dirs "roles/proxy_server" ;;
+"$__CORE_ROLE_HOME_SERVER_CONST__" | "$__CORE_ROLE_STANDBY_SERVER_CONST__") add_dirs "roles/home_server" ;;
+"$__CORE_ROLE_WORKSTATION_CONST__") add_dirs "roles/workstation" ;;
 esac
 
 # ----------------
@@ -104,12 +96,12 @@ esac
 case "$__CORE_OS_KIND__" in
 "$__CORE_OS_KIND_MACOS_CONST__")
   USER_PROFILE_FILE="${HOME}/.zshrc"
-  ADDITIONAL_BIN_DIRS="${ADDITIONAL_BIN_DIRS} macos"
+  add_dirs "macos"
   ;;
 
 "$__CORE_OS_KIND_LINUX_CONST__")
   USER_PROFILE_FILE="${HOME}/.bashrc"
-  ADDITIONAL_BIN_DIRS="${ADDITIONAL_BIN_DIRS} linux"
+  add_dirs "linux"
   ;;
 
 *)

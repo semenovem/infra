@@ -34,6 +34,7 @@ help() {
 }
 
 [ -n "$__HELP__" ] && help && exit 0
+[ -z "$1" ] && help && exit 0
 
 CMD=$(__core_get_virtualization_app__) || exit 1
 
