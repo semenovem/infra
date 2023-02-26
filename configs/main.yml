@@ -192,7 +192,7 @@ hosts:
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGyQMkD1kkI6cti/Srn8FNX8RzjUjlKq6ynoROeXHvp9aJHqMdETId1PFiJQjfPNCNKlVVDA8lyTkn9GZtaQSi8l7NoUsPfgGvfnBVmJpy2MlnDW83QOAwUc6fDI5oM8Kg== evg@home
     ssh_remote_forward:
       ports:
-        - 2200:0.0.0.0:22 # ssh
+        - 2200::22 # ssh
         - 10080::10080    # xeoma
 
 

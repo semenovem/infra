@@ -17,6 +17,9 @@ exit
 # execute
 sshfs evg@192.168.11.100:/mnt ~/_mount
 
+# if there is an error: mount_macfuse: the macFUSE kernel extension is not loaded
+sudo kextunload -b io.macfuse.filesystems.macfuse
+
 # cancel
 umount ~/_mount
 
