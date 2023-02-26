@@ -121,7 +121,7 @@ case "$ARG" in
       start $data
     done
   }
-  __run_configuration__ ssh-remote-forward -host __get_hostname__ | pipe
+  __run_configuration__ ssh-remote-forward -host "$(__get_hostname__)" | pipe
   ;;
 
 "stop")
