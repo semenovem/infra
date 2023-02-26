@@ -1,0 +1,10 @@
+[user]
+	name = Semenov Evgeny
+	email = semenovem@gmail.com
+
+[core]
+	autocrlf = input
+[pull]
+	rebase = true
+[init]
+	defaultBranch = main

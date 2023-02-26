@@ -129,7 +129,8 @@ core_conf_logger() {
   coreConfMsg="[${CORE_LOGGER_NAME}][${coreConfLoggerType}]$(core_logger_sub_system_name) $*"
 
   if [ -n "$CORE_LOGGER_COLOR_TERMINAL" ]; then
-    echo "${coreConfColor}${coreConfMsg}${__NC__}"
+    cmd="${coreConfColor}${coreConfMsg}${__NC__}"
+    [ -z "$(echo -e)" ] && echo -e "$cmd" || echo "${cmd}"
   else
     echo "$coreConfMsg"
   fi
