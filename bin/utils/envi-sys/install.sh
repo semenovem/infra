@@ -39,13 +39,10 @@ gen_profile_with_bin_dirs() {
 
   echo
   echo "export __ENVI_BIN__=\"${envi_bin}\""
-  echo
   echo "export PATH=\"\${PATH}:${dirs}\""
-
   echo
   echo "## additional profile"
   echo "source \"\${__ENVI_BIN__}/../home/profile\""
-
   echo
   echo "## repository update"
   echo "sh \"\${__ENVI_BIN__}/utils/envi-sys/update-repo.sh\" \"${envi_bin}/utils/envi-sys\""
