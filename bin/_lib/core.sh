@@ -266,7 +266,7 @@ __realpath__() {
 # Выполнить конфигуратор
 __run_configuration__() {
   APP=$(__realpath__ "${__ENVI_BIN__}/../app/configuration/bin/configuration-app")
-  $APP $@ -config-file="../../../configs/main.yml"
+  $APP $@ -config-file="${__ENVI_BIN__}/../configs/main.yml"
 }
 
 # Получить имя хоста
