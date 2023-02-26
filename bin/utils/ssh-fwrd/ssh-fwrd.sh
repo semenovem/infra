@@ -84,7 +84,7 @@ start() {
   host=$1
   shift
 
-#  проверить, запущен ли процесс
+  #  проверить, запущен ли процесс
 
   SERVICE_NAME="$(get_service_name $host)"
   [ -n "$__DRY__" ] && __info__ "запустить '${host}' '${SERVICE_NAME}'" && return 0
@@ -121,7 +121,7 @@ case "$ARG" in
       start $data
     done
   }
-  __run_configuration__ ssh-remote-forward -host "mini" | pipe
+  __run_configuration__ ssh-remote-forward -host __get_hostname__ | pipe
   ;;
 
 "stop")
@@ -134,17 +134,12 @@ case "$ARG" in
   systemctl list-units "ssh-fwrd-*" --all | grep -E '^\s*ssh-fwrd-' | awk '{print $1}' | pipe
   ;;
 
-"status")
-  #    systemctl list-units "ssh-fwrd-*" --all | grep -E '^\s*ssh-fwrd-'
-  systemctl list-units "ssh-fwrd-*" --all
-
-
-  ;;
+"status") systemctl list-units "ssh-fwrd-*" --all ;;
 
 "files")
-# TODO сделать просмотр файлов запущенных серсвисов
-# если запущенных нет - посмотреть новые файлы
- ;;
+  # TODO сделать просмотр файлов запущенных серсвисов
+  # если запущенных нет - посмотреть новые файлы
+  ;;
 
 *)
   __err__ "unknown arg '$ARG'"
