@@ -1,17 +1,27 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+. "${ROOT}/../../_lib/core.sh" || exit 1
 
 CONFIG_DIR="${ROOT}/config"
 CONFIG_FILE="${ROOT}/config.env"
-TORRENT_FILES_DIR="${ROOT}/torrent-files"
+TORRENT_FILES_DIR=
 DOWNLOADS_DIR=
+
+# TODO подтверждение устаноки при первом старте
+
+
+if [ ! -f "$CONFIG_FILE" ]; then
+  __confirm__ "Создать необходимые файлы для старта qbittorrent ?"
+fi
 
 if [ ! -f "$CONFIG_FILE" ]; then
   {
-    echo "# В этом файле можно переопределить значения переменных"
+    echo "# В этом файле нужно указать пути к директориям"
     echo
+    echo "# Директория для загрузки:"
     echo "__DOWNLOADS_DIR__="
+    echo "# Директория для файлов торрентов:"
     echo "__TORRENT_FILES_DIR__="
   } >"$CONFIG_FILE"
 fi
