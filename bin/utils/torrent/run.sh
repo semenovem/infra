@@ -7,6 +7,7 @@ CONFIG_DIR="${ROOT}/config"
 CONFIG_FILE="${ROOT}/config.env"
 TORRENT_FILES_DIR=
 DOWNLOADS_DIR=
+GUI="$(id -g)"
 
 # TODO подтверждение устаноки при первом старте
 
@@ -19,10 +20,12 @@ if [ ! -f "$CONFIG_FILE" ]; then
   {
     echo "# В этом файле нужно указать пути к директориям"
     echo
-    echo "# Директория для загрузки:"
+    echo "# Каталог для загрузки:"
     echo "__DOWNLOADS_DIR__="
-    echo "# Директория для файлов торрентов:"
+    echo "# Каталок для файлов торрентов:"
     echo "__TORRENT_FILES_DIR__="
+    echo "# ID группы, с котороый нужно создавать загруженные файлы:"
+    echo "__GUI__="
   } >"$CONFIG_FILE"
 fi
 
@@ -45,9 +48,8 @@ set +o allexport
 docker run -d \
   --restart unless-stopped \
   --name=qbittorrent \
-  --user "$(id -u):$(id -g)" \
   -e PUID="$(id -u)" \
-  -e PGID="$(id -g)" \
+  -e PGID="$__GUI__" \
   -e TZ=Etc/UTC \
   -e WEBUI_PORT=8080 \
   -p 8080:8080 \
