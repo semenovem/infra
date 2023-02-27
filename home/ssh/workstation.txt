@@ -10,41 +10,41 @@ Host open-msk1
   IdentityFile  ~/.ssh/id_ecdsa
   RequestTTY    yes
   # --- home
-  LocalForward  2200 127.0.0.1:2200  # ssh   22
-  LocalForward  10090 127.0.0.1:10090  # xeoma 10090
+  LocalForward  2200 127.0.0.1:2200    # ssh
+  LocalForward  10090 127.0.0.1:10090  # xeoma
   # --- srv1
-  LocalForward  2201 127.0.0.1:2201  # ssh
+  LocalForward  2201 127.0.0.1:2201    # ssh
   LocalForward  11941 127.0.0.1:11941  # openvpn
   # --- srv2
-  LocalForward  2202 127.0.0.1:2202  # ssh
+  LocalForward  2202 127.0.0.1:2202    # ssh
   LocalForward  11942 127.0.0.1:11942  # openvpn
   # --- srv21
-  LocalForward  2203 127.0.0.1:2203  # ssh
+  LocalForward  2203 127.0.0.1:2203    # ssh
   LocalForward  11943 127.0.0.1:11943  # openvpn
   # --- srv22
-  LocalForward  2204 127.0.0.1:2204  # ssh
+  LocalForward  2204 127.0.0.1:2204    # ssh
   LocalForward  11944 127.0.0.1:11944  # openvpn
 
 
 Host open-rr4
-  HostName      msk1.evgio.com
+  HostName      rr4.evgio.com
   User          adman
   Port          2257
   User          adman
   IdentityFile  ~/.ssh/id_ecdsa
   RequestTTY    yes
   # --- home
-  LocalForward  2200 127.0.0.1:2200  # ssh   22
-  LocalForward  10090 127.0.0.1:10090  # xeoma 10090
+  LocalForward  2200 127.0.0.1:2200    # ssh
+  LocalForward  10090 127.0.0.1:10090  # xeoma
   # --- srv1
-  LocalForward  2201 127.0.0.1:2201  # ssh
+  LocalForward  2201 127.0.0.1:2201    # ssh
   LocalForward  11941 127.0.0.1:11941  # openvpn
   # --- srv2
-  LocalForward  2202 127.0.0.1:2202  # ssh
+  LocalForward  2202 127.0.0.1:2202    # ssh
   LocalForward  11942 127.0.0.1:11942  # openvpn
   # --- srv21
-  LocalForward  2203 127.0.0.1:2203  # ssh
+  LocalForward  2203 127.0.0.1:2203    # ssh
   LocalForward  11943 127.0.0.1:11943  # openvpn
   # --- srv22
-  LocalForward  2204 127.0.0.1:2204  # ssh
+  LocalForward  2204 127.0.0.1:2204    # ssh
   LocalForward  11944 127.0.0.1:11944  # openvpn

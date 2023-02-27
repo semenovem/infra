@@ -1,5 +1,0 @@
-
-
-
-/home/evg/.vnc
-myvnc start / stop / restart

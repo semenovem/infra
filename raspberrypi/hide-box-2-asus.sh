@@ -6,7 +6,7 @@ sudo apt -y upgrade && \
 sudo DEBIAN_FRONTEND=noninteractive apt -y install hostapd \
   dnsmasq openvpn netfilter-persistent iptables-persistent lshw vim mc iptraf-ng \
   git raspberrypi-kernel-headers build-essential dkms autossh iperf bc sshfs openvpn \
-  dnsutils telnet pwgen
+  dnsutils telnet pwgen wireguard
 
 
 # ----------------------------------------------------------------------------
