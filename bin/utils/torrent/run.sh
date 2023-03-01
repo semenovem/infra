@@ -11,7 +11,6 @@ GUI="$(id -g)"
 
 # TODO подтверждение устаноки при первом старте
 
-
 if [ ! -f "$CONFIG_FILE" ]; then
   __confirm__ "Создать необходимые файлы для старта qbittorrent ?"
 fi
@@ -34,6 +33,8 @@ set -o allexport
 . "$CONFIG_FILE" || exit 1
 set +o allexport
 
+[ -n "$__GUI__" ] && GUI="$__GUI__"
+
 [ -n "$__DOWNLOADS_DIR__" ] && DOWNLOADS_DIR="$__DOWNLOADS_DIR__"
 [ -n "$__TORRENT_FILES_DIR__" ] && TORRENT_FILES_DIR="$__TORRENT_FILES_DIR__"
 
@@ -45,11 +46,22 @@ set +o allexport
   echo "Torrent files directory does not exist: '${TORRENT_FILES_DIR}'" &&
   exit 1
 
+# Проверить запущен ли сервис
+# если в контейнер остановлен - удалить и пересоздать
+
+HAS=$(docker ps --filter=name=qbittorrent -q) || exit 1
+[ -n "$HAS" ] && exit 0
+
+HAS=$(docker ps --filter=name=qbittorrent -q -a) || exit 1
+if [ -n "$HAS" ]; then
+  docker rm qbittorrent || exit 1
+fi
+
 docker run -d \
   --restart unless-stopped \
   --name=qbittorrent \
   -e PUID="$(id -u)" \
-  -e PGID="$__GUI__" \
+  -e PGID="$GUI" \
   -e TZ=Etc/UTC \
   -e WEBUI_PORT=8080 \
   -p 8080:8080 \
