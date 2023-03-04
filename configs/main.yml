@@ -7,7 +7,9 @@ roles:
     allow_incoming_ssh_for_roles: WORKSTATION MINI_SERVER MINI_SERVER
 
   - name: WORKSTATION
+
   - name: MINI_SERVER
+    allow_incoming_ssh_for_roles: WORKSTATION HOME_SERVER STANDBY_SERVER
 
   - name: PROXY_SERVER
     allow_incoming_ssh_for_roles: WORKSTATION HOME_SERVER STANDBY_SERVER MINI_SERVER
@@ -16,7 +18,7 @@ roles:
     allow_incoming_ssh_for_roles: WORKSTATION
 
   - name: STANDBY_SERVER
-    allow_incoming_ssh_for_roles: HOME_SERVER WORKSTATION
+    allow_incoming_ssh_for_roles: HOME_SERVER WORKSTATION MINI_SERVER
 
 
 # Проброс портов

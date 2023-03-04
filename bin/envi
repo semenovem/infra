@@ -83,5 +83,5 @@ task "2." && sh "${ROOT}/utils/envi-sys/update-repo.sh" -force
 task "3." && sh "${ROOT}/utils/envi-sys/get-role.sh"
 task "4." && sh "${ROOT}/utils/envi-sys/set-role.sh"
 task "5." && sh "${ROOT}/_utils/ssh-config-upd.sh" $@
-task "6." && sh "${ROOT}/_utils/ssh-authorized-keys-upd.sh" $@
+task "6." && sh "${ROOT}/utils/envi-sys/ssh-authorized-keys.sh" $@
 task "7." && sh "${ROOT}/../app/configuration/build.sh"

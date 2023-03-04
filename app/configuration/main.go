@@ -7,7 +7,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"syscall"
 )
 
 // go run main.go  -config-file=fgfg/sdfdf.conf verify
@@ -31,7 +30,7 @@ func init() {
 
 func main() {
 	if err := run(os.Args[1:]); err != nil {
-		syscall.Exit(1)
+		os.Exit(1)
 	}
 
 	os.Exit(0)

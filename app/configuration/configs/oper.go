@@ -27,7 +27,7 @@ func (c *Config) GetHostRoleByName(n string) string {
 // GetAllowIncomingSSHByRole Получить роли, которые могут подключиться к хосту
 func (c *Config) GetAllowIncomingSSHByRole(n string) []string {
 	for _, role := range c.Roles {
-		if role.Name == n {
+		if strings.EqualFold(role.Name, n) {
 			return role.AllowIncomingSSHForRoles()
 		}
 	}
