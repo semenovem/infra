@@ -78,10 +78,12 @@ MENU="
 TASK=
 main || exit 1
 
-task "1." && sh "${ROOT}/utils/envi-sys/install.sh"
-task "2." && sh "${ROOT}/utils/envi-sys/update-repo.sh" -force
-task "3." && sh "${ROOT}/utils/envi-sys/get-role.sh"
-task "4." && sh "${ROOT}/utils/envi-sys/set-role.sh"
-task "5." && sh "${ROOT}/_utils/ssh-config-upd.sh" $@
-task "6." && sh "${ROOT}/utils/envi-sys/ssh-authorized-keys.sh" $@
+ENVI_SYS_DIR="${ROOT}/utils/envi-sys"
+
+task "1." && sh "${ENVI_SYS_DIR}/install.sh"
+task "2." && sh "${ENVI_SYS_DIR}/update-repo.sh" -force
+task "3." && sh "${ENVI_SYS_DIR}/get-role.sh"
+task "4." && sh "${ENVI_SYS_DIR}/set-role.sh"
+task "5." && sh "${ENVI_SYS_DIR}/ssh-config-upd.sh" $@
+task "6." && sh "${ENVI_SYS_DIR}/ssh-authorized-keys.sh" $@
 task "7." && sh "${ROOT}/../app/configuration/build.sh"

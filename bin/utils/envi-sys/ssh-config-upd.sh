@@ -3,7 +3,7 @@
 # Запись файла ssh config
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../_lib/core.sh" || exit 1
+. "${ROOT}/../../_lib/core.sh" || exit 1
 
 TARGET_FILE="${HOME}/.ssh/config"
 SSH_CONFIG_FILE=$(mktemp) || exit 1

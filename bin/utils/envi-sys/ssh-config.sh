@@ -5,12 +5,12 @@
 # $2 - файл предпросмотра
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
-. "${ROOT}/../_lib/core.sh" || exit 1
-. "${ROOT}/../_lib/role.sh" || exit 1
+. "${ROOT}/../../_lib/core.sh" || exit 1
+. "${ROOT}/../../_lib/role.sh" || exit 1
 
-__CFG_WORKSTATION__="${ROOT}/../../home/ssh/workstation.txt"
-__CFG_SERVER__="${ROOT}/../../home/ssh/server.txt"
-__CFG_LOCAL__="${ROOT}/../../home/ssh/local.txt"
+__CFG_WORKSTATION__="${ROOT}/../../../home/ssh/workstation.txt"
+__CFG_SERVER__="${ROOT}/../../../home/ssh/server.txt"
+__CFG_LOCAL__="${ROOT}/../../../home/ssh/local.txt"
 CONTENT=
 
 SSH_CONFIG_FILE=$1
