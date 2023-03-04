@@ -6,16 +6,10 @@ echo "[DEBU] __PKI_DIR__    = ${__PKI_DIR__}"
 echo "[DEBU] __SECRET_TA__  = ${__SECRET_TA__}"
 echo "[DEBU] ======================== ----------- ========================"
 
-[ -d "$__PKI_DIR__" ] &&
-  [ "$(find "$__PKI_DIR__" -maxdepth 1 | wc -l)" -gt 1 ] &&
-  echo "not an empty dir for pki. path inside docker container: [${__PKI_DIR__}]" &&
-  exit 0
+[ ! -d "$__PKI_DIR__" ] && echo "dir pki [__PKI_DIR__] does not exist" && exit 1
 
-if [ ! -d "$__PKI_DIR__" ]; then
-  mkdir "$__PKI_DIR__" || exit 1
-fi
-
-chmod 0700 "$__PKI_DIR__" || exit 1
+[ "$(find "$__PKI_DIR__" -maxdepth 1 | wc -l)" -gt 1 ] &&
+  echo "not an empty dir pki [__PKI_DIR__]" && exit 0
 
 TMP_DIR=$(mktemp -d) || exit 1
 

@@ -3,24 +3,29 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/../../_lib/core.sh" || exit 1
 
-OPENVPN_PKI_DIR="${HOME}/_envi_openvpn_pki" # Инфраструктура ключей openvpn
+INFRA_PKI_DIR="${HOME}/_envi_openvpn_pki" # Инфраструктура ключей openvpn
 IMAGE="envi/easy_rsa:1.0"
 DOCKER_CMD=$(__core_get_virtualization_app__) || exit 1
 OPER="$1"
 PKI_NAME=$2
 CN_NAME=$3 # Common Name of certificate
-PKI_DIR="${OPENVPN_PKI_DIR}/${PKI_NAME}-pki"
+PKI_DIR="${INFRA_PKI_DIR}/${PKI_NAME}-pki"
 
 help() {
   __info__ "install name-pki          - установка"
   __info__ "issue   name-pki cn-cert  - выпуск сертификата"
-  __info__ "  name-pki  - имя директории с инфраструктурой ключей"
-  __info__ "  cn-cert   - имя сертификата"
+  __info__ "  name-pki  - \$1 имя директории с инфраструктурой ключей"
+  __info__ "  cn-cert   - \$2 имя сертификата"
 }
 
-if [ ! -d "$OPENVPN_PKI_DIR" ]; then
-  mkdir "$OPENVPN_PKI_DIR" || exit 1
-  chmod 0700 "$OPENVPN_PKI_DIR" || exit 1
+if [ ! -d "$INFRA_PKI_DIR" ]; then
+  mkdir "$INFRA_PKI_DIR" || exit 1
+  chmod 0700 "$INFRA_PKI_DIR" || exit 1
+fi
+
+if [ ! -d "$PKI_DIR" ]; then
+  mkdir "$PKI_DIR" || exit 1
+  chmod 0700 "$PKI_DIR" || exit 1
 fi
 
 __core_has_docker_image__ "$IMAGE"
@@ -34,14 +39,8 @@ case $? in
 *) exit 1 ;;
 esac
 
-# 1. установка pki инфраструктуры
-# 2. создание сертификатов сервера + клиента
-# 3. копирование данных на удаленный сервер
-#
-#
-
 check() {
-  [ -z "$PKI_NAME" ] && __err__ "не передано имя директории pki" && return 1
+  [ -z "$PKI_NAME" ] && __err__ "[PKI_NAME] pki directory name not passed" && return 1
   return 0
 }
 
@@ -57,7 +56,7 @@ execute() {
     -e "__CN__=${CN_NAME}" \
     -e "__PKI_NAME__=${PKI_NAME}" \
     -v "${PKI_DIR}:/app/pki:rw" \
-    -v "${OPENVPN_PKI_DIR}:/app/crypto:rw" \
+    -v "${INFRA_PKI_DIR}:/app/crypto:rw" \
     -v "${ROOT}/oper/install-pki.sh:/app/install-pki.sh:ro" \
     -v "${ROOT}/oper/issue.sh:/app/issue.sh:ro" \
     -v "${ROOT}/oper/build-client-cfg.sh:/app/build-client-cfg.sh:ro" \
@@ -77,7 +76,6 @@ case "$OPER" in
   ;;
 
   # Выпуск сертификата с указанным CN (Common Name)
-  # Если сертификат уже существует - вернет существующее значение
 "issue")
   check || exit 1
   [ ! -d "$PKI_DIR" ] && __err__ "directory [${PKI_DIR}] does not exist" && exit 1
