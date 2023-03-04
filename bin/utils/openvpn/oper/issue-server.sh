@@ -4,6 +4,8 @@ SERVER1_CN="evgio-server1-evg"
 SERVER2_CN="evgio-server2-evg"
 SERVER3_CN="evgio-server3-evg"
 
+
+
 server_issue_cert() {
   name=$1
 

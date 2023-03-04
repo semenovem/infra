@@ -180,11 +180,10 @@ __core_conf_get_rest_args__() {
 
 # получить название доступного приложения виртуализации (podman/docker)
 __core_get_virtualization_app__() {
-  CORE_CONF_CMD="podman"
-  which "$CORE_CONF_CMD" >/dev/null || CORE_CONF_CMD="docker"
-  which "$CORE_CONF_CMD" >/dev/null
-  [ $? -ne 0 ] && __err__ "podman/docker not installed" && return 1
-  echo $CORE_CONF_CMD
+  which "docker" >/dev/null && echo "docker" && return 0
+  which "podman" >/dev/null && echo "podman" && return 0
+
+  __err__ "podman/docker not installed" && return 1
 }
 
 # проверить, есть ли образ
@@ -198,21 +197,6 @@ __core_has_docker_image__() {
   CORE_CONF_HAS=$($CORE_CONF_CMD image ls --filter=reference="$CORE_CONF_NAME" -q) || return 2
   [ -n "$CORE_CONF_HAS" ] && return 0
   return 1
-}
-
-# Вернет директорию vpn_pki
-# return 1 - нет директории или пуста
-# TODO заменить использование переменной на этот метод
-__core_vpn_pki_dir__() {
-  [ ! -d "$__CORE_VPN_PKI_DIR__" ] &&
-    __err__ "dir vpn pki is not exist [${__CORE_VPN_PKI_DIR__}]" &&
-    return 1
-
-  [ "$(find "$__CORE_VPN_PKI_DIR__" -maxdepth 1 | wc -l)" -le 1 ] &&
-    __err__ "dir vpn pki is empty [${__CORE_VPN_PKI_DIR__}]" &&
-    return 1
-
-  echo "$__CORE_VPN_PKI_DIR__"
 }
 
 #
