@@ -23,7 +23,7 @@ if [ ! -d "$INFRA_PKI_DIR" ]; then
   chmod 0700 "$INFRA_PKI_DIR" || exit 1
 fi
 
-if [ ! -d "$PKI_DIR" ]; then
+if [ -n "$PKI_NAME" ] && [ ! -d "$PKI_DIR" ]; then
   mkdir "$PKI_DIR" || exit 1
   chmod 0700 "$PKI_DIR" || exit 1
 fi
