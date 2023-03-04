@@ -195,6 +195,7 @@ hosts:
     ssh_remote_forward:
       ports:
         - 2200::22 # ssh
+        - 11940:0.0.0.0:1194  # openvpn
         - 10080::10080    # xeoma
 
 
@@ -213,7 +214,6 @@ hosts:
       ports:
         - 2201::22            # ssh
         - 11941:0.0.0.0:1194  # openvpn
-        - 44401:0.0.0.0:44400 # wireguard
 
   - name: srv2
     role: STANDBY_SERVER
@@ -230,7 +230,6 @@ hosts:
       ports:
         - 2202::22            # ssh
         - 11942:0.0.0.0:1194  # openvpn
-        - 44402:0.0.0.0:44400 # wireguard
 
 
   - name: srv21
@@ -251,7 +250,6 @@ hosts:
       ports:
         - 2223::22            # ssh
         - 11943:0.0.0.0:1194  # openvpn
-        - 44403:0.0.0.0:44400 # wireguard
 
 
   - name: srv22
@@ -272,5 +270,4 @@ hosts:
       ports:
         - 2224::22            # ssh
         - 11944:0.0.0.0:1194  # openvpn
-        - 44404:0.0.0.0:44400 # wireguard
 
