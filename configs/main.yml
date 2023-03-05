@@ -48,6 +48,12 @@ hosts:
       remote:
         user:
         pub_key: ""
+    ssh_remote_forward:
+      hosts: msk1 rr1 rr4
+      ports:
+        - 30022:0.0.0.0:22   # ssh
+        - 31194:0.0.0.0:1194 # vpn - 0.0.0.0 - на все интерфейсы
+        - 31194::1194        # vnc - :: для локальной сети
 
 
   # ---------------------------------------------------------------------------------
@@ -125,10 +131,11 @@ hosts:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
     ssh_remote_forward:
-      hosts: msk1
+      hosts: msk1 rr1 rr4
       ports:
-        - 20022:0.0.0.0:22   # ssh
-        - 20443:0.0.0.0:1194 # vpn
+        - 30022:0.0.0.0:22   # ssh
+        - 31194:0.0.0.0:1194 # vpn
+        - 35900::5900        # vnc
 
 
   # work 16"
