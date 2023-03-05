@@ -112,6 +112,7 @@ systemctl start openvpn-server@server-443-udp.service
 systemctl status openvpn-server@server-443-udp.service
 
 systemctl -f enable openvpn-server@server-tcp.service
+systemctl stop openvpn-server@server-tcp.service
 systemctl start openvpn-server@server-tcp.service
 systemctl restart openvpn-server@server-tcp.service
 systemctl status openvpn-server@server-tcp.service
