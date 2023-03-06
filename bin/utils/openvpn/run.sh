@@ -16,16 +16,12 @@ help() {
   __info__ "issue   name-pki cn-cert  - выпуск сертификата"
   __info__ "  name-pki  - \$1 имя директории с инфраструктурой ключей"
   __info__ "  cn-cert   - \$2 имя сертификата"
+  __info__ "ls                        - список"
 }
 
 if [ ! -d "$INFRA_PKI_DIR" ]; then
   mkdir "$INFRA_PKI_DIR" || exit 1
   chmod 0700 "$INFRA_PKI_DIR" || exit 1
-fi
-
-if [ -n "$PKI_NAME" ] && [ ! -d "$PKI_DIR" ]; then
-  mkdir "$PKI_DIR" || exit 1
-  chmod 0700 "$PKI_DIR" || exit 1
 fi
 
 __core_has_docker_image__ "$IMAGE"
@@ -67,22 +63,29 @@ execute() {
 # =========================================================
 
 case "$OPER" in
-# Установка инфраструктуры PKI
 "install")
+  # Установка инфраструктуры PKI
   check || exit 1
+
+  if [ -n "$PKI_NAME" ] && [ ! -d "$PKI_DIR" ]; then
+    mkdir "$PKI_DIR" || exit 1
+    chmod 0700 "$PKI_DIR" || exit 1
+  fi
 
   execute sh install-pki.sh || exit 1
   execute sh issue.sh server || exit 1
   ;;
 
-  # Выпуск сертификата с указанным CN (Common Name)
 "issue")
+  # Выпуск сертификата с указанным CN (Common Name)
   check || exit 1
   [ ! -d "$PKI_DIR" ] && __err__ "directory [${PKI_DIR}] does not exist" && exit 1
   [ -z "$CN_NAME" ] && __err__ "empty CN_NAME" && exit 1
 
   execute sh issue.sh client
   ;;
+
+"ls") ls -l "$INFRA_PKI_DIR" ;;
 
 *help | *h) help && exit 0 ;;
 *)

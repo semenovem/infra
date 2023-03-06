@@ -84,7 +84,7 @@ if [ "$TYPE" = "client" ]; then
     "$__PKI_DIR__" \
     "${__CFG_DIR__}/client-linux-tmpl.ovpn" \
     "$__CN__" \
-    "${__CRYPTO_DIR__}/${__PKI_NAME__}-client-${__CN__}-linux.ovpn" \
+    "${__CRYPTO_DIR__}/${__PKI_NAME__}-${__CN__}-linux.ovpn" \
     "msk1.evgio.com" \
     "1194" \
     "tcp"
@@ -93,7 +93,7 @@ if [ "$TYPE" = "client" ]; then
     "$__PKI_DIR__" \
     "${__CFG_DIR__}/client-macos-tmpl.ovpn" \
     "$__CN__" \
-    "${__CRYPTO_DIR__}/${__PKI_NAME__}-client-${__CN__}-macos.ovpn" \
+    "${__CRYPTO_DIR__}/${__PKI_NAME__}-${__CN__}-macos.ovpn" \
     "msk1.evgio.com" \
     "1194" \
     "tcp"
