@@ -44,9 +44,9 @@ systemctl daemon-reload
 
 # ----------------
 
-sudo systemctl -f enable openvpn-server@server-33440-tcp
-sudo systemctl start openvpn-server@server-33440-tcp
-sudo systemctl stop openvpn-server@server-33440-tcp
-sudo systemctl status openvpn-server@server-33440-tcp
+sudo systemctl -f enable openvpn-server@server-udp
+sudo systemctl start openvpn-server@server-udp
+sudo systemctl stop openvpn-server@server-udp
+sudo systemctl status openvpn-server@server-udp
 
 

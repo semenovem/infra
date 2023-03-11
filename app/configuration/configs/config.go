@@ -4,6 +4,11 @@ import (
 	"strings"
 )
 
+var (
+	errDuplicateRoleMsg = "root/Roles contains duplicate role [%s]"
+	errRoleExistsMsg    = "role [%s] does not exist"
+)
+
 type Config struct {
 	Version          string            `yaml:"version"`
 	Hosts            []*Host           `yaml:"hosts"`

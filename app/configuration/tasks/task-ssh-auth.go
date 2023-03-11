@@ -10,9 +10,15 @@ func newSSHAuthorizedKeysTask() *Task {
 }
 
 func sshAuthorizedKeysTask(t *Task) error {
+	roleName := getRoleFlag(t.fs)
+
+	err := t.cfg.IsRoleExists(roleName)
+	if err != nil {
+		return err
+	}
+
 	var (
-		role       = getRoleFlag(t.fs)
-		allowRoles = t.cfg.GetAllowIncomingSSHByRole(role)
+		allowRoles = t.cfg.GetAllowIncomingSSHByRole(roleName)
 		pybKeys    = t.cfg.GetPubKeysOfUserMainByRoles(allowRoles)
 	)
 

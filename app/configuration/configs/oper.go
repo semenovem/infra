@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -70,6 +71,39 @@ func (c *Config) GetSSHLocalForwardByHostName(n string) *SSHRemoteForward {
 		}
 
 		return pfw
+	}
+
+	return nil
+}
+
+// GetExistingRoles Возвращает список существующих ролей
+func (c *Config) GetExistingRoles() (map[string]*Role, error) {
+	roles := make(map[string]*Role)
+
+	for _, r := range c.Roles {
+		n := strings.ToLower(r.Name)
+
+		if _, ok := roles[n]; ok {
+			return nil, fmt.Errorf(errDuplicateRoleMsg, r.Name)
+		}
+		roles[n] = r
+	}
+
+	return roles, nil
+}
+
+// IsRoleExists проверяет - существует ли роль
+func (c *Config) IsRoleExists(roleName string) error {
+	name := strings.ToLower(roleName)
+
+	roles, err := c.GetExistingRoles()
+	if err != nil {
+		return err
+	}
+
+	_, ok := roles[name]
+	if !ok {
+		return fmt.Errorf(errRoleExistsMsg, name)
 	}
 
 	return nil
