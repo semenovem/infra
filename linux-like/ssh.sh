@@ -6,6 +6,9 @@
 sudo vim /etc/ssh/sshd_config
 PasswordAuthentication no
 PermitRootLogin no
+AllowTcpForwarding yes
+#GatewayPorts yes
+
 systemctl restart sshd.service
 
 
