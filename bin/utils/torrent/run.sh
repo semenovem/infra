@@ -7,6 +7,7 @@ CONFIG_DIR="${ROOT}/config"
 CONFIG_FILE="${ROOT}/config.env"
 TORRENT_FILES_DIR=
 DOWNLOADS_DIR=
+DOWNLOADS_INCOMPLETE_DIR=
 GUI="$(id -g)"
 
 if [ ! -f "$CONFIG_FILE" ]; then
@@ -19,7 +20,9 @@ if [ ! -f "$CONFIG_FILE" ]; then
     echo
     echo "# Каталог для загрузки:"
     echo "__DOWNLOADS_DIR__="
-    echo "# Каталок для файлов торрентов:"
+    echo "# Каталог для не завершенных загрузок:"
+    echo "__INCOMPLETE_DIR__="
+    echo "# Каталог для файлов торрентов:"
     echo "__TORRENT_FILES_DIR__="
     echo "# ID группы, с котороый нужно создавать загруженные файлы:"
     echo "__GUI__="
@@ -34,10 +37,15 @@ set +o allexport
 [ -n "$__GUI__" ] && GUI="$__GUI__"
 
 [ -n "$__DOWNLOADS_DIR__" ] && DOWNLOADS_DIR="$__DOWNLOADS_DIR__"
+[ -n "$__INCOMPLETE_DIR__" ] && INCOMPLETE_DIR="$__INCOMPLETE_DIR__"
 [ -n "$__TORRENT_FILES_DIR__" ] && TORRENT_FILES_DIR="$__TORRENT_FILES_DIR__"
 
 [ ! -d "$DOWNLOADS_DIR" ] &&
   echo "Download directory does not exist: '${DOWNLOADS_DIR}'" &&
+  exit 1
+
+[ ! -d "$INCOMPLETE_DIR" ] &&
+  echo "Incomplete directory does not exist: '${INCOMPLETE_DIR}'" &&
   exit 1
 
 [ ! -d "$TORRENT_FILES_DIR" ] &&
@@ -48,7 +56,7 @@ set +o allexport
 # если в контейнер остановлен - удалить и пересоздать
 
 HAS=$(docker ps --filter=name=qbittorrent -q) || exit 1
-[ -n "$HAS" ] && exit 0
+[ -n "$HAS" ] && __info__ "already running" && exit 0
 
 HAS=$(docker ps --filter=name=qbittorrent -q -a) || exit 1
 if [ -n "$HAS" ]; then
@@ -67,5 +75,6 @@ docker run -d \
   -p 6881:6881/udp \
   -v "${CONFIG_DIR}:/config" \
   -v "${DOWNLOADS_DIR}:/downloads" \
+  -v "${INCOMPLETE_DIR}:/incomplete" \
   -v "${TORRENT_FILES_DIR}:/torrent-files" \
   lscr.io/linuxserver/qbittorrent:4.5.1
