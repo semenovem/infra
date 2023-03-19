@@ -167,3 +167,10 @@ sudo vim /etc/fstab
  yum install policycoreutils-python
 
 semanage port -a -t ssh_port_t -p tcp 2257
+
+
+###################################отк
+# Отключить логи
+systemctl status rsyslog
+systemctl stop rsyslog
+systemctl disable rsyslog

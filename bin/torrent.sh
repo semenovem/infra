@@ -2,11 +2,19 @@
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 
-if [ "$1" = "stop" ]; then
+case $1 in
+"stop")
   sh "${ROOT}/utils/torrent/stop.sh"
   exit $?
-fi
+  ;;
+"run")
+  sh "${ROOT}/utils/torrent/run.sh" $@ || exit 1
+  docker logs -f qbittorrent
+  exit $?
+  ;;
 
-sh "${ROOT}/utils/torrent/run.sh" $@
+*)
+  echo "use torrent.sh [run | stop]"
+  ;;
 
-docker logs -f qbittorrent
+esac

@@ -80,3 +80,8 @@ xserver-command=X -s 0 dpms
 `sudo iwlist wlan0 scan | grep ESSID`
 
 
+------------------------------------  
+> air play
+`https://github.com/FD-/RPiPlay`
+
+

@@ -6,7 +6,7 @@
 # 5.45.120.70
 Host eu eu1
   HostName     eu1.evgio.com
-  Port         2257
+  Port         22
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
@@ -28,13 +28,6 @@ Host rr3
 # 185.87.51.94 (ihor-hosting.ru)
 Host rr4
   HostName     rr4.evgio.com
-  Port         2257
-  User         adman
-  IdentityFile ~/.ssh/id_ecdsa
-
-# spb (timeweb.ru)
-Host spb
-  HostName     spb.evgio.com
   Port         2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa

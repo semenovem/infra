@@ -9,10 +9,8 @@ TORRENT_FILES_DIR=
 DOWNLOADS_DIR=
 GUI="$(id -g)"
 
-# TODO подтверждение устаноки при первом старте
-
 if [ ! -f "$CONFIG_FILE" ]; then
-  __confirm__ "Создать необходимые файлы для старта qbittorrent ?"
+  __confirm__ "Создать необходимые файлы для старта qbittorrent ?" || exit 0
 fi
 
 if [ ! -f "$CONFIG_FILE" ]; then
