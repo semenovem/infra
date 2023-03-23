@@ -204,6 +204,7 @@ hosts:
         - 2200::22            # ssh
         - 11940:0.0.0.0:1194  # openvpn
         - 10090::10090        # xeoma
+        - 3000::3000          # temporary
 
 
   - name: srv1

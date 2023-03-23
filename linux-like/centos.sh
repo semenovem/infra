@@ -142,7 +142,7 @@ firewall-cmd --permanent --list-all
 firewall-cmd --get-services
 firewall-cmd --get-zones
 firewall-cmd --permanent --add-service=http
-firewall-cmd --zone=public --permanent --add-port 8080/tcp
+firewall-cmd --zone=public --permanent --add-port 3003/tcp
 firewall-cmd --reload
 
 

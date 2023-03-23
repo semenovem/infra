@@ -24,6 +24,9 @@ __CORE_OS_IS_RASPBIAN__=
 
 CORE_OS_RELEASE="/etc/os-release"
 
+# TODO сделать получение типа системы через это:
+#$(uname -s)
+
 if [ -f "$CORE_OS_RELEASE" ]; then
   __CORE_OS_KIND__="$__CORE_OS_KIND_LINUX_CONST__"
   __OS_LINUX_KIND__="$__CORE_OS_KIND_LINUX_CONST__"
