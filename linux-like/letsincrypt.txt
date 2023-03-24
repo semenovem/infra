@@ -1,0 +1,4 @@
+
+ sudo certbot certonly --standalone -d test.domain.ru
+
+https://trueconf.ru/blog/baza-znaniy/sozdanie-sertifikata-lets-encrypt-na-linux.html

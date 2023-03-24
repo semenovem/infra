@@ -47,10 +47,7 @@ firewall-cmd --zone=public --permanent \
   --add-port 5001/tcp \
   --add-port 5001/udp \
   --add-port 17593/tcp \
-  --add-port 27593/tcp \
-  --add-port 37593/tcp
-
-# 17593, 27593, 37593 - openvpn из дома
+  --add-port 27593/tcp
 
 firewall-cmd --reload
 

@@ -205,6 +205,7 @@ hosts:
         - 11940:0.0.0.0:1194  # openvpn
         - 10090::10090        # xeoma
         - 3000::3000          # temporary
+        - 3002::3002          # temporary
 
 
   - name: srv1
