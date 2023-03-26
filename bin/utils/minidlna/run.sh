@@ -20,7 +20,7 @@ case "$1" in
 "start")
   running && __info__ "already running" && exit 0
 
-  minidlnad -f "$CONFIG_FILE" -P "$PID_FILE"
+  minidlnad -f "$CONFIG_FILE" -P "$PID_FILE" -R -r
   ;;
 
 "stop")
