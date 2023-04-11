@@ -33,7 +33,7 @@ func newHelpTask() *Task {
 
 func newPWDTask() *Task {
 	return &Task{
-		name:  "pwd",
+		name:  pwdTaskName,
 		usage: "Текущая директория",
 		run: func(_ *Task) error {
 			path, err := os.Getwd()

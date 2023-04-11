@@ -6,6 +6,7 @@ import (
 )
 
 const (
+	// Описание флагов
 	configFileFlagUsage = "файл конфигурации"
 	debugFlagUsage      = "отладочный вывод"
 	hostFlagUsage       = "имя хоста"
@@ -13,15 +14,20 @@ const (
 	versionFlagUsage    = "версия приложения"
 	roleFlagUsage       = "роль"
 
-	// флаги
+	// Флаги
 	debugFlagName      = "debug"
 	hostFlagName       = "host"
 	configFileFlagName = "config-file"
 	roleFlagName       = "role"
 
-	// команды
-	versionTaskName = "version"
-	helpTaskName    = "help"
+	// Команды
+	versionTaskName           = "version"
+	helpTaskName              = "help"
+	pwdTaskName               = "pwd"
+	sshRemoteForwardTaskName  = "ssh-remote-forward"
+	sshAuthorizedKeysTaskName = "ssh-authorized-keys"
+	sshConfigTaskName         = "ssh-config"
+	verifyTaskName            = "verify"
 )
 
 func extract(fs *flag.FlagSet, n string) string {

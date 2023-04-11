@@ -1,10 +1,13 @@
 package tasks
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 func newPortForwardingTask() *Task {
 	return &Task{
-		name:  "ssh-remote-forward",
+		name:  sshRemoteForwardTaskName,
 		usage: "данные о пробросе портов",
 		flags: []flagSet{addHostFlag},
 		run:   sshRemoteForwardTask,
@@ -16,6 +19,8 @@ func sshRemoteForwardTask(t *Task) error {
 		hostName     = getHostFlag(t.fs)
 		localForward = t.cfg.GetSSHLocalForwardByHostName(hostName)
 	)
+
+	fmt.Println(">>>>>>>>>> ", localForward)
 
 	if localForward != nil {
 		hosts, err := localForward.GetItems()

@@ -2,7 +2,7 @@ package tasks
 
 func newSSHConfigTask() *Task {
 	return &Task{
-		name:  "ssh-config",
+		name:  sshConfigTaskName,
 		usage: "создать файл ssh config",
 		flags: []flagSet{addHostFlag},
 		run:   sshConfigTask,

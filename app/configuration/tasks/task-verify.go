@@ -7,7 +7,7 @@ import (
 
 func newVerifierTask() *Task {
 	return &Task{
-		name:  "verify",
+		name:  verifyTaskName,
 		usage: "проверяет валидность файла конфигурации",
 		flags: []flagSet{},
 		run:   verifierTask,

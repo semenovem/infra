@@ -52,8 +52,8 @@ type Role struct {
 type SSHRemoteForward struct {
 	HostsRaw  string   `yaml:"hosts,omitempty"`
 	PortsRaw  []string `yaml:"ports,omitempty"`
-	User      []string `yaml:"user,omitempty"`
-	ConnectTo []string `yaml:"connect_to,omitempty"` //
+	User      string   `yaml:"user,omitempty"`
+	ConnectTo []string `yaml:"connect_to,omitempty"`
 }
 
 func (o Role) AllowIncomingSSHForRoles() []string {
