@@ -3,7 +3,7 @@ version: 1.0.0
 # Свойства роли
 roles:
   - name: EXAMPLE       # Название роли
-    # Разрешены входящие соединения
+    # Разрешены входящие ssh подключения
     allow_incoming_ssh_for_roles: WORKSTATION MINI_SERVER MINI_SERVER
 
   - name: WORKSTATION
