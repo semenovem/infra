@@ -250,7 +250,7 @@ hosts:
 
 
   - name: office-server
-    role: __CORE_ROLE_OFFICE_SERVER_CONST__
+    role: OFFICE_SERVER
     description:
     public:
       url:
@@ -267,7 +267,6 @@ hosts:
       ports:
         - 61022:0.0.0.0:22    # ssh
         - 61194:0.0.0.0:1194  # vpn
-#        - 61080:0.0.0.0:10090 # cctv
 
 
 

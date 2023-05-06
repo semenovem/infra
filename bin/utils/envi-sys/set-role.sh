@@ -38,7 +38,7 @@ main() {
   read -rp "Номер роли. [q для выхода]: " ans
 
   case "$ans" in
-  "1" | "2" | "3" | "4" | "5")
+  "1" | "2" | "3" | "4" | "5" | "6")
     role=$(get_role_name_by_id "$ans")
     [ $? -ne 0 ] && echo "нет такого id '$ans'" && return 1
     ;;

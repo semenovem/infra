@@ -20,7 +20,7 @@ WORKING_DIRECTORY="$(__realpath__ "$ROOT")" || exit 1
 [ ! -d "$SYSTEMMD_DIR" ] && echo "ERR: dir '${SYSTEMMD_DIR}' not exist" && exit 1
 
 help() {
-  echo "use: [ start | restart | stop | status | files ]"
+  echo "use: [ start | restart | stop | status | files | show ]"
 }
 
 tmpl() {
@@ -37,7 +37,7 @@ getPathAutosshPidFile() {
 }
 
 get_service_name() {
-  echo "${PREFIX_SERVICE_NAME}-$1.service"
+  echo "${PREFIX_SERVICE_NAME}-$(echo $1 | grep -Eo '[^@]+$' | grep -Eio '^[^.]+').service"
 }
 
 get_service_file_path() {
@@ -106,6 +106,7 @@ stop() {
 ARG="$1"
 [ -z "$ARG" ] && ARG="status"
 
+# ------------------------------------------------------
 case "$ARG" in
 "start")
   pipe() {
@@ -129,10 +130,19 @@ case "$ARG" in
   systemctl list-units "ssh-fwrd-*" --all | grep -E '^\s*ssh-fwrd-' | awk '{print $1}' | pipe
   ;;
 
-"status") systemctl list-units "ssh-fwrd-*" --all ;;
+"status")
+  help
+  systemctl list-units "ssh-fwrd-*" --all
+  ;;
+
+"show")
+  HOSTNAME=$(__get_hostname__) || exit 1
+
+  __run_configurator__ ssh-remote-forward -host "$HOSTNAME"
+  ;;
 
 "files")
-  # TODO сделать просмотр файлов запущенных серсвисов
+  # TODO сделать просмотр файлов запущенных сервисов
   # если запущенных нет - посмотреть новые файлы
   ;;
 
