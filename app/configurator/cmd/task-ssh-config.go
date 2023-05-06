@@ -1,4 +1,4 @@
-package tasks
+package cmd
 
 func newSSHConfigTask() *Task {
 	return &Task{

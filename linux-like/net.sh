@@ -42,3 +42,22 @@ curl ipecho.net/plain
 sudo route -n add 192.168.1.0/24 192.168.4.1
 sudo route -n delete 192.168.1.0/24 192.168.4.1
 
+
+############################################################
+# netplan
+# настройка Metrics
+
+vim /etc/netplan/00-installer-config.yaml
+
+```yaml
+network:
+  ethernets:
+    enp2s0:
+      dhcp4: true
+      dhcp4-overrides:
+        route-metric: 101
+    enp7s0:
+      dhcp4: true
+  version: 2
+```
+

@@ -29,12 +29,31 @@ func (c *SSHPortForward) FormatRemote() string {
 	forwards := make([]string, len(c.Forwards))
 
 	for i, v := range c.Forwards {
-		forwards[i] = v.FormatRemote()
+		forwards[i] = "-R " + v.FormatRemote()
 	}
 
 	out = append(out, " "+strings.Join(forwards, " "))
 
 	return strings.Join(out, "")
+}
+
+func ParseSSHConnForwards(ls []string) ([]*SSHPortForward, error) {
+	if len(ls) == 0 {
+		return nil, nil
+	}
+
+	var (
+		ret = make([]*SSHPortForward, len(ls))
+		err error
+	)
+
+	for i, v := range ls {
+		if ret[i], err = ParseSSHConnForward(v); err != nil {
+			return nil, err
+		}
+	}
+
+	return ret, nil
 }
 
 // ParseSSHConnForward
@@ -57,17 +76,8 @@ func ParseSSHConnForward(s string) (*SSHPortForward, error) {
 		return nil, fmt.Errorf("не корректный формат [%s]", s)
 	}
 
-	if strings.Contains(elems[0], "@") {
-		userHost := split(elems[0], "@")
-
-		if len(userHost) != 2 {
-			return nil, fmt.Errorf("не корректный формат user@host в [%s]", s)
-		}
-
-		connForward.User = userHost[0]
-		connForward.Host = userHost[1]
-	} else {
-		connForward.Host = elems[0]
+	if connForward.User, connForward.Host, err = ParseConn(elems[0]); err != nil {
+		return nil, err
 	}
 
 	elems = elems[1:]
@@ -108,4 +118,29 @@ func ParseSSHConnForward(s string) (*SSHPortForward, error) {
 	}
 
 	return connForward, nil
+}
+
+func ParseConn(str string) (user, host string, err error) {
+	s := RemoveSpaces(str)
+
+	if strings.Contains(s, "@") {
+		userHost := split(s, "@")
+
+		if len(userHost) != 2 {
+			err = fmt.Errorf("не корректный формат user@host в [%s]", str)
+			return
+		}
+
+		user = userHost[0]
+		host = userHost[1]
+	} else {
+		host = s
+	}
+
+	if host == "" {
+		user = ""
+		err = fmt.Errorf("не корректный формат user@host в [%s]", str)
+	}
+
+	return
 }

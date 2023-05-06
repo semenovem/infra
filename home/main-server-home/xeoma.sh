@@ -29,4 +29,17 @@ exit 0
 
 # путь до директории хранения кэша архива
 # (желательно на RAM-диске или скоростном HDD) для увеличения скорости записи**
--archivecache [DirPath]
+-archivecache /mnt/memfs/xeoma-archive
+
+
+---------------------
+
+./xeoma.app -core -serverport 10080
+
+
+# Обновление
+# остановить сервис
+sudo ./xeoma.app -install -removeexe
+# -
+
+-activateRequest ''

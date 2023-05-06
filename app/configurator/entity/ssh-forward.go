@@ -35,6 +35,25 @@ func (o *SSHForward) Port2() uint16 {
 	return o.port2
 }
 
+func ParseSSHForwards(ls []string) ([]*SSHForward, error) {
+	if len(ls) == 0 {
+		return nil, nil
+	}
+
+	var (
+		ret = make([]*SSHForward, len(ls))
+		err error
+	)
+
+	for i, v := range ls {
+		if ret[i], err = ParseSSHForward(v); err != nil {
+			return nil, err
+		}
+	}
+
+	return ret, nil
+}
+
 // ParseSSHForward
 // 2201::22
 // 11941:0.0.0.0:1194

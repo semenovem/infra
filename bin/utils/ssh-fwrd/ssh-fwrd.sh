@@ -17,7 +17,7 @@ FILE_CONF="${ROOT:?}/ssh-fwrd.conf"
 
 WORKING_DIRECTORY="$(__realpath__ "$ROOT")" || exit 1
 
-[ ! -d "$SYSTEMMD_DIR" ] && echo "ERR: dir '${SYSTEMMD_DIR}' not exist"
+[ ! -d "$SYSTEMMD_DIR" ] && echo "ERR: dir '${SYSTEMMD_DIR}' not exist" && exit 1
 
 help() {
   echo "use: [ start | restart | stop | status | files ]"
@@ -45,18 +45,13 @@ get_service_file_path() {
 }
 
 getCmd() {
-  conns=
-  for it in $2; do
-    conns="${conns} -R ${it}"
-  done
-
   echo "autossh -M 0 \
     -o 'ServerAliveInterval 30' \
     -o 'ServerAliveCountMax 3' \
     -o 'PubkeyAuthentication=yes' \
     -o 'StrictHostKeyChecking=false' \
     -o 'PasswordAuthentication=no' \
-    -N ${conns} $1"
+    -N $*"
 }
 
 create_file() {
@@ -72,7 +67,7 @@ create_file() {
   tmpl "$TMP_FILE" "workingDirectory" "$WORKING_DIRECTORY" || return 1
   tmpl "$TMP_FILE" "user" "$(id -un)" || return 1
   tmpl "$TMP_FILE" "group" "$(id -gn)" || return 1
-  tmpl "$TMP_FILE" "execStart" "$(getCmd "$host" "$conns")" || return 1
+  tmpl "$TMP_FILE" "execStart" "$(getCmd "$conns" "$host")" || return 1
 
   echo "$TMP_FILE"
 }
@@ -88,7 +83,7 @@ start() {
 
   TMP_FILE="$(create_file $host $*)" || return 1
 
-  sudo mv "$TMP_FILE" "$(get_service_file_path $SERVICE_NAME)" || return 1
+  sudo mv "$TMP_FILE" "$(get_service_file_path "$SERVICE_NAME")" || return 1
   sudo systemctl daemon-reload || return 1
   sudo systemctl start "$SERVICE_NAME" || return 1
   sudo systemctl enable "$SERVICE_NAME" || return 1
@@ -103,7 +98,7 @@ stop() {
 
   sudo systemctl stop "$SERVICE_NAME" || return 1
   sudo systemctl disable "$SERVICE_NAME" || return 1
-  sudo rm -f "$(get_service_file_path $SERVICE_NAME)" || return 1
+  sudo rm -f "$(get_service_file_path "$SERVICE_NAME")" || return 1
   sudo systemctl reset-failed
   sudo systemctl daemon-reload
 }
@@ -118,7 +113,10 @@ case "$ARG" in
       start $data
     done
   }
-  __run_configuration__ ssh-remote-forward -host "$(__get_hostname__)" | pipe
+
+  HOSTNAME=$(__get_hostname__) || exit 1
+
+  __run_configurator__ ssh-remote-forward -host "$HOSTNAME" | pipe
   ;;
 
 "stop")

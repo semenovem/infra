@@ -1,0 +1,11 @@
+
+# Создание расписания для перезагрузки роутера раз в неделю (по понедельникам) в 03:30
+telnet:
+
+schedule rebootrouter
+action start 30 3 1
+action stop 31 3 1
+exit
+system reboot schedule rebootrouter
+system configuration save
+exit

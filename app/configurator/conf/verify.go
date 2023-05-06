@@ -1,8 +1,7 @@
-package configs
+package conf
 
 func Verify(cfg *Config) []string {
 	errs := verifyRoles(cfg)
-	errs = append(errs, verifySSHLocalForward(cfg)...)
 	errs = append(errs, verifyHosts(cfg)...)
 
 	return errs

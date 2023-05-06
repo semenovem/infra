@@ -20,16 +20,14 @@ roles:
   - name: STANDBY_SERVER
     allow_incoming_ssh_for_roles: HOME_SERVER WORKSTATION MINI_SERVER
 
-
-# Проброс портов
-ssh_remote_forward:
-  hosts: rr1 rr4 msk1 kz2 eu1
+  - name: OFFICE_SERVER
+    allow_incoming_ssh_for_roles: HOME_SERVER WORKSTATION
 
 
 hosts:
   # Определение
-  - role: PROXY_SERVER
-    name: example
+  - name: example
+    role: PROXY_SERVER
     description: перезагрузка в среду в 3:00
     crontab: 0 3 * * 3 /usr/bin/systemctl reboot
     public: # Публичное подключение
@@ -41,7 +39,7 @@ hosts:
       ip: 192.168.1.2
       ipv6: ""
     ssh:
-      port: 8080
+      port: 20220
       main:
         user: admin
         pub_key: ecdsa-sha2-nistp384
@@ -49,14 +47,18 @@ hosts:
         user:
         pub_key: ""
     ssh_remote_forward:
-      hosts: msk1 rr1 rr4
+      hosts: msk1 rr1 user4@rr4 srv5.vfstl.net
+      user: remote-user
       ports:
         - 30022:0.0.0.0:22   # ssh
         - 31194:0.0.0.0:1194 # vpn - 0.0.0.0 - на все интерфейсы
         - 31194::1194        # vnc - :: для локальной сети
-      user: remote-user
       connect_to:
-        - remote-user@host.site.dom 2201::22 11941:0.0.0.0:1194
+        - remote2-user@host.site.dom -p 2022 2201::22 11941:0.0.0.0:1194
+        - remote3-user@msk1 2201::22 11941:0.0.0.0:1194
+        - site.com 2201::22 11941:0.0.0.0:1194
+        - rr4 -p 5202 2201::22
+        - remote@rr4 2201::22 11941:0.0.0.0:1194
 
   # ---------------------------------------------------------------------------------
   ### Proxy сервера
@@ -192,7 +194,7 @@ hosts:
     description: перезагрузка 2-а раза в мес (timezone utc +3)
     crontab:
     local:
-      url: home.local
+      url: home.local core.home
       ip: 192.168.11.100
     local2:
       url: home2.local
@@ -202,6 +204,7 @@ hosts:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGyQMkD1kkI6cti/Srn8FNX8RzjUjlKq6ynoROeXHvp9aJHqMdETId1PFiJQjfPNCNKlVVDA8lyTkn9GZtaQSi8l7NoUsPfgGvfnBVmJpy2MlnDW83QOAwUc6fDI5oM8Kg== evg@home
     ssh_remote_forward:
+      hosts: rr1 rr4 msk1 kz2 eu1
       ports:
         - 2200::22            # ssh
         - 11940:0.0.0.0:1194  # openvpn
@@ -215,70 +218,56 @@ hosts:
     description: перезагрузка в среду в 3:00 (timezone utc +3)
     crontab: 0 3 * * 3 /usr/bin/systemctl reboot
     local:
-      url: srv1.local
+      url: srv1.local srv.home
       ip: 192.168.11.101
     ssh:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBIMVsRQ2FzF/qKVAwUwASQ2Tk1JBiCKHkphOdXYzUFmGHM5wWM8e/6UBD/zdfrz3Tgtv7M8X4wbA4cnC8TzPCY0xlklB35criLsE1L7IZRGP7ghNo9SPuRbtybIdNJQ1yg== adman@srv1
     ssh_remote_forward:
+      hosts: rr1 rr4 msk1 kz2 eu1
       ports:
         - 2201::22            # ssh
         - 11941:0.0.0.0:1194  # openvpn
+
 
   - name: srv2
     role: STANDBY_SERVER
     description: перезагрузка каждый второй день (timezone utc +3)
     crontab: 0 3 /2 * * /usr/bin/systemctl reboot
     local:
-      url: srv2.local
+      url: srv2.local srv2.home
       ip: 192.168.11.102
     ssh:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGm16LDGpzavDoaqmDwHRswdSXjCJlcSFNFPHsJONoZs6DKJaveJk4ndqrLjoUKMcCCDnkprTNSG03jwO0VQGEd/2IA8tuGIwNQW8G4dKPvxzoUiN37uhYj3w8khUIHAqA== adman@srv2
     ssh_remote_forward:
+      hosts: rr1 rr4 msk1 kz2 eu1
       ports:
         - 2202::22            # ssh
         - 11942:0.0.0.0:1194  # openvpn
 
 
-  - name: srv21
-    role: STANDBY_SERVER
-    description: перезагрузка в четверг
-    crontab: 0 4 * * 6 /usr/bin/systemctl reboot
+  - name: office-server
+    role: __CORE_ROLE_OFFICE_SERVER_CONST__
+    description:
     public:
-      url: home.evgio.com
+      url:
       ip:
     local:
-      url: srv21.local
-      ip: 192.168.12.121
+      url: main.local
+      ip: 192.168.175.200
     ssh:
       main:
-        user: adman
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBBDEl++6Wjat47aJ/V2EKY4yMLVoC8oxHYIcPJuTphQN++dkNLPMdUkilcjkO1ge8TKI1Nwo+OOAWmGh2FitIX29kwEizIpdq3tmSO3smPJvTHjS6L4zTqyvG74Qtva0GQ== adman@srv21
+        user: evg
+        pub_key:
     ssh_remote_forward:
+      hosts: forward-user@msk1 forward-user@rr1 forward-user@rr4
       ports:
-        - 2223::22            # ssh
-        - 11943:0.0.0.0:1194  # openvpn
+        - 61022:0.0.0.0:22    # ssh
+        - 61194:0.0.0.0:1194  # vpn
+#        - 61080:0.0.0.0:10090 # cctv
 
 
-  - name: srv22
-    role: STANDBY_SERVER
-    description: перезагрузка в воскресение
-    crontab: 0 7 * * 0 /usr/bin/systemctl reboot
-    public:
-      url: home.evgio.com
-      ip:
-    local:
-      url: srv21.local
-      ip: 192.168.12.121
-    ssh:
-      main:
-        user: adman
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGYSB8fOYrYGKZ9SCGlOTa5YGscOwCfov2gSupi8kjlPwL3Deg+FqaFKKiU1iAHl/OXHIItTx/MdNGuBLFfAStd4XF7RKyljeyv54bCDC+Ydsn2aVAyvTm02431biL1k6g== adman@srv22
-    ssh_remote_forward:
-      ports:
-        - 2224::22            # ssh
-        - 11944:0.0.0.0:1194  # openvpn
 

@@ -1,4 +1,4 @@
-package tasks
+package cmd
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 
 func newVersionTask() *Task {
 	return &Task{
-		name:  versionTaskName,
+		name:  versionCmdName,
 		usage: versionFlagUsage,
 		run: func(_ *Task) error {
 			loggerInfo.Println(GetAppVersion())
@@ -20,7 +20,7 @@ func newVersionTask() *Task {
 
 func newHelpTask() *Task {
 	return &Task{
-		name:  helpTaskName,
+		name:  helpCmdName,
 		usage: helpFlagUsage,
 		run: func(_ *Task) error {
 			Help()
@@ -33,7 +33,7 @@ func newHelpTask() *Task {
 
 func newPWDTask() *Task {
 	return &Task{
-		name:  pwdTaskName,
+		name:  pwdCmdName,
 		usage: "Текущая директория",
 		run: func(_ *Task) error {
 			path, err := os.Getwd()

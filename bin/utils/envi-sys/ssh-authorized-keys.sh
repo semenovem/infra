@@ -11,7 +11,7 @@ TARGET_FILE="${HOME}/.ssh/authorized_keys"
 ROLE=$(__core_role_get__)
 __debug__ "role: ${ROLE}"
 
-PUB_KEYS=$(__run_configuration__ ssh-authorized-keys -role "$ROLE") || exit 1
+PUB_KEYS=$(__run_configurator__ ssh-authorized-keys -role "$ROLE") || exit 1
 
 if [ -z "$PUB_KEYS" ]; then
   __info__ "нет ключей для добавления"

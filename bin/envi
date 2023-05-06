@@ -73,7 +73,7 @@ MENU="
 4. установить роль для машины
 5. обновить ssh config
 6. обновить ssh authorization_keys
-7. скомпилировать configuration-app"
+7. скомпилировать configurator-app"
 
 TASK=
 main || exit 1
@@ -86,4 +86,4 @@ task "3." && sh "${ENVI_SYS_DIR}/get-role.sh"
 task "4." && sh "${ENVI_SYS_DIR}/set-role.sh"
 task "5." && sh "${ENVI_SYS_DIR}/ssh-config-upd.sh" $@
 task "6." && sh "${ENVI_SYS_DIR}/ssh-authorized-keys.sh" $@
-task "7." && sh "${ROOT}/../app/configuration/build.sh"
+task "7." && sh "${ROOT}/../app/configurator/build.sh" "${ROOT}/utils/envi-configurator-app"

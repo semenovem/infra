@@ -1,4 +1,4 @@
-package tasks
+package cmd
 
 import (
 	"flag"
@@ -21,13 +21,13 @@ const (
 	roleFlagName       = "role"
 
 	// Команды
-	versionTaskName           = "version"
-	helpTaskName              = "help"
-	pwdTaskName               = "pwd"
-	sshRemoteForwardTaskName  = "ssh-remote-forward"
-	sshAuthorizedKeysTaskName = "ssh-authorized-keys"
-	sshConfigTaskName         = "ssh-config"
-	verifyTaskName            = "verify"
+	versionCmdName           = "version"
+	helpCmdName              = "help"
+	pwdCmdName               = "pwd"
+	sshRemoteForwardCmdName  = "ssh-remote-forward"
+	sshAuthorizedKeysCmdName = "ssh-authorized-keys"
+	sshConfigTaskName        = "ssh-config"
+	verifyCmdName            = "verify"
 )
 
 func extract(fs *flag.FlagSet, n string) string {

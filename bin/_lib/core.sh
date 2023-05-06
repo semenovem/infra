@@ -239,7 +239,7 @@ __absolute_path__() {
 }
 
 # Нормализация пути
-# Схлопнуть относительные переходы типа:
+# Удалить относительные переходы типа:
 # /Users/sem/_environment/bin/../conf.yml => /Users/sem/_environment/conf.yml
 __realpath__() {
   echo "$(
@@ -249,9 +249,8 @@ __realpath__() {
 }
 
 # Выполнить конфигуратор
-__run_configuration__() {
-  APP=$(__realpath__ "${__ENVI_BIN__}/../app/configuration/bin/configuration-app")
-  $APP $@ -config-file="${__ENVI_BIN__}/../configs/main.yml"
+__run_configurator__() {
+  "${__ENVI_BIN__}/utils/envi-configurator-app" $@ -config-file="${__ENVI_BIN__}/../configs/main.yml"
 }
 
 # Получить имя хоста

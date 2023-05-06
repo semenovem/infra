@@ -1,7 +1,7 @@
 package main
 
 import (
-	"configuration/tasks"
+	"configuration/cmd"
 	"errors"
 	"flag"
 	"io"
@@ -23,9 +23,9 @@ func getAppVersion() string {
 }
 
 func init() {
-	tasks.GetAppVersion = getAppVersion
+	cmd.GetAppVersion = getAppVersion
 	loggerDebug.SetOutput(io.Discard)
-	tasks.SetLoggers(loggerInfo, loggerDebug)
+	cmd.SetLoggers(loggerInfo, loggerDebug)
 }
 
 func main() {
@@ -38,11 +38,11 @@ func main() {
 
 func run(args []string) error {
 	if len(args) == 0 {
-		tasks.Help()
+		cmd.Help()
 		return nil
 	}
 
-	for _, task := range tasks.New() {
+	for _, task := range cmd.New() {
 		if task.Name() != args[0] {
 			continue
 		}
@@ -70,7 +70,7 @@ func run(args []string) error {
 	err := errors.New("main.run: не валидные аргументы")
 	loggerErr.Println(err.Error())
 
-	tasks.ShortHelp()
+	cmd.ShortHelp()
 
 	return err
 }

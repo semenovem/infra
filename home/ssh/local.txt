@@ -25,24 +25,8 @@ Host srv2
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-Host srv21
-  HostName     192.168.12.121
-  User         adman
-  IdentityFile ~/.ssh/id_ecdsa
-
-Host srv22
-  HostName     192.168.12.122
-  User         adman
-  IdentityFile ~/.ssh/id_ecdsa
-
 Host mini
   HostName     mini.local
-  User         adman
-  Port         22
-  IdentityFile ~/.ssh/id_ecdsa
-
-Host mini2
-  HostName     mini2.local
   User         adman
   Port         22
   IdentityFile ~/.ssh/id_ecdsa

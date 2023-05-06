@@ -1,4 +1,4 @@
-package tasks
+package cmd
 
 import (
 	"configuration/conf"
@@ -7,7 +7,7 @@ import (
 
 func newVerifierTask() *Task {
 	return &Task{
-		name:  verifyTaskName,
+		name:  verifyCmdName,
 		usage: "проверяет валидность файла конфигурации",
 		flags: []flagSet{},
 		run:   verifierTask,

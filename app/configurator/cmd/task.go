@@ -1,4 +1,4 @@
-package tasks
+package cmd
 
 import (
 	"configuration/conf"

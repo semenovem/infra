@@ -1,4 +1,4 @@
-package configs
+package conf
 
 import "fmt"
 
@@ -34,9 +34,9 @@ func verifyHosts(cfg *Config) []string {
 
 	// Валидность данных хоста
 	for _, host := range cfg.Hosts {
-		if host.SSHRemoteForward != nil {
+		if host.SSHPortForward != nil {
 			// Дубликаты хостов
-			dups = duplicates(host.SSHRemoteForward.Hosts())
+			dups = duplicates(host.SSHPortForward.getHosts())
 			if len(dups) != 0 {
 				errs = append(errs, fmt.Sprintf(
 					"hosts.[%s].ssh_remote_forward.hosts: дубликаты %s",
@@ -44,7 +44,7 @@ func verifyHosts(cfg *Config) []string {
 			}
 
 			// Не существующие хосты
-			for _, h := range host.SSHRemoteForward.Hosts() {
+			for _, h := range host.SSHPortForward.getHosts() {
 				if _, ok := knownHosts[h]; !ok {
 					errs = append(errs, fmt.Sprintf(
 						"hosts.[%s].ssh_remote_forward.hosts: неизвестный хост %s",

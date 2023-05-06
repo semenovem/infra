@@ -41,16 +41,6 @@ adman ALL=(ALL) NOPASSWD: ALL
 
 
 # ################################
-# SSH
-vim /etc/ssh/sshd_config
-PasswordAuthentication no
-PermitRootLogin no
-
-# setenforce 0 - если ошибка по новому порту
-systemctl restart sshd.service
-
-
-# ################################
 # TODO: check it for macos ?
 # remote mount
 apt --enablerepo=powertools -y install fuse-sshfs

@@ -1,4 +1,4 @@
-package configs
+package conf
 
 import "fmt"
 
@@ -22,7 +22,7 @@ func verifyRoles(cfg *Config) []string {
 	}
 
 	for _, role := range cfg.Roles {
-		dups = duplicates(role.AllowIncomingSSHForRoles())
+		dups = duplicates(role.allowIncomingSSHForRoles())
 		if len(dups) != 0 {
 			errs = append(errs, fmt.Sprintf(
 				"roles.[%s].allow_incoming_ssh_for_roles: имеет дубликат %s",

@@ -9,6 +9,7 @@ PermitRootLogin no
 AllowTcpForwarding yes
 #GatewayPorts yes
 
+# setenforce 0 - если ошибка по новому порту
 systemctl restart sshd.service
 
 
@@ -63,3 +64,11 @@ sudo sshfs -o allow_other \
 
 
 #-------------
+
+autossh -M 0 -fN \
+  -o "PubkeyAuthentication=yes" \
+  -o "StrictHostKeyChecking=false" \
+  -o "PasswordAuthentication=no" \
+  -o "ServerAliveInterval 60" \
+  -o "ServerAliveCountMax 3" \
+  -R 46771:localhost:22 rr4

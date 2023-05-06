@@ -1,8 +1,8 @@
-package tasks
+package cmd
 
 func newSSHAuthorizedKeysTask() *Task {
 	return &Task{
-		name:  sshAuthorizedKeysTaskName,
+		name:  sshAuthorizedKeysCmdName,
 		usage: "список публичных ssh ключей для authorization_keys",
 		flags: []flagSet{addRoleFlag},
 		run:   sshAuthorizedKeysTask,
