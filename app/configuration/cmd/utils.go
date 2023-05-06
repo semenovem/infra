@@ -38,7 +38,7 @@ func newPWDTask() *Task {
 		run: func(_ *Task) error {
 			path, err := os.Getwd()
 			if err != nil {
-				return fmt.Errorf("tasks.PWDTask.run: %ds", err.Error())
+				return fmt.Errorf("tasks.PWDTask.run: %s", err.Error())
 			}
 			loggerInfo.Println(path)
 

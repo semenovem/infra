@@ -1,7 +1,7 @@
 package tasks
 
 import (
-	"configuration/configs"
+	"configuration/conf"
 	"errors"
 )
 
@@ -15,7 +15,7 @@ func newVerifierTask() *Task {
 }
 
 func verifierTask(t *Task) error {
-	errs := configs.Verify(t.cfg)
+	errs := conf.Verify(t.cfg)
 
 	for _, msg := range errs {
 		loggerInfo.Println(msg)

@@ -1,7 +1,9 @@
 package configs
 
 import (
+	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -35,4 +37,24 @@ func arrToMap(arr []string) map[string]struct{} {
 		m[v] = struct{}{}
 	}
 	return m
+}
+
+func split(s, sep string) []string {
+	a := strings.Split(s, sep)
+	trim(a)
+
+	return a
+}
+
+func parsePort(s string) (uint16, error) {
+	port, err := strconv.ParseUint(s, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	if port > maxPort {
+		return 0, fmt.Errorf("значение port [%d] превышает максимальное [%d]", port, maxPort)
+	}
+
+	return uint16(port), nil
 }

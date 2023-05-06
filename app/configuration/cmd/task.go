@@ -1,7 +1,7 @@
 package tasks
 
 import (
-	"configuration/configs"
+	"configuration/conf"
 	"errors"
 	"flag"
 	"fmt"
@@ -26,7 +26,7 @@ type Task struct {
 	flags             []flagSet
 	run               func(*Task) error
 	allowEmptyFlags   []string // Допустимы пустые значения
-	cfg               *configs.Config
+	cfg               *conf.Config
 	configFileFlagVal string
 	offConfigFileFlag bool // Не использовать флаг файла конфига
 	offDebugFlag      bool // Не использовать флаг отладки
@@ -117,7 +117,7 @@ func (t *Task) Init(args []string) error {
 func (t *Task) Run() error {
 	if !t.offConfigFileFlag {
 		var err error
-		t.cfg, err = configs.ParseConfigFile(t.configFileFlagVal)
+		t.cfg, err = conf.ParseConfigFile(t.configFileFlagVal)
 		if err != nil {
 			return fmt.Errorf("tasks.getConfigFile: %s", err.Error())
 		}

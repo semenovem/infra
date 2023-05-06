@@ -10,7 +10,7 @@ func TestGetExistingRoles(t *testing.T) {
 
 	t.Run("ok", func(t *testing.T) {
 		c := Config{
-			Roles: []*Role{
+			Roles: []*DTORole{
 				{Name: "123"},
 				{Name: "qwe"},
 				{Name: "asd"},
@@ -22,7 +22,7 @@ func TestGetExistingRoles(t *testing.T) {
 			return
 		}
 
-		expected := map[string]*Role{
+		expected := map[string]*DTORole{
 			"123": {Name: "123"},
 			"qwe": {Name: "qwe"},
 			"asd": {Name: "asd"},
@@ -33,7 +33,7 @@ func TestGetExistingRoles(t *testing.T) {
 
 	t.Run("duplicate", func(t *testing.T) {
 		c := Config{
-			Roles: []*Role{
+			Roles: []*DTORole{
 				{Name: "123"},
 				{Name: "123"},
 			},
@@ -50,7 +50,7 @@ func TestGetExistingRoles(t *testing.T) {
 
 	t.Run("duplicate2", func(t *testing.T) {
 		c := Config{
-			Roles: []*Role{
+			Roles: []*DTORole{
 				{Name: "qwe"},
 				{Name: "QWE"},
 			},
