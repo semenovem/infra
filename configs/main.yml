@@ -21,7 +21,7 @@ roles:
     allow_incoming_ssh_for_roles: HOME_SERVER WORKSTATION MINI_SERVER
 
   - name: OFFICE_SERVER
-    allow_incoming_ssh_for_roles: HOME_SERVER WORKSTATION
+    allow_incoming_ssh_for_roles: HOME_SERVER WORKSTATION OFFICE_SERVER
 
 
 hosts:
@@ -248,25 +248,37 @@ hosts:
         - 2202::22            # ssh
         - 11942:0.0.0.0:1194  # openvpn
 
-
   - name: office-server
     role: OFFICE_SERVER
     description:
-    public:
-      url:
-      ip:
     local:
       url: main.local
       ip: 192.168.175.200
     ssh:
       main:
         user: evg
-        pub_key:
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBE9qsJbSRrCYARg2uPSSX0TMzCaVzuEgv09FEnlRefzB6RbpmhHkPLJ+yn6k2qWQICYKebBY8nKjFZrgOAGQx+3tp+HKRESU2yP3+RBRtLCUBvQu1ULOYp5jk3gKcIDtFg== evg@office-server
     ssh_remote_forward:
       hosts: forward-user@msk1 forward-user@rr1 forward-user@rr4
       ports:
         - 61022:0.0.0.0:22    # ssh
         - 61194:0.0.0.0:1194  # vpn
+
+
+  - name: office-mini-tv
+    role: OFFICE_SERVER
+    description:
+    local:
+      url: mini-tv.local
+      ip: 192.168.175.202
+    ssh:
+      main:
+        user: evg
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOrXJXPdUGWv1AlkELzcFv+E7fatcPhi8Wg6vB+AFvNNXOqh5YZrp4ye3xH/PiOxh5LcV7Ghfc7phLTzN7AISMFJskCsiMq7QmCBgQhKx4kJXWxBdASHDBddvdlUYNVVKg== evg@office-mini-tv
+    ssh_remote_forward:
+      hosts: forward-user@msk1 forward-user@rr1 forward-user@rr4
+      ports:
+        - 61044:0.0.0.0:22    # ssh
 
 
 

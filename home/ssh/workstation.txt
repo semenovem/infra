@@ -18,12 +18,8 @@ Host open-msk1
   # --- srv2
   LocalForward  2202 127.0.0.1:2202    # ssh
   LocalForward  11942 127.0.0.1:11942  # openvpn
-  # --- srv21
-  LocalForward  2203 127.0.0.1:2203    # ssh
-  LocalForward  11943 127.0.0.1:11943  # openvpn
-  # --- srv22
-  LocalForward  2204 127.0.0.1:2204    # ssh
-  LocalForward  11944 127.0.0.1:11944  # openvpn
+  # --- office-server
+  LocalForward  61022 127.0.0.1:61022  # ssh
 
 
 Host open-rr4
@@ -42,9 +38,5 @@ Host open-rr4
   # --- srv2
   LocalForward  2202 127.0.0.1:2202    # ssh
   LocalForward  11942 127.0.0.1:11942  # openvpn
-  # --- srv21
-  LocalForward  2203 127.0.0.1:2203    # ssh
-  LocalForward  11943 127.0.0.1:11943  # openvpn
-  # --- srv22
-  LocalForward  2204 127.0.0.1:2204    # ssh
-  LocalForward  11944 127.0.0.1:11944  # openvpn
+  # --- office-server
+  LocalForward  2203 127.0.0.1:61022   # ssh
