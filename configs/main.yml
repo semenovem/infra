@@ -267,7 +267,8 @@ hosts:
 
   - name: office-mini-tv
     role: OFFICE_SERVER
-    description:
+    description: перезагрузка каждую пятницу
+    crontab: 0 3 * * 6 /usr/bin/systemctl reboot
     local:
       url: mini-tv.local
       ip: 192.168.175.202
