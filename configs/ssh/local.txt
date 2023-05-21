@@ -30,3 +30,17 @@ Host mini
   User         adman
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
+
+# -----------------------------
+# office
+Host office-server
+  HostName     192.168.1.200
+  User         evg
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host office-tv
+  HostName     192.168.1.202
+  User         evg
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa

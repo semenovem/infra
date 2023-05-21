@@ -29,8 +29,6 @@ envi-utils
 
 | -                        | source                       |
 |--------------------------|------------------------------|
-| list of public keys      | `./home/ssh/keys-pub.txt`    |
-| ssh config (server)      | `./home/ssh/server.txt`      |
-| ssh config (workstation) | `./home/ssh/workstation.txt` |
-| ssh config (local)       | `./home/ssh/local.txt`       |
-
+| ssh config (server)      | `./configs/ssh/server.txt`      |
+| ssh config (workstation) | `./configs/ssh/workstation.txt` |
+| ssh config (local)       | `./configs/ssh/local.txt`       |

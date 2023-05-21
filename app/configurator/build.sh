@@ -4,7 +4,7 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 
 cd "$ROOT" || exit 1
 
-VERSION="1.1.0"
+VERSION="1.1.1"
 
 FILE=$1
 

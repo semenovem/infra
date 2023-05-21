@@ -1,0 +1,97 @@
+
+
+https://serverspace.ru/support/help/bind9-primary-dns-ubuntu-20-04/
+
+apt install bind9
+
+
+
+-------------------------------------------
+/etc/bind/named.conf.options
+-------------------------------------------
+acl "lan" {
+        localhost;
+	192.168.175.0/24;
+};
+
+
+
+options {
+	directory "/var/cache/bind";
+
+	// If there is a firewall between you and nameservers you want
+	// to talk to, you may need to fix the firewall to allow multiple
+	// ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+
+	// If your ISP provided one or more IP addresses for stable
+	// nameservers, you probably want to use them as forwarders.
+	// Uncomment the following block, and insert the addresses replacing
+	// the all-0's placeholder.
+
+	// forwarders {
+	// 	0.0.0.0;
+	// };
+
+	//========================================================================
+	// If BIND logs error messages about the root key being expired,
+	// you will need to update your keys.  See https://www.isc.org/bind-keys
+	//========================================================================
+	dnssec-validation auto;
+
+	listen-on-v6 { none; };
+	allow-query { "lan"; };
+	forwarders {
+		77.88.8.8;
+		77.88.8.1;
+	};
+	listen-on {
+		"lan";
+	};
+	recursion yes;
+	allow-recursion { "lan"; };
+	auth-nxdomain no;
+	version "NOT CURRENTLY AVAILABLE";
+	//querylog yes;
+};
+
+
+
+-------------------------------------------
+/etc/bind/named.conf.office
+-------------------------------------------
+zone "local" {
+        type master;
+        file "/etc/bind/db.home";
+        allow-transfer { 192.168.175.200; };
+        also-notify { 192.168.175.200; };
+};
+
+systemctl reload bind9
+
+
+-------------------------------------------
+vim /etc/bind/db.home
+-------------------------------------------
+$ORIGIN .
+$TTL 14400
+home  IN  SOA  ns1.home.  root.ns1.home. (
+            2020040501 ; serial
+            604800     ; refresh
+            86400      ; retry
+            2419200    ; expire
+            604800     ; minimum
+            )
+         NS ns1.home.
+         A 192.168.11.100
+$ORIGIN home.
+$TTL 14400
+ns1	A	192.168.11.100
+srv1	A	192.168.11.101
+srv2	A	192.168.11.102
+main	A	192.168.11.100
+cam1	A	192.168.11.61
+cam2	A	192.168.11.62
+cam3	A	192.168.11.63
+
+
+sudo rndc reload

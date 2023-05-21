@@ -1,0 +1,4 @@
+
+
+Settings path:
+/usr/local/Xeoma

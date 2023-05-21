@@ -133,9 +133,7 @@ func (o *DTOSSHPortForward) getConnections() ([]*entity.SSHPortForward, error) {
 
 // getConnections возвращает данные для проброса портов
 func (o *DTOSSHPortForward) getConvertHosts() ([]*entity.SSHPortForward, error) {
-	var (
-		ret = make([]*entity.SSHPortForward, 0)
-	)
+	ret := make([]*entity.SSHPortForward, 0)
 
 	forward, err := o.getForward()
 	if err != nil {
@@ -146,6 +144,10 @@ func (o *DTOSSHPortForward) getConvertHosts() ([]*entity.SSHPortForward, error) 
 		it := &entity.SSHPortForward{}
 		if it.User, it.Host, err = entity.ParseConn(v); err != nil {
 			return nil, err
+		}
+
+		if it.User == "" || o.User != "" {
+			it.User = o.User
 		}
 
 		it.Forwards = forward
