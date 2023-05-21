@@ -248,6 +248,10 @@ hosts:
         - 2202::22            # ssh
         - 11942:0.0.0.0:1194  # openvpn
 
+
+  # ---------------------------------------------------------------------------------
+  ### Офис
+  # ---------------------------------------------------------------------------------
   - name: office-server
     role: OFFICE_SERVER
     description:
@@ -283,7 +287,25 @@ hosts:
       ports:
         - 62022:0.0.0.0:22    # ssh
         - 62194:0.0.0.0:1194  # vpn
-        - 62059:0.0.0.0:5900  # vnc
+        - 62059::5900  # vnc
+
+
+  - name: office-mini-pin1
+    role: OFFICE_SERVER
+    description: перезагрузка каждый вторник
+    crontab: 0 3 * * 3 /usr/bin/systemctl reboot
+    local:
+      url: mini-pin1.local
+      ip: 192.168.175.204
+    ssh:
+      main:
+        user: evg
+        pub_key:
+    ssh_remote_forward:
+      hosts: forward-user@msk1 forward-user@rr1 forward-user@rr4
+      ports:
+        - 62044:0.0.0.0:22  # ssh
+        - 62059::5900       # vnc
 
 
 
