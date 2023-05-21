@@ -263,6 +263,8 @@ hosts:
       ports:
         - 61022:0.0.0.0:22    # ssh
         - 61194:0.0.0.0:1194  # vpn
+        - 61080:0.0.0.0:10080  # cctv xeoma
+        - 61090:0.0.0.0:10090  # cctv http
 
 
   - name: office-mini-tv
@@ -279,7 +281,9 @@ hosts:
     ssh_remote_forward:
       hosts: forward-user@msk1 forward-user@rr1 forward-user@rr4
       ports:
-        - 61044:0.0.0.0:22    # ssh
+        - 62022:0.0.0.0:22    # ssh
+        - 62194:0.0.0.0:1194  # vpn
+        - 62059:0.0.0.0:5900  # vnc
 
 
 
