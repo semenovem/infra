@@ -12,6 +12,8 @@ DESTINATION=$1
 
 [ -z "$DESTINATION" ] && __err__ "Destination directory not passed" && exit 1
 
+DESTINATION=$(__realpath__ "$DESTINATION")
+
 if [ ! -d "$DESTINATION" ]; then
   __info__ "Create destination directory"
   mkdir "$DESTINATION" || exit 1
@@ -31,13 +33,25 @@ if [ -z "$__YES__" ]; then
   find ./ -iname "*.avi" | pipe
 fi
 
-
 # ---------------------------------------
 # Конвертация
 __confirm__ "Продолжить ?" || exit 0
 
-for PATH in $(find ./ -iname "*.avi"); do
-  FILE_NAME=$($BASENAME $PATH ".avi")
+pipe2() {
+  while read -r PATH; do
+    FILE_NAME=$($BASENAME "$PATH" ".avi")
+    FILE_PATH="${DESTINATION}/${FILE_NAME}.mkv"
 
-  $FFMPEG -fflags +genpts -i "$PATH" -c:v copy -c:a copy "${DESTINATION%/}/${FILE_NAME}.mkv"
-done
+#    echo ">> $PATH"
+#    echo ">> $FILE_NAME"
+#    echo ">> $FILE_PATH"
+#    echo
+
+#    $FFMPEG -fflags +genpts -i "$PATH" -c:v copy -c:a copy "$FILE_PATH"
+    echo "$FFMPEG -fflags +genpts -i \""$PATH"\" -c:v copy -c:a copy \""$FILE_PATH"\"; \\"
+
+#    sh -c "" &
+  done
+}
+
+find ./ -iname "*.avi" | pipe2
