@@ -24,9 +24,9 @@ Host open-msk1
   LocalForward  61080 127.0.0.1:61080  # xeoma
   LocalForward  61090 127.0.0.1:61090  # xeoma web
   # --- office-mini-tv
-  LocalForward  62044 127.0.0.1:62044  # ssh
+  LocalForward  62022 127.0.0.1:62022  # ssh
   LocalForward  62194 127.0.0.1:62194  # vpn
-  LocalForward  62059 127.0.0.1:62194  # vnc
+  LocalForward  62059 127.0.0.1:62059  # vnc
 
 
 Host open-rr4
@@ -51,6 +51,6 @@ Host open-rr4
   LocalForward  61080 127.0.0.1:61080  # xeoma
   LocalForward  61090 127.0.0.1:61090  # xeoma web
   # --- office-mini-tv
-  LocalForward  62044 127.0.0.1:62044  # ssh
+  LocalForward  62022 127.0.0.1:62022  # ssh
   LocalForward  62194 127.0.0.1:62194  # vpn
-  LocalForward  62059 127.0.0.1:62194  # vnc
+  LocalForward  62059 127.0.0.1:62059  # vnc

@@ -25,7 +25,7 @@ if [ -z "$__YES__" ]; then
   __info__ "Файлы для конвертации:"
   pipe() {
     while read -r PATH; do
-      $BASENAME $PATH
+      $BASENAME "$PATH"
     done
   }
   find ./ -iname "*.avi" | pipe
