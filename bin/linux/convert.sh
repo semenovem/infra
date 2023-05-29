@@ -6,52 +6,41 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/../_lib/core.sh" || exit 1
 
-BASENAME=$(which basename) || exit 1
-FFMPEG=$(which ffmpeg) || exit 1
-DESTINATION=$1
+which basename
+[ $? -ne 0 ] && __err__ "not install [basename]" && exit 1
 
-[ -z "$DESTINATION" ] && __err__ "Destination directory not passed" && exit 1
+which ffmpeg
+[ $? -ne 0 ] && __err__ "not install [ffmpeg]" && exit 1
 
-DESTINATION=$(__realpath__ "$DESTINATION")
+DEST_DIR=$1
+[ -z "$DEST_DIR" ] && __err__ "destination directory not passed" && exit 1
 
-if [ ! -d "$DESTINATION" ]; then
+DEST_DIR=$(__realpath__ "$DEST_DIR")
+
+if [ ! -d "$DEST_DIR" ]; then
   __info__ "Create destination directory"
-  mkdir "$DESTINATION" || exit 1
+  mkdir "$DEST_DIR" || exit 1
 fi
 
-__confirm__ "Директория назначения [${DESTINATION}]. Продолжить ?" || exit 0
+__confirm__ "Destination directory [ ${DEST_DIR} ] continue ?" || exit 0
 
 # ---------------------------------------
 # Подтверждение файлов для конвертации
 if [ -z "$__YES__" ]; then
-  __info__ "Файлы для конвертации:"
-  pipe() {
-    while read -r PATH; do
-      $BASENAME "$PATH"
-    done
-  }
-  find ./ -iname "*.avi" | pipe
+  __info__ "Files to convert:"
+
+  for SRC_FILE in "./"*.avi; do
+    basename "$SRC_FILE"
+  done
 fi
 
 # ---------------------------------------
 # Конвертация
-__confirm__ "Продолжить ?" || exit 0
+__confirm__ "Continue ?" || exit 0
 
-pipe2() {
-  while read -r PATH; do
-    FILE_NAME=$($BASENAME "$PATH" ".avi")
-    FILE_PATH="${DESTINATION}/${FILE_NAME}.mkv"
+for SRC_FILE in "./"*.avi; do
+  FILE_NAME=$(basename "$SRC_FILE" ".avi")
+  DST_FILE="${DEST_DIR}/${FILE_NAME}.mkv"
 
-#    echo ">> $PATH"
-#    echo ">> $FILE_NAME"
-#    echo ">> $FILE_PATH"
-#    echo
-
-#    $FFMPEG -fflags +genpts -i "$PATH" -c:v copy -c:a copy "$FILE_PATH"
-    echo "$FFMPEG -fflags +genpts -i \""$PATH"\" -c:v copy -c:a copy \""$FILE_PATH"\"; \\"
-
-#    sh -c "" &
-  done
-}
-
-find ./ -iname "*.avi" | pipe2
+  ffmpeg -fflags +genpts -i "$SRC_FILE" -c:v copy -c:a copy "${DST_FILE}.mkv"
+done
