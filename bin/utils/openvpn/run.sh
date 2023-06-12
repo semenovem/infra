@@ -6,17 +6,23 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 INFRA_PKI_DIR="${HOME}/_envi_openvpn_pki" # Инфраструктура ключей openvpn
 IMAGE="envi/easy_rsa:1.0"
 DOCKER_CMD=$(__core_get_virtualization_app__) || exit 1
-OPER="$1"
-PKI_NAME=$2
-CN_NAME=$3 # Common Name of certificate
-PKI_DIR="${INFRA_PKI_DIR}/${PKI_NAME}-pki"
+OPER="$1"   # Command
+PKI_NAME=$2 # Repository with pki
+CN_NAME=$3  # Common Name of certificate
+[ -n "$PKI_NAME" ] && PKI_DIR="${INFRA_PKI_DIR}/${PKI_NAME}-pki"
 
 help() {
-  __info__ "install name-pki          - установка"
-  __info__ "issue   name-pki cn-cert  - выпуск сертификата"
-  __info__ "  name-pki  - \$1 имя директории с инфраструктурой ключей"
-  __info__ "  cn-cert   - \$2 имя сертификата"
-  __info__ "ls                        - список"
+  __info__ 'install name-pki        - установка'
+  __info__ 'issue name-pki cn-cert  - выпуск сертификата'
+  __info__ 'ls                      - список репозиториев'
+  __info__ 'ls name-pki             - список сертификатов в репозитории'
+  __info__ 'get name-pki cn-cert    - получить архив с набором крипто-материалов'
+  __info__ 'revoke name-pki cn-cert - отозвать сертификат'
+  __info__ ''
+  __info__ ''
+  __info__ 'common properties:'
+  __info__ '  name-pki    - имя репозитория (директории с инфраструктурой ключей)'
+  __info__ '  cn-cert     - имя сертификата'
 }
 
 if [ ! -d "$INFRA_PKI_DIR" ]; then
@@ -35,8 +41,13 @@ case $? in
 *) exit 1 ;;
 esac
 
-check() {
-  [ -z "$PKI_NAME" ] && __err__ "[PKI_NAME] pki directory name not passed" && return 1
+check_arg_pki() {
+  [ -z "$PKI_NAME" ] && __err__ "[PKI_NAME] pki name not passed" && return 1
+  return 0
+}
+
+check_arg_cn_cert() {
+  [ -z "$CN_NAME" ] && __err__ "[CN_CERT] cn-cert name not passed" && return 1
   return 0
 }
 
@@ -65,7 +76,7 @@ execute() {
 case "$OPER" in
 "install")
   # Установка инфраструктуры PKI
-  check || exit 1
+  check_arg_pki || exit 1
 
   if [ -n "$PKI_NAME" ] && [ ! -d "$PKI_DIR" ]; then
     mkdir "$PKI_DIR" || exit 1
@@ -78,14 +89,25 @@ case "$OPER" in
 
 "issue")
   # Выпуск сертификата с указанным CN (Common Name)
-  check || exit 1
+  check_arg_pki || exit 1
+  check_arg_cn_cert || exit 1
+
   [ ! -d "$PKI_DIR" ] && __err__ "directory [${PKI_DIR}] does not exist" && exit 1
-  [ -z "$CN_NAME" ] && __err__ "empty CN_NAME" && exit 1
 
   execute sh issue.sh client
   ;;
 
-"ls") ls -l "$INFRA_PKI_DIR" ;;
+"ls")
+  if [ -n "$PKI_DIR" ]; then
+    :
+    echo "!! > $PKI_DIR"
+  else
+    # shellcheck disable=SC2010
+    ls -l "$INFRA_PKI_DIR" | grep -Ei '\-pki$'
+    :
+  fi
+
+  ;;
 
 *help | *h) help && exit 0 ;;
 *)

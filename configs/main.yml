@@ -301,6 +301,6 @@ hosts:
     ssh:
       main:
         user: evg
-        pub_key:
+        pub_key:ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGqLDqDRifyckCeDIblL0vipBEPJ/ttML23l475xYI8zjYpaDOGoig8ivOckNPu4QKAke5/lvxrZ9MzSAY56U5eMTA9ARdVo+Hq0C0lZmBk3ih+t4XmVvOXSVd544iiz1Q== evg@office-mini-pin1
 
 

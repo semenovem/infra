@@ -10,10 +10,6 @@ import (
 var (
 	errDuplicateRoleMsg = "root/Roles contains duplicate role [%s]"
 	errRoleExistsMsg    = "role [%s] does not exist"
-
-	localhost = "127.0.0.1"
-
-	sshPort = uint16(22)
 )
 
 type DTOSSHUser struct {

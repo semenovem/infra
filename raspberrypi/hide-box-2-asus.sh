@@ -6,7 +6,7 @@ sudo apt -y upgrade && \
 sudo DEBIAN_FRONTEND=noninteractive apt -y install hostapd \
   dnsmasq openvpn netfilter-persistent iptables-persistent lshw vim mc iptraf-ng \
   git raspberrypi-kernel-headers build-essential dkms autossh iperf bc sshfs openvpn \
-  dnsutils telnet pwgen wireguard
+  dnsutils telnet pwgen wireguard tmux
 
 
 # ----------------------------------------------------------------------------
@@ -32,10 +32,10 @@ sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 sudo vim /etc/udev/rules.d/70-persistent-net.rules
 
 # built-in 4Gb (old)
-SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="dc:a6:32:a2:4a:54", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
+#SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="dc:a6:32:a2:4a:54", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
 
 # built-in on 8gb (new)
-#SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="e4:5f:01:ad:61:29", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="e4:5f:01:ad:61:29", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan0"
 
 # Realtek Semiconductor Corp. RTL88x2bu [AC1200 Techkey]
 #SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="90:de:80:3f:a2:69", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="wlan1"

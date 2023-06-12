@@ -20,7 +20,7 @@ echo "[DEBU] __CN__         = ${__CN__}"
 echo "[DEBU] __PKI_DIR__    = ${__PKI_DIR__}"
 echo "[DEBU] __CRYPTO_DIR__ = ${__CRYPTO_DIR__}"
 echo "[DEBU] __CFG_DIR__    = ${__CFG_DIR__}"
-echo "[DEBU] __PKI_NAME__    = ${__PKI_NAME__}"
+echo "[DEBU] __PKI_NAME__   = ${__PKI_NAME__}"
 echo "[DEBU] ======================== ---------- ========================"
 
 [ -n "$ERR" ] && exit 1
