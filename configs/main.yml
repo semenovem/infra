@@ -214,8 +214,8 @@ hosts:
 
   - name: srv1
     role: STANDBY_SERVER
-    description: перезагрузка в среду в 3:00 (timezone utc +3)
-    crontab: 0 3 * * 3 /usr/bin/systemctl reboot
+    description: перезагрузка в среду в 4:00 (timezone utc +3)
+    crontab: 0 1 * * 3 /usr/bin/systemctl reboot
     local:
       url: srv1.local srv.home
       ip: 192.168.11.101
@@ -232,8 +232,8 @@ hosts:
 
   - name: srv2
     role: STANDBY_SERVER
-    description: перезагрузка каждый второй день (timezone utc +3)
-    crontab: 0 3 /2 * * /usr/bin/systemctl reboot
+    description: перезагрузка каждую пятницу (timezone utc +3)
+    crontab: 0 1 * * 5 /usr/bin/systemctl reboot
     local:
       url: srv2.local srv2.home
       ip: 192.168.11.102

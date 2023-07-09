@@ -28,6 +28,8 @@ LC_ALL=en_US.utf-8
 
 sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
+sudo timedatectl set-timezone UTC
+
 # ----------------------------------------------------------------------------
 sudo vim /etc/udev/rules.d/70-persistent-net.rules
 
