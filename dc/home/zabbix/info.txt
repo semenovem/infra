@@ -1,0 +1,10 @@
+
+git clone https://github.com/zabbix/zabbix-docker
+docker-compose -f ./docker-compose_v3_alpine_mysql_latest.yaml up -d
+
+localhost:80
+admin / zabbix
+
+
+/etc/zabbix/zabbix_agent2.conf
+systemctl status zabbix-agent2
