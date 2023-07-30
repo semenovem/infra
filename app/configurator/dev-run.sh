@@ -4,7 +4,10 @@ CFG_ARG="-config-file=../../configs/main.yml"
 
 
 go run -ldflags="-X 'main.appVersion=1.0.2'" *.go \
-  ssh-remote-forward "$CFG_ARG" -host office-server
+ pki "$CFG_ARG" -host eu1
+
+
+#  ssh-remote-forward "$CFG_ARG" -host office-server
 
 
 exit 0

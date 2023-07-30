@@ -2,6 +2,7 @@ package conf
 
 import (
 	"configuration/entity"
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -138,4 +139,43 @@ func (c *Config) GetAllowIncomingSSHByRole(n string) []string {
 	}
 
 	return nil
+}
+
+func (c *Config) GetPKI(n string) (string, error) {
+	host, err := c.GetHost(n)
+	if err != nil {
+		return "", err
+	}
+
+	return host.PKI, nil
+}
+
+func (c *Config) GetSSHConn(n string) (string, error) {
+	host, err := c.GetHost(n)
+	if err != nil {
+		return "", err
+	}
+
+	if host.Public == nil || host.Public.IP == "" {
+		return "", errors.New("public ip not specified")
+	}
+
+	if host.SSH == nil {
+		return "", errors.New("ssh data not specified")
+	}
+
+	if host.SSH.Main == nil || host.SSH.Main.User == "" {
+		return "", errors.New("ssh user not specified")
+	}
+
+	if host.SSH.Port == 0 {
+		return "", errors.New("ssh port not specified")
+	}
+
+	return fmt.Sprintf(
+		"%s@%s -p %d",
+		host.SSH.Main.User,
+		host.Public.IP,
+		host.SSH.Port,
+	), nil
 }

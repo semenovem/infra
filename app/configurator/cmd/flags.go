@@ -28,6 +28,8 @@ const (
 	sshAuthorizedKeysCmdName = "ssh-authorized-keys"
 	sshConfigTaskName        = "ssh-config"
 	verifyCmdName            = "verify"
+	pkiCmdName               = "pki"
+	sshConnCmdName           = "ssh-conn"
 )
 
 func extract(fs *flag.FlagSet, n string) string {

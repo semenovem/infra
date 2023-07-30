@@ -41,6 +41,8 @@ func New() []*Task {
 		newSSHAuthorizedKeysTask(),
 		newPortForwardingTask(),
 		newPWDTask(),
+		newPKITask(),
+		newSSHConnTask(),
 	}
 }
 

@@ -46,6 +46,7 @@ func (c *Config) getHostSSH(n string) (*DTOSSH, error) {
 type DTOHost struct {
 	Name           string             `yaml:"name"`
 	Role           string             `yaml:"role"`
+	PKI            string             `yaml:"pki"`
 	Description    string             `yaml:"description,omitempty"`
 	Crontab        string             `yaml:"crontab,omitempty"`
 	Public         *DTOConn           `yaml:"public,omitempty"`
