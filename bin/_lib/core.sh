@@ -199,6 +199,22 @@ __core_has_docker_image__() {
   return 1
 }
 
+# проверить существование образа и собрать в случае отсутствия
+# $1 - название образа [name:1.0]
+# $2 - файл docker
+# $3 - путь scope сборки образа
+__core_build_docker_image_if_not__() {
+  __core_has_docker_image__ "$IMAGE"
+  case $? in
+  0) return 0 ;;
+  1)
+    __info__ "Build docker image in progress..."
+    $DOCKER_CMD build -f "$2" -t "$IMAGE" "$3" || return 1
+    ;;
+  *) return 1 ;;
+  esac
+}
+
 #
 # Общие
 #
