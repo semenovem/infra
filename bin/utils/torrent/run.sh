@@ -40,17 +40,22 @@ set +o allexport
 [ -n "$__INCOMPLETE_DIR__" ] && INCOMPLETE_DIR="$__INCOMPLETE_DIR__"
 [ -n "$__TORRENT_FILES_DIR__" ] && TORRENT_FILES_DIR="$__TORRENT_FILES_DIR__"
 
-[ ! -d "$DOWNLOADS_DIR" ] &&
-  echo "Download directory does not exist: '${DOWNLOADS_DIR}'" &&
-  exit 1
+if [ -n "$DOWNLOADS_DIR" ]; then
+  [ -z "$INCOMPLETE_DIR" ] && INCOMPLETE_DIR="$DOWNLOADS_DIR"
+  [ -z "$TORRENT_FILES_DIR" ] && TORRENT_FILES_DIR="$DOWNLOADS_DIR"
+fi
 
-[ ! -d "$INCOMPLETE_DIR" ] &&
-  echo "Incomplete directory does not exist: '${INCOMPLETE_DIR}'" &&
-  exit 1
+if [ ! -d "$DOWNLOADS_DIR" ]; then
+  mkdir "$DOWNLOADS_DIR" || exit 1
+fi
 
-[ ! -d "$TORRENT_FILES_DIR" ] &&
-  echo "Torrent files directory does not exist: '${TORRENT_FILES_DIR}'" &&
-  exit 1
+if [ ! -d "$INCOMPLETE_DIR" ]; then
+  mkdir "$INCOMPLETE_DIR"
+fi
+
+if [ ! -d "$TORRENT_FILES_DIR" ]; then
+  mkdir "$TORRENT_FILES_DIR"
+fi
 
 # Проверить запущен ли сервис
 # если в контейнер остановлен - удалить и пересоздать
@@ -66,6 +71,7 @@ fi
 docker run -d \
   --restart unless-stopped \
   --name=qbittorrent \
+  --cpus 0.5 \
   -e PUID="$(id -u)" \
   -e PGID="$GUI" \
   -e TZ=Etc/UTC \
@@ -77,4 +83,4 @@ docker run -d \
   -v "${DOWNLOADS_DIR}:/downloads" \
   -v "${INCOMPLETE_DIR}:/incomplete" \
   -v "${TORRENT_FILES_DIR}:/torrent-files" \
-  lscr.io/linuxserver/qbittorrent:4.5.1
+  lscr.io/linuxserver/qbittorrent:4.5.5
