@@ -1,0 +1,8 @@
+# github.com/caarlos0/env v3.5.0+incompatible
+## explicit
+github.com/caarlos0/env
+# github.com/joho/godotenv v1.5.1
+## explicit; go 1.12
+github.com/joho/godotenv
+# github.com/stretchr/testify v1.8.4
+## explicit; go 1.20

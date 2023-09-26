@@ -24,7 +24,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
     echo "__INCOMPLETE_DIR__="
     echo "# Каталог для файлов торрентов:"
     echo "__TORRENT_FILES_DIR__="
-    echo "# ID группы, с котороый нужно создавать загруженные файлы:"
+    echo "# ID группы, с которой нужно создавать загруженные файлы:"
     echo "__GUI__="
   } >"$CONFIG_FILE"
 fi
@@ -73,7 +73,7 @@ docker run -d \
   --name=qbittorrent \
   --cpus 0.5 \
   -e PUID="$(id -u)" \
-  -e PGID="$GUI" \
+  -e PGID="$(id -g)" \
   -e TZ=Etc/UTC \
   -e WEBUI_PORT=8080 \
   -p 8080:8080 \

@@ -185,3 +185,9 @@ sudo systemctl status hostapd
 dmesg
 sudo ifconfig usb0 up
 sudo dhclient usb0
+
+###################################отк
+# Отключить логи
+systemctl status rsyslog
+systemctl stop rsyslog
+systemctl disable rsyslog

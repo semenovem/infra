@@ -57,7 +57,7 @@ if [ -n "$OPER_COPY_FILES" ]; then
   copy_to_server "${ROOT}/cfg/server-33440-tcp.conf" "${REMOTE_DIR}/server-33440-tcp.conf"
 fi
 
-# TODO раздельная инсталяция сервисов по номеру порта
+# TODO раздельная инсталляция сервисов по номеру порта
 
 exit 0
 

@@ -65,6 +65,7 @@ hosts:
   # ---------------------------------------------------------------------------------
   - name: rr1
     role: PROXY_SERVER
+    pki: rrx
     public:
       url: rr1.evgio.com
       ip: 130.255.170.133
@@ -77,6 +78,7 @@ hosts:
 
   - name: rr4
     role: PROXY_SERVER
+    pki: rrx
     public:
       url: rr4.evgio.com
       ip: 185.87.51.94
@@ -89,6 +91,7 @@ hosts:
 
   - name: msk1
     role: PROXY_SERVER
+    pki: rrx
     public:
       url: msk1.evgio.com
       ip: 195.133.46.87
@@ -101,6 +104,7 @@ hosts:
 
   - name: kz2
     role: PROXY_SERVER
+    pki: kz
     public:
       url: kz2.evgio.com
       ip: 93.170.72.108
@@ -113,11 +117,13 @@ hosts:
 
   - name: eu1
     role: PROXY_SERVER
+    pki: eu
     public:
       url: eu1.evgio.com
       ip: 5.45.120.70
     ssh:
-      port: 2257
+      # TODO исправить порт
+      port: 22
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPpbwyFmbVB3ABe2rzyOd7Gm/oHr60swOw8B3J7pPBTsCSKjTNYcub+q4F7M44Q7Pam3VS4f0vgQkZMjduTWgvOQTWWAq/5Qv7jkNVX5tFhICFR2d3Bxas3Kj3/Vs/rkIg== adman@eu1
@@ -191,6 +197,7 @@ hosts:
   # ---------------------------------------------------------------------------------
   - name: home
     role: HOME_SERVER
+    pki: hom
     description: перезагрузка 2-а раза в мес (timezone utc +3)
     crontab:
     local:
@@ -214,6 +221,7 @@ hosts:
 
   - name: srv1
     role: STANDBY_SERVER
+    pki: hom
     description: перезагрузка в среду в 4:00 (timezone utc +3)
     crontab: 0 1 * * 3 /usr/bin/systemctl reboot
     local:
@@ -232,6 +240,7 @@ hosts:
 
   - name: srv2
     role: STANDBY_SERVER
+    pki: hom
     description: перезагрузка каждую пятницу (timezone utc +3)
     crontab: 0 1 * * 5 /usr/bin/systemctl reboot
     local:
@@ -253,6 +262,7 @@ hosts:
   # ---------------------------------------------------------------------------------
   - name: office-server
     role: OFFICE_SERVER
+    pki: auto
     description:
     local:
       url: main.local
@@ -273,6 +283,7 @@ hosts:
 
   - name: office-mini-tv
     role: OFFICE_SERVER
+    pki: auto
     description: перезагрузка каждую пятницу
     crontab: 0 3 * * 6 /usr/bin/systemctl reboot
     local:

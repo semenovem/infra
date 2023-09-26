@@ -38,3 +38,8 @@ find . -type f -name "*.txt" | wc -l
 
 # count directories
 find . -type d | wc -l
+
+
+# --------------------
+# проверка smart данных дисков
+sudo smartctl -a /dev/sda
