@@ -260,25 +260,25 @@ hosts:
   # ---------------------------------------------------------------------------------
   ### Офис
   # ---------------------------------------------------------------------------------
-  - name: office-server
+  - name: office-core
     role: OFFICE_SERVER
     pki: auto
-    description:
+    description: основной (xeoma, docs, backups)
     local:
-      url: main.local
+      url: core.local
       ip: 192.168.1.200
     ssh:
       main:
         user: evg
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBE9qsJbSRrCYARg2uPSSX0TMzCaVzuEgv09FEnlRefzB6RbpmhHkPLJ+yn6k2qWQICYKebBY8nKjFZrgOAGQx+3tp+HKRESU2yP3+RBRtLCUBvQu1ULOYp5jk3gKcIDtFg== evg@office-server
-    ssh_remote_forward:
-      user: forward-user
-      hosts: msk1 rr1 rr4
-      ports:
-        - 61022:0.0.0.0:22    # ssh
-        - 61194:0.0.0.0:1194  # vpn
-        - 61080:0.0.0.0:10080  # cctv xeoma
-        - 61090:0.0.0.0:10090  # cctv http
+#    ssh_remote_forward:
+#      user: forward-user
+#      hosts: msk1 rr1 rr4
+#      ports:
+#        - 61022:0.0.0.0:22    # ssh
+#        - 61194:0.0.0.0:1194  # vpn
+#        - 61080:0.0.0.0:10080  # cctv xeoma
+#        - 61090:0.0.0.0:10090  # cctv http
 
 
   - name: office-mini-tv
