@@ -1,17 +1,19 @@
 #!/bin/sh
 
-# sh /Users/jon/_environment/bin/utils/backup-dirs/backup-dir.sh _dev "home" "/mnt/soft/backup/laptop-16inno/09" 1
-# sh /Users/jon/_environment/bin/utils/backup-dirs/backup-dir.sh _dev "evg@192.168.1.200" "/home/evg/backup/laptop-16inno/09/dev" 1
-# Вернет ошибку [10] если директории с .git (репозитории) не будут найдены
+# -----------------------------------------------
+# Перебирает директорию в поисках .git директорий - архивирует на удаленный хост
+# Если директория не .git и весит меньше `SIZE_PACK_MAX` Mb - архивируем
+# Если директория .git не найдена и вниз спускаться уже нельзя (depth = 0) - архивируем
+# $1 - адрес хоста для подключения по ssh
+# $2 - локальная директория которую нужно заархивировать на удаленный хост
+# $3 - путь на целевой машине для файла архива
+# $4 - уровень вложенности поиска директорий .git
+# -----------------------------------------------
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/../../_lib/core.sh" || exit 1
 
-# указать копируемые директории
-# куда копировать
-
-# пройти по директориям - заархивировать - скопировать
-
+# Входные аргументы
 SRC_DIR=$1
 HOST=$2
 DST_DIR=$3
@@ -27,18 +29,11 @@ MAX_DEPTH=$(echo "$MAX_DEPTH" | grep -iEo '[0-9]*')
 
 ssh "$HOST" "mkdir -p ${DST_DIR}" || exit 1 # Создать директорию на удаленном хосте
 
-
-
-#[ ! -d "$SRC_DIR" ] && __err__ "путь ${SRC_DIR} не является директорией" && exit 1
-
-#find "$SRC_DIR" -maxdepth 1 -type d
-
-# Попробовать подключится к удаленному серверу
-#ssh "$HOST" ls >/dev/null
-#[ $? -ne 0 ] && __err__ "ошибка подключения к host=${HOST}" && exit 1
-
-#exit
 copy_via_ssh() {
+# TODO добавить проверку последних измененных файлов и архивировать только их
+# find /home/captain -type f -mmin -30
+# find /home/captain -type d -mmin -30
+
   DIR_NAME=$(basename "$1")
   sh "${ROOT}/archive-dir.sh" "$HOST" "$1" "${DST_DIR}/${DIR_NAME}.tar.gz"
 }
