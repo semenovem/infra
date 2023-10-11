@@ -1,63 +1,38 @@
-
 https://www.dmosk.ru/miniinstruktions.php?mini=mdadm
 
---------------------------------------------------
-Disk /dev/sdb: 1,82 TiB, 2000398934016 bytes, 3907029168 sectors
-Disk model: ST2000DM008-2FR1
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 4096 bytes
-I/O size (minimum/optimal): 4096 bytes / 4096 bytes
-Disklabel type: dos
-Disk identifier: 0xf12f9280
+
+server-core
+----------------------
+raid1 ssd-512Gb
+/dev/sda + /dev/sdb
+----------------------
+----------------------
+raid1 hdd-1Gb
+/dev/sdc + /dev/sdd
+----------------------
 
 
---------------------------------------------------
-Disk /dev/sdc: 931,51 GiB, 1000204886016 bytes, 1953525168 sectors
-Disk model: ST31000528AS
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: gpt
-Disk identifier: 2053F803-E55B-445D-A2BA-06C97B9C137F
----
-Start        End    Sectors   Size
-2048 1953525167 1953523120 931,5G
-Device     Boot Start        End    Sectors  Size Id Type
-/dev/sdc1        2048 1950353408 1950351361  930G 83 Linux
-
---------------------------------------------------
-Disk /dev/sdd: 465,76 GiB, 500107862016 bytes, 976773168 sectors
-Disk model: WDC WD5000AAKS-0
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: dos
-Disk identifier: 0x00000000
----
-Device     Boot Start       End   Sectors   Size Id Type
-/dev/sdd1        2048 976773119 976771072 465,8G af HFS / HFS+
-
---------------------------------------------------
-mdadm --create --verbose --level=1 --metadata=1.2 --raid-devices=2 /dev/md0 /dev/sdb1 /dev/sdc1
-mdadm --create --verbose /dev/md0 -l 1 -n 2 /dev/sdb1 /dev/sdc1
 
 
---------------------------------------------------
-root@office-server:/etc/mdadm# cat mdadm.conf
-DEVICE partitions
-ARRAY /dev/md/office-server:0 level=raid1 num-devices=2 metadata=1.2 name=office-server:0 UUID=bb33903a:9e4a4abc:c7a30527:88665887
-ARRAY /dev/md500 level=raid1 num-devices=2 metadata=1.2 name=office-server:500 UUID=a866395f:49a87d48:b2699a63:d3228f46
-
---------------------------------------------------
+----------
+mdadm --zero-superblock --force /dev/sd{a,b}
+wipefs --all --force /dev/sd{a,b}
+mdadm --create --verbose /dev/md0 -l 1 -n 2 /dev/sd{a,b}
+--
+mkdir /etc/mdadm
+echo "DEVICE partitions" > /etc/mdadm/mdadm.conf
+mdadm --detail --scan --verbose | awk '/ARRAY/ {print}' >> /etc/mdadm/mdadm.conf
+--
+mkfs.ext4 /dev/md
+mkdir /mnt/md1
+mount /dev/md1 /mnt/md1
+--
 blkid
-/dev/md0: UUID="91c88bcd-938a-4808-afd5-83a1069814c0" BLOCK_SIZE="4096" TYPE="ext4"
-/dev/md500: UUID="7dfb76cb-97a2-44e9-979a-5e3a637fdee1" BLOCK_SIZE="4096" TYPE="ext4"
+# добавить в /etc/fstab
+UUID="edd4e8bd-1f45-4c3e-962b-e93aa6c1fd23"    /mnt/md1    ext4    defaults    0 0
 
-/etc/fstab
-UUID="91c88bcd-938a-4808-afd5-83a1069814c0"    /mnt/raid_1t    ext4    defaults    0 0
-UUID="7dfb76cb-97a2-44e9-979a-5e3a637fdee1"    /mnt/raid_500g    ext4    defaults    0 0
---------------------------------------------------
 
-500106788864
-
-1950355456
+------------------------
+# информация о raid
+cat /proc/mdstat
+mdadm -D /dev/md1
