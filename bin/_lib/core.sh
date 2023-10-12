@@ -180,7 +180,7 @@ __core_conf_get_rest_args__() {
 
 # проверить приложение виртуализации
 __core_get_virtualization_app__() {
-  which "docker" >/dev/null && echo "docker" && return 0
+  which "docker" >/dev/null && return 0
   __err__ "docker not installed" && return 1
 }
 

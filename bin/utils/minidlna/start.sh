@@ -7,41 +7,52 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 DOCKER_IMAGE="infra/minidlna:1.0"
 CONTAINER_NAME="minidlna"
 DOCKER_FILE="${ROOT}/minidlna.dockerfile"
-PORT="8200"
 CONFIG_MEDIA="${HOME}/.infra/minidlna/media.conf"
 
 case "$1" in
 "start")
   __core_build_docker_image_if_not__ "$DOCKER_IMAGE" "$DOCKER_FILE" "$ROOT" || exit 1
 
-#  TMP_CONFIG_FILE=$(mktemp) || exit 1
-#  cat "${ROOT}/minidlna.conf" > "$TMP_CONFIG_FILE" || exit 1
-#  ARGS="-v '/mnt/hdd-2t/torrent:/media:ro'"
-#
-#
-#  for dir in $(grep -Ev '^[#[:space:]]+|^$' "$CONFIG_MEDIA"); do
-#    echo ">>>>>>>>>>>> media_dir=/media/$dir"
-#  done
+  # проверить и создать локальный конфиг
 
-# set - -- -v "/mnt/hdd-2t/torrent:/media:ro"
-# set -- $ARGS
-# ls "$@"
+  TMP_CONFIG_FILE=$(mktemp) || exit 1
+  grep -Ev '^[#[:space:]]+|^$' "${ROOT}/minidlna.conf" >"$TMP_CONFIG_FILE" || exit 1
 
-#echo "?????????? $@"
-##
+  VOLUMES_ARGS=
+
+  for DIR in $(grep -Ev '^[#[:space:]]+|^$' "$CONFIG_MEDIA"); do
+    MOUNT_POINT="/minidlna/media/$(basename "$DIR")"
+    echo "media_dir=${MOUNT_POINT}" >> "$TMP_CONFIG_FILE"
+
+    VOLUMES_ARGS="${VOLUMES_ARGS} -v ${DIR}:${MOUNT_POINT}:ro"
+  done
+
+#  cat "$TMP_CONFIG_FILE"
+
+#  echo $VOLUMES_ARGS
+
+  # set - -- -v "/mnt/hdd-2t/torrent:/media:ro"
+  # set -- $ARGS
+  # ls "$@"
+
+  #echo "?????????? $@"
+  ##
+
+#    -v "/mnt/hdd-2t/torrent:/media:ro" \
 #  exit
-
-#    -p "${PORT}:8200" \
 
   docker run -it --rm --name "$CONTAINER_NAME" \
     -u "nobody:nobody" \
-    -v "${ROOT}/minidlna.conf:/minidlna-dir/minidlna.conf:ro" \
-    -v "/home/evg/media:/media:ro" \
+    -v "${ROOT}/minidlna.conf:/minidlna/minidlna.conf:ro" \
     --network host \
-    "$DOCKER_IMAGE" sh
+    $VOLUMES_ARGS \
+    "$DOCKER_IMAGE" minidlnad -f "/minidlna/minidlna.conf" -P "/tmp/minidlna.pid" -R -r && tail -f /dev/null
+  #    -v "/home/evg/media:/media:ro" \
 
-#    $@ \
-  #  minidlnad -f "/minidlna-dir/minidlna.conf" -P "/tmp/minidlna.pid" -R -r
+  #    $@ \
+  #  minidlnad -f "/minidlna/minidlna.conf" -P "/tmp/minidlna.pid" -R -r
+
+#   tail -f /dev/null
   ;;
 
 "stop")
