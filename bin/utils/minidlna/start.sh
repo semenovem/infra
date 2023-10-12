@@ -16,28 +16,31 @@ case "$1" in
 
 #  TMP_CONFIG_FILE=$(mktemp) || exit 1
 #  cat "${ROOT}/minidlna.conf" > "$TMP_CONFIG_FILE" || exit 1
-  ARGS="-v '/mnt/hdd-2t/torrent:/media:ro'"
-
-
-  for dir in $(grep -Ev '^[#[:space:]]+|^$' "$CONFIG_MEDIA"); do
-    echo ">>>>>>>>>>>> media_dir=/media/$dir"
-  done
+#  ARGS="-v '/mnt/hdd-2t/torrent:/media:ro'"
+#
+#
+#  for dir in $(grep -Ev '^[#[:space:]]+|^$' "$CONFIG_MEDIA"); do
+#    echo ">>>>>>>>>>>> media_dir=/media/$dir"
+#  done
 
 # set - -- -v "/mnt/hdd-2t/torrent:/media:ro"
- set -- $ARGS
+# set -- $ARGS
 # ls "$@"
 
 #echo "?????????? $@"
 ##
 #  exit
 
+#    -p "${PORT}:8200" \
+
   docker run -it --rm --name "$CONTAINER_NAME" \
     -u "nobody:nobody" \
-    -p "${PORT}:8200" \
     -v "${ROOT}/minidlna.conf:/minidlna-dir/minidlna.conf:ro" \
-    $@ \
+    -v "/home/evg/media:/media:ro" \
+    --network host \
     "$DOCKER_IMAGE" sh
 
+#    $@ \
   #  minidlnad -f "/minidlna-dir/minidlna.conf" -P "/tmp/minidlna.pid" -R -r
   ;;
 
