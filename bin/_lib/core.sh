@@ -178,12 +178,10 @@ __core_conf_get_rest_args__() {
   return 1
 }
 
-# получить название доступного приложения виртуализации (podman/docker)
+# проверить приложение виртуализации
 __core_get_virtualization_app__() {
   which "docker" >/dev/null && echo "docker" && return 0
-  which "podman" >/dev/null && echo "podman" && return 0
-
-  __err__ "podman/docker not installed" && return 1
+  __err__ "docker not installed" && return 1
 }
 
 # проверить, есть ли образ
@@ -191,10 +189,9 @@ __core_get_virtualization_app__() {
 # return 1 - нет образа TODO - изменить на 99
 # return 2 - ошибка
 __core_has_docker_image__() {
+  __core_get_virtualization_app__ || return 2
   CORE_CONF_NAME=$1
-  CORE_CONF_CMD=$(__core_get_virtualization_app__) || return 2
-
-  CORE_CONF_HAS=$($CORE_CONF_CMD image ls --filter=reference="$CORE_CONF_NAME" -q) || return 2
+  CORE_CONF_HAS=$(docker image ls --filter=reference="$CORE_CONF_NAME" -q) || return 2
   [ -n "$CORE_CONF_HAS" ] && return 0
   return 1
 }
@@ -204,12 +201,15 @@ __core_has_docker_image__() {
 # $2 - файл docker
 # $3 - путь scope сборки образа
 __core_build_docker_image_if_not__() {
-  __core_has_docker_image__ "$IMAGE"
+  __core_has_docker_image__ "$1"
   case $? in
   0) return 0 ;;
   1)
     __info__ "Build docker image in progress..."
-    $DOCKER_CMD build -f "$2" -t "$IMAGE" "$3" || return 1
+    if ! docker build -f "$2" -t "$1" "$3"; then
+      __err__ "Build docker image error"
+      return 1
+    fi
     ;;
   *) return 1 ;;
   esac
