@@ -1,0 +1,23 @@
+
+server-core
+
+######################################################
+- рейд массивы:
+mdadm
+----------------------
+raid1 ssd-512Gb
+/dev/sda + /dev/sdb
+/mnt/md1
+----------------------
+----------------------
+raid1 hdd-1Gb
+/dev/sdc + /dev/sdd
+/mnt/md2
+----------------------
+
+######################################################
+- RAM диск
+# /etc/fstab
+
+# ram disk for archive cache
+tmpfs  /mnt/memfs-xeoma  tmpfs  rw,size=1G  0   0
