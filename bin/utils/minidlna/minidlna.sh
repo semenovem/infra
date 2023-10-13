@@ -12,11 +12,12 @@ CONFIG_MEDIA="${HOME}/.infra/minidlna/media.conf"
 
 status_container() {
   HAS=$(docker ps -q --filter "name=${CONTAINER_NAME}") || return 1
-  [ -n "$HAS" ] && __info__ "running" || __info__ "not running"
+  [ -n "$HAS" ] && __info__ "status: running" || __info__ "status: not running"
 }
 
 help() {
   __info__ "use minidlna.sh [start | stop | status]"
+  __info__ "config file: ${CONFIG_MEDIA}"
 }
 
 [ -z "$1" ] && status_container && help && exit 0
@@ -69,7 +70,8 @@ case "$1" in
 
   docker run -d --restart on-failure:10 \
     --name "$CONTAINER_NAME" \
-    --memory 1G \
+    --memory=100m \
+    --memory-swap=0m \
     --cpus 0.5 \
     -u "nobody:nobody" \
     --network host \
