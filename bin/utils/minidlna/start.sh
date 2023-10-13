@@ -1,19 +1,58 @@
 #!/bin/sh
 
+# Старт медиа плеера
+
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/../../_lib/core.sh" || exit 1
 
-# Старт медиа плеера
 DOCKER_IMAGE="infra/minidlna:1.0"
 CONTAINER_NAME="minidlna"
 DOCKER_FILE="${ROOT}/minidlna.dockerfile"
 CONFIG_MEDIA="${HOME}/.infra/minidlna/media.conf"
+
+status_container() {
+  HAS=$(docker ps -q --filter "name=${CONTAINER_NAME}") || return 1
+  [ -n "$HAS" ] && __info__ "running" || __info__ "not running"
+}
+
+help() {
+  __info__ "use minidlna.sh [start | stop | status]"
+}
+
+[ -z "$1" ] && status_container && help && exit 0
+
+remove_container() {
+  HAS=$(docker ps -a -q --filter "name=${CONTAINER_NAME}") || return 1
+  if [ -n "$HAS" ]; then
+    docker rm -v "$CONTAINER_NAME" >/dev/null || return 1
+  fi
+}
+
+stop_container() {
+  HAS=$(docker ps -q --filter "name=${CONTAINER_NAME}") || return 1
+  if [ -n "$HAS" ]; then
+    docker stop "$CONTAINER_NAME" -t 5 >/dev/null || return 1
+    HAS=$(docker ps -a -q --filter "name=${CONTAINER_NAME}") || return 1
+    docker rm -v "$CONTAINER_NAME" >/dev/null || return 1
+  fi
+}
 
 case "$1" in
 "start")
   __core_build_docker_image_if_not__ "$DOCKER_IMAGE" "$DOCKER_FILE" "$ROOT" || exit 1
 
   # проверить и создать локальный конфиг
+  if [ ! -f "$CONFIG_MEDIA" ]; then
+    {
+      echo "# Media directories"
+      echo "# /mnt/music"
+      echo "# /mnt/cinema"
+    } >"$CONFIG_MEDIA" || exit 1
+  fi
+
+  HAS=$(docker ps -q --filter "name=${CONTAINER_NAME}") || exit 1
+  [ -n "$HAS" ] && __info__ "already running" && exit 0
+  remove_container || exit 1
 
   TMP_CONFIG_FILE=$(mktemp) || exit 1
   grep -Ev '^[#[:space:]]+|^$' "${ROOT}/minidlna.conf" >"$TMP_CONFIG_FILE" || exit 1
@@ -22,44 +61,33 @@ case "$1" in
 
   for DIR in $(grep -Ev '^[#[:space:]]+|^$' "$CONFIG_MEDIA"); do
     MOUNT_POINT="/minidlna/media/$(basename "$DIR")"
-    echo "media_dir=${MOUNT_POINT}" >> "$TMP_CONFIG_FILE"
-
+    echo "media_dir=${MOUNT_POINT}" >>"$TMP_CONFIG_FILE"
     VOLUMES_ARGS="${VOLUMES_ARGS} -v ${DIR}:${MOUNT_POINT}:ro"
   done
 
-#  cat "$TMP_CONFIG_FILE"
+  [ -z "$VOLUMES_ARGS" ] && echo "configuration file ${CONFIG_MEDIA} not contain media directories " && exit
 
-#  echo $VOLUMES_ARGS
-
-  # set - -- -v "/mnt/hdd-2t/torrent:/media:ro"
-  # set -- $ARGS
-  # ls "$@"
-
-  #echo "?????????? $@"
-  ##
-
-#    -v "/mnt/hdd-2t/torrent:/media:ro" \
-#  exit
-
-  docker run -it --rm --name "$CONTAINER_NAME" \
+  docker run -d --restart on-failure:10 \
+    --name "$CONTAINER_NAME" \
+    --memory 1G \
+    --cpus 0.5 \
     -u "nobody:nobody" \
-    -v "${ROOT}/minidlna.conf:/minidlna/minidlna.conf:ro" \
     --network host \
+    -v "${ROOT}/minidlna.conf:/minidlna/minidlna.conf:ro" \
     $VOLUMES_ARGS \
-    "$DOCKER_IMAGE" minidlnad -f "/minidlna/minidlna.conf" -P "/tmp/minidlna.pid" -R -r && tail -f /dev/null
-  #    -v "/home/evg/media:/media:ro" \
+    "$DOCKER_IMAGE" \
+    sh -c 'minidlnad -f "/minidlna/minidlna.conf" -P "/tmp/minidlna.pid" -R -r && tail -f /dev/null'
 
-  #    $@ \
-  #  minidlnad -f "/minidlna/minidlna.conf" -P "/tmp/minidlna.pid" -R -r
-
-#   tail -f /dev/null
+  docker ps
   ;;
 
 "stop")
-  docker stop "$CONTAINER_NAME"
+  stop_container
   ;;
 
-*) __info__ "use minidlna.sh [start | stop | log]" ;;
-esac
+"status")
+  status_container
+  ;;
 
-exit 0
+*) help ;;
+esac
