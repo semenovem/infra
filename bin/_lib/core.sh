@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Директория хранения локальных данных
+export __CORE_STATE_DIR__="${HOME}/_infra/.local"
+
+# Инфраструктура ключей vpn
+export __CORE_VPN_PKI_DIR__="${HOME}/.vpn_pki"
+
+# Время последнего обновления репозитория
+export __CORE_TIME_REPO_LAST_UPDATED__="${__CORE_STATE_DIR__}/last-update-repo"
+
 #
 # Конфигурация
 # -force
@@ -7,18 +16,6 @@
 # -yes
 #
 # __ENVI_BIN__ = путь к bin, устанавливается в профайле
-
-# Директория хранения данных. Есть копии в других файлах
-__CORE_STATE_DIR__="${HOME}/_envi_state"
-
-# Файл профиля пользователя в операционной системе
-CORE_PROFILE_FILE="${HOME}/.profile_envi"
-
-# Инфраструктура ключей vpn
-__CORE_VPN_PKI_DIR__="${HOME}/.vpn_pki"
-
-# Время последнего обновления репозитория
-__CORE_TIME_REPO_LAST_UPDATED__="${__CORE_STATE_DIR__}/last-update-repo"
 
 # Отвечать утвердительно на запросы к пользователю
 __YES__=
@@ -84,7 +81,6 @@ unset p
 # логгер
 # использует __QUIET__=1 для подавления вывода
 
-CORE_LOGGER_NAME="envi"
 CORE_LOGGER_USE_DATA=
 
 __CORE_LOGGER_SUB_SYSTEM_NAME__=$(basename "$0") || exit 1
@@ -126,7 +122,7 @@ core_conf_logger() {
   shift
   shift
 
-  coreConfMsg="[${CORE_LOGGER_NAME}][${coreConfLoggerType}]$(core_logger_sub_system_name) $*"
+  coreConfMsg="[${coreConfLoggerType}]$(core_logger_sub_system_name) $*"
 
   if [ -n "$CORE_LOGGER_COLOR_TERMINAL" ]; then
     cmd="${coreConfColor}${coreConfMsg}${__NC__}"
@@ -256,12 +252,17 @@ __absolute_path__() {
 
 # Нормализация пути
 # Удалить относительные переходы типа:
+# /Users/sem/infra/bin/../ => /Users/sem/infra
+__realpath_dir__() {
+  echo "$(
+    cd "$1" || return 1
+    pwd
+  )"
+}
+
 # /Users/sem/infra/bin/../conf.yml => /Users/sem/infra/conf.yml
 __realpath__() {
-  echo "$(
-    cd "$(dirname "$1")" || return 1
-    pwd
-  )/$(basename "$1")"
+  echo "$(__realpath_dir__ "$(dirname "$1")")/$(basename "$1")"
 }
 
 # Выполнить конфигуратор
@@ -283,14 +284,26 @@ __get_hostname__() {
 
 # Создать директорию данных окружения, если не существует
 if [ ! -d "$__CORE_STATE_DIR__" ]; then
-  __debug__ "Нет директории [$__CORE_STATE_DIR__]. Создать..."
+  __info__ "No directory [${__CORE_STATE_DIR__}]. Create and install chmod 0700..."
 
-  mkdir "$__CORE_STATE_DIR__" || exit 1
+  ERR=$(mkdir "$__CORE_STATE_DIR__" 2>&1)
+  if [ $? -ne 0 ]; then
+    __err__ "Creating a directory [${__CORE_STATE_DIR__}]. ($ERR)"
+    exit 1
+  fi
+
+  ERR=$(chmod 0700 "$__CORE_STATE_DIR__" 2>&1)
+  if [ $? -ne 0 ]; then
+    __err__ "Setting directory permissions [${__CORE_STATE_DIR__}]. ($ERR)"
+    exit 1
+  fi
+
+  unset ERR
 fi
 
 # Создать .ssh директорию, если не существует
 if [ ! -d "${HOME}/.ssh" ]; then
-  __debug__ "Нет директории [${HOME}/.ssh]. Создать + установить chmod 0700..."
+  __info__ "No directory [${HOME}/.ssh]. Create and install chmod 0700..."
 
   mkdir "${HOME}/.ssh" || exit 1
   chmod 0700 "${HOME}/.ssh" || exit 1

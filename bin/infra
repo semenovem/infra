@@ -1,0 +1,22 @@
+#!/bin/sh
+
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+. "${ROOT}/_lib/core.sh" || exit 1
+
+case "$1" in
+
+"install")
+  shift
+  sh "${ROOT}/util/sys/install.sh" "$@"
+  ;;
+
+*)
+  __info__ "list of commands"
+  __info__ "help          "
+  __info__ "install          - create and install infrastructure"
+  __info__
+  __info__ "[li cert scanLocalNet temp envi-utils !]"
+  __info__ "sudo netstat -lntup  # список приложений, использующих порты"
+  ;;
+
+esac

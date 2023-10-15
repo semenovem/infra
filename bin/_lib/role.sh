@@ -1,9 +1,7 @@
 #!/bin/sh
 
-# TODO дублирует значение из conf.sh __CORE_STATE_DIR__
-CORE_ROLE_PATH_DIR="${HOME}/_envi_state"
-
-CORE_ROLE_FILE="role"
+# Константы определяются в core.sh
+[ -z "$__CORE_STATE_DIR__" ] && echo "Не установлена константа [__CORE_STATE_DIR__]" && exit 1
 
 # Типы ролей
 # при добавлении новой роли - также добавь и в __CORE_ROLES__
@@ -13,8 +11,6 @@ __CORE_ROLE_PROXY_SERVER_CONST__="PROXY_SERVER"
 __CORE_ROLE_WORKSTATION_CONST__="WORKSTATION"
 __CORE_ROLE_MINI_SERVER_CONST__="MINI_SERVER"
 __CORE_ROLE_OFFICE_SERVER_CONST__="OFFICE_SERVER"
-# TODO подготовить новую роль ssh-configs, ssh-authorized
-__CORE_ROLE_GIT_REPO_CONST__="GIT_REPO"
 
 __CORE_ROLES__="$__CORE_ROLE_HOME_SERVER_CONST__"
 __CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_STANDBY_SERVER_CONST__}"
@@ -22,12 +18,11 @@ __CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_PROXY_SERVER_CONST__}"
 __CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_WORKSTATION_CONST__}"
 __CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_MINI_SERVER_CONST__}"
 __CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_OFFICE_SERVER_CONST__}"
-__CORE_ROLES__="${__CORE_ROLES__} ${__CORE_ROLE_GIT_REPO_CONST__}"
 
 # Получение сохраненной роли устройства
 __core_role_get__() {
-  [ ! -f "${CORE_ROLE_PATH_DIR}/${CORE_ROLE_FILE}" ] && return 1
-  role=$(cat "${CORE_ROLE_PATH_DIR}/${CORE_ROLE_FILE}")
+  [ ! -f "${__CORE_STATE_DIR__}/role" ] && return 1
+  role=$(cat "${__CORE_STATE_DIR__}/role")
 
   [ -z "$role" ] && return 1
   for it in $__CORE_ROLES__; do
@@ -41,5 +36,5 @@ __core_role_save__() {
   role=$1
   [ -z "$role" ] && echo "не передано значение роли" >&2 && return 1
 
-  echo "$role" >"${CORE_ROLE_PATH_DIR}/${CORE_ROLE_FILE}"
+  echo "$role" >"${__CORE_STATE_DIR__}/role"
 }

@@ -11,14 +11,13 @@
 SOURCE=$1
 TARGET=$2
 
-[ ! -f "$SOURCE" ] && echo "Нет файла-источника '$SOURCE'" >&2 && exit 1
+[ ! -f "$SOURCE" ] && echo "No source file '$SOURCE'" >&2 && exit 1
 
 # файлы идентичные
 [ -f "$TARGET" ] && cmp -s "$TARGET" "$SOURCE" &&
-  echo "Файлы идентичные" &&
+  echo "The files are identical" &&
   exit 0
 
 cp "$SOURCE" "$TARGET" || exit 1
 
-echo "Копирование успешно"
-exit 0
+echo "Copying successful"

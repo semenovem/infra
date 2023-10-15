@@ -1,19 +1,21 @@
 #### Environment setting
 
 ```
-git clone https://github.com/semenovem/infra.git infra
-
-sh _infra_/bin/infra_install
+cd && git clone https://github.com/semenovem/infra.git _infra && \
+sh _infra/bin/infra install
 ```  
 
 #### See new commands in terminal
 
-`envi-help`
+`infra-help`
 
 #### Global environment
 ```
-__ENVI_BIN__
+__INFRA_BIN__=${HOME}/_infra/bin
 ```
+
+# Profile configuration 
+${HOME}/.profile_infra
 ---------------------------------------------------------
 
 ```
