@@ -1,9 +1,9 @@
 #### Environment setting
 
 ```
-git clone https://github.com/semenovem/environment.git _environment
+git clone https://github.com/semenovem/infra.git infra
 
-sh _environment/bin/envi
+sh _infra_/bin/infra_install
 ```  
 
 #### See new commands in terminal

@@ -3,7 +3,7 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/../../_lib/core.sh" || exit 1
 
-CONFIG_DIR="${HOME}/_environment/.local/torrent/config"
+CONFIG_DIR="${HOME}/infra/.local/torrent/config"
 CONFIG_FILE="${ROOT}/config.env"
 TORRENT_FILES_DIR=
 DOWNLOADS_DIR=

@@ -33,8 +33,9 @@ Host mini
 
 # -----------------------------
 # office
-Host office-server
-  HostName     192.168.1.200
+Host office-core
+  HostName     192.168.41.31
+#  HostName     192.168.1.200
   User         evg
   Port         22
   IdentityFile ~/.ssh/id_ecdsa

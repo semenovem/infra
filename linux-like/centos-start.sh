@@ -14,8 +14,8 @@ adduser adman
 usermod -aG wheel adman
 
 runuser -l adman -c 'whoami'
-runuser -l adman -c 'git clone https://github.com/semenovem/environment.git _environment'
-#runuser -l adman -c 'sh _environment/bin/envi'
+runuser -l adman -c 'git clone https://github.com/semenovem/infra.git infra'
+#runuser -l adman -c 'sh infra/bin/envi'
 
 # ------------------
 #

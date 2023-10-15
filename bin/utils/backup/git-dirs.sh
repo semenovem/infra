@@ -14,14 +14,17 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 . "${ROOT}/../../_lib/core.sh" || exit 1
 
 # Входные аргументы
-SRC_DIR=$1
-HOST=$2
+HOST=$1
+SRC_DIR=$2
 DST_DIR=$3
 MAX_DEPTH=$4 # на сколько директорий можно проваливаться вглубь
 
 SIZE_PACK_MAX=100 # максимальный размер директории которая не является репозиторием
 
-[ -z "$SRC_DIR" ] && __err__ "не передан аргумент (архивируемая директория) \$1" && exit 1
+[ -z "$DST_DIR" ] &&
+  __err__ "не передан аргумент (целевая директория на удаленном хосте) \$3" && exit 1
+
+[ -z "$SRC_DIR" ] && __err__ "не передан аргумент (архивируемая директория) \$2" && exit 1
 SRC_DIR=$(__absolute_path__ "$SRC_DIR")
 
 MAX_DEPTH=$(echo "$MAX_DEPTH" | grep -iEo '[0-9]*')
@@ -30,10 +33,6 @@ MAX_DEPTH=$(echo "$MAX_DEPTH" | grep -iEo '[0-9]*')
 ssh "$HOST" "mkdir -p ${DST_DIR}" || exit 1 # Создать директорию на удаленном хосте
 
 copy_via_ssh() {
-# TODO добавить проверку последних измененных файлов и архивировать только их
-# find /home/captain -type f -mmin -30
-# find /home/captain -type d -mmin -30
-
   DIR_NAME=$(basename "$1")
   sh "${ROOT}/archive-dir.sh" "$HOST" "$1" "${DST_DIR}/${DIR_NAME}.tar.gz"
 }
@@ -53,7 +52,7 @@ for DIR in "$SRC_DIR"/*; do
   fi
 
   if [ "$MAX_DEPTH" -gt 0 ]; then
-    sh "$0" "$DIR" "$HOST" "${DST_DIR}/$(basename "$DIR")" "$((MAX_DEPTH - 1))"
+    sh "$0" "$HOST" "$DIR" "${DST_DIR}/$(basename "$DIR")" "$((MAX_DEPTH - 1))"
     continue
   fi
 

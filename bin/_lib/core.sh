@@ -256,7 +256,7 @@ __absolute_path__() {
 
 # Нормализация пути
 # Удалить относительные переходы типа:
-# /Users/sem/_environment/bin/../conf.yml => /Users/sem/_environment/conf.yml
+# /Users/sem/infra/bin/../conf.yml => /Users/sem/infra/conf.yml
 __realpath__() {
   echo "$(
     cd "$(dirname "$1")" || return 1

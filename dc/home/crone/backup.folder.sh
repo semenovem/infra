@@ -2,8 +2,8 @@
 
 # Копия каждый день в 23 часа
 # crontab
-# 1 23 * * * sh /home/evg/_environment/dc/home/crone/backup.folder.sh
-# 1 16 30 * * sh /home/evg/_environment/dc/home/crone/backup.folder.sh
+# 1 23 * * * sh /home/evg/infra/dc/home/crone/backup.folder.sh
+# 1 16 30 * * sh /home/evg/infra/dc/home/crone/backup.folder.sh
 
 # sudo grep --color -i cron /var/log/syslog
 
