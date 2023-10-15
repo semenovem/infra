@@ -1,0 +1,93 @@
+#!/bin/sh
+
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+. "${ROOT}/_lib/core.sh" || exit 1
+
+CONFIG_FILE="${__CORE_STATE_DIR__}/torrent/config.env"
+CONFIG_DIR="${__CORE_STATE_DIR__}/torrent/config"
+CONTAINER_NAME="qbittorrent"
+
+if [ ! -d "${CONFIG_DIR}" ]; then
+  mkdir -p "$CONFIG_DIR" || exit 1
+fi
+
+if [ ! -f "$CONFIG_FILE" ]; then
+  {
+    echo "# В этом файле нужно указать пути к директориям"
+    echo
+    echo "__WEBUI_PORT__=8080"
+    echo
+    echo "# Каталог для загрузки:"
+    echo "__DOWNLOADS_DIR__="
+    echo
+    echo "# Каталог для не завершенных загрузок:"
+    echo "__INCOMPLETE_DIR__="
+    echo
+    echo "# Каталог для файлов торрентов:"
+    echo "__TORRENT_FILES_DIR__="
+  } >"$CONFIG_FILE"
+fi
+
+set -o allexport
+# shellcheck disable=SC1090
+. "$CONFIG_FILE" || exit 1
+set +o allexport
+
+remove_container() {
+  HAS=$(docker ps --filter=name="$CONTAINER_NAME" -q -a) || return 1
+  if [ -n "$HAS" ]; then
+    docker rm "$CONTAINER_NAME" >/dev/null || return 1
+  fi
+}
+
+case $1 in
+"stop")
+  HAS=$(docker ps --filter=name="$CONTAINER_NAME" -q) || exit 1
+  if [ -n "$HAS" ]; then
+    docker stop "$CONTAINER_NAME" >/dev/null
+  fi
+  remove_container || exit 1
+  ;;
+"run" | "start")
+  ERR=
+  [ -z "$__DOWNLOADS_DIR__" ] && ERR=1 && __info__ "не указано значение __DOWNLOADS_DIR__"
+  [ -z "$__INCOMPLETE_DIR__" ] && ERR=1 && __info__ "не указано значение __INCOMPLETE_DIR__"
+  [ -z "$__TORRENT_FILES_DIR__" ] && ERR=1 && __info__ "не указано значение __TORRENT_FILES_DIR__"
+  [ -n "$ERR" ] && __info__ "Заполните значения в файле [${CONFIG_FILE}]" && exit 1
+
+  mkdir -p "$__DOWNLOADS_DIR__" || exit 1
+  mkdir -p "$__INCOMPLETE_DIR__" || exit 1
+  mkdir -p "$__TORRENT_FILES_DIR__" || exit 1
+
+  HAS=$(docker ps --filter=name="$CONTAINER_NAME" -q) || exit 1
+  [ -n "$HAS" ] && __info__ "already running" && exit 0
+
+  remove_container || exit 1
+
+  docker run -d \
+    --restart unless-stopped \
+    --name="$CONTAINER_NAME" \
+    --cpus 0.5 \
+    -e PUID="$(id -u)" \
+    -e PGID="$(id -g)" \
+    -e TZ=Etc/UTC \
+    -e WEBUI_PORT="${__WEBUI_PORT__}" \
+    -p "${__WEBUI_PORT__}:${__WEBUI_PORT__}" \
+    -p 6881:6881 \
+    -p 6881:6881/udp \
+    -v "${CONFIG_DIR}:/config" \
+    -v "${__DOWNLOADS_DIR__}:/downloads" \
+    -v "${__INCOMPLETE_DIR__}:/incomplete" \
+    -v "${__TORRENT_FILES_DIR__}:/torrent-files" \
+    lscr.io/linuxserver/qbittorrent:4.5.5
+
+  docker logs -f "$CONTAINER_NAME"
+  ;;
+
+"log" | "logs") docker logs -f "$CONTAINER_NAME" ;;
+
+*)
+  echo "use torrent [start | stop | log]"
+  ;;
+
+esac

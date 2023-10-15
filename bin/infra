@@ -3,17 +3,43 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/_lib/core.sh" || exit 1
 
-case "$1" in
+ENVI_SYS_DIR="${ROOT}/util/sys"
+COMMAND=$1
+shift
 
-"install")
-  shift
-  sh "${ROOT}/util/sys/install.sh" "$@"
+case "$COMMAND" in
+
+"install") sh "${ROOT}/util/sys/install.sh" "$@" ;;
+"update-repo") sh "${ENVI_SYS_DIR}/update-repo.sh" -force "$@" ;;
+"show-role") sh "${ENVI_SYS_DIR}/get-role.sh" ;;
+"set-role") sh "${ENVI_SYS_DIR}/set-role.sh" "$@" ;;
+"update-ssh-config") sh "${ENVI_SYS_DIR}/ssh-config-upd.sh" "$@" ;;
+"update-ssh-authorized-keys") sh "${ENVI_SYS_DIR}/ssh-config-upd.sh" "$@" ;;
+"build-configurator-app")
+  sh "${ROOT}/../app/configurator/build.sh" "${ROOT}/utils/envi-configurator-app"
+  ;;
+
+"util" | "utils")
+  __info__ "info about util"
+  __info__ "torrent    - "
+  __info__ "qrcode     - "
+  __info__ "yadisk     - "
   ;;
 
 *)
   __info__ "list of commands"
   __info__ "help          "
-  __info__ "install          - create and install infrastructure"
+  __info__ "install                     - create and install infrastructure"
+  __info__ "update-repo                 - "
+  __info__ "show-role                   - "
+  __info__ "set-role                    - "
+  __info__ "update-ssh-config           - "
+  __info__ "update-ssh-authorized-keys  - "
+  __info__ "build-configurator-app      - "
+  __info__
+  __info__ "util  - info about utils"
+  __info__
+  __info__
   __info__
   __info__ "[li cert scanLocalNet temp envi-utils !]"
   __info__ "sudo netstat -lntup  # список приложений, использующих порты"
