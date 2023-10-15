@@ -1,3 +1,0 @@
-#!/bin/sh
-
-sh "${__ENVI_BIN__}/utils/minidlna/minidlna.sh" $@

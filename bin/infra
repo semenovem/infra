@@ -5,7 +5,8 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 
 ENVI_SYS_DIR="${ROOT}/util/sys"
 COMMAND=$1
-shift
+
+[ -n "$COMMAND" ] && shift
 
 case "$COMMAND" in
 
