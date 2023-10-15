@@ -7,7 +7,7 @@ sh _infra/bin/infra install
 
 #### See new commands in terminal
 
-`infra-help`
+`infra help`
 
 #### Global environment
 ```
@@ -15,17 +15,9 @@ __INFRA_BIN__=${HOME}/_infra/bin
 ```
 
 # Profile configuration 
-${HOME}/.profile_infra
+${HOME}/_infra/profile_infra
 ---------------------------------------------------------
-
-```
-# update ssh config, 
-# update authorized_keys
-# update self repo 
-# ....
-
-envi-utils
-```  
+ 
 
 ##### data
 
