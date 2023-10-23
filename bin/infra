@@ -17,7 +17,7 @@ case "$COMMAND" in
 "update-ssh-config") sh "${ENVI_SYS_DIR}/ssh-config-upd.sh" "$@" ;;
 "update-ssh-authorized-keys") sh "${ENVI_SYS_DIR}/ssh-config-upd.sh" "$@" ;;
 "build-configurator-app")
-  sh "${ROOT}/../app/configurator/build.sh" "${ROOT}/utils/envi-configurator-app"
+  sh "${ROOT}/../app/configurator/build.sh" "${__CORE_STATE_DIR__}/configurator-app"
   ;;
 
 "util" | "utils")
