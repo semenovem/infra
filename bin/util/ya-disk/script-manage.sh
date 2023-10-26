@@ -86,7 +86,7 @@ case $OPER in
   __confirm__ "Stop container ${CONTAINER_NAME} ?" || exit 0
 
   if is_running; then
-    docker exec -it ya-disk yandex-disk stop
+    docker exec -it "$CONTAINER_NAME" yandex-disk stop
     sleep 1
     docker stop "$CONTAINER_NAME" || exit 1
     sleep 1
@@ -121,23 +121,34 @@ case $OPER in
     docker rm "$CONTAINER_NAME" || exit 1
   fi
 
-  docker run --detach --restart unless-stopped --platform=linux/amd64 \
+# --detach --restart unless-stopped
+  docker run -it --rm  --platform=linux/amd64 \
     --name "$CONTAINER_NAME" \
     -u "$(id -u):$(id -g)" \
     -w /ya \
     --memory=500m \
     --memory-swap=500m \
     --cpus=0.3 \
+    -v "/etc/group:/etc/group:ro" \
+    -v "/etc/passwd:/etc/passwd:ro" \
     -v "${__YA_DISK_DIR__}:/ya/disk:rw" \
-    -v "${__AUTH__}:/home/app/.config/yandex-disk:rw" \
-    -v "${ROOT}/config.cfg:/ya/config.cfg:rw" \
-    "$IMAGE" \
+    -v "${__AUTH__}:/ya/.config/yandex-disk:rw" \
+    -v "${ROOT}/config.cfg:/ya/.config/yandex-disk/config.cfg:rw" \
+    -e "__EXCLUDE__=$__EXCLUDE__" \
+    -e "HOME=/ya" \
+    "$IMAGE" bash
+
+  exit 0
+#    \
     yandex-disk start \
     --no-daemon \
     --dir=/ya/disk \
-    --config=/app/config.cfg \
     --exclude-dirs="$__EXCLUDE__"
+
+
+#    --config=/app/config.cfg \
   ;;
+#    --auth=/ya/config/passwd \
 *)
   __info__ "Command not passed"
   help
