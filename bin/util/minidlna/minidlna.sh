@@ -66,7 +66,7 @@ case "$1" in
     VOLUMES_ARGS="${VOLUMES_ARGS} -v ${DIR}:${MOUNT_POINT}:ro"
   done
 
-  [ -z "$VOLUMES_ARGS" ] && echo "configuration file ${CONFIG_MEDIA} not contain media directories " && exit
+  [ -z "$VOLUMES_ARGS" ] && echo "configuration file ${CONFIG_MEDIA} not contain media directories " && exit 1
 
   docker run -d --restart on-failure:10 \
     --name "$CONTAINER_NAME" \
