@@ -121,8 +121,9 @@ case $OPER in
     docker rm "$CONTAINER_NAME" || exit 1
   fi
 
-# --detach --restart unless-stopped
-  docker run -it --rm  --platform=linux/amd64 \
+  # -it --rm
+  # --detach --restart unless-stopped
+  docker run --detach --restart unless-stopped \
     --name "$CONTAINER_NAME" \
     -u "$(id -u):$(id -g)" \
     -w /ya \
@@ -134,21 +135,18 @@ case $OPER in
     -v "${__YA_DISK_DIR__}:/ya/disk:rw" \
     -v "${__AUTH__}:/ya/.config/yandex-disk:rw" \
     -v "${ROOT}/config.cfg:/ya/.config/yandex-disk/config.cfg:rw" \
+    -e LC_ALL=C.UTF-8 \
     -e "__EXCLUDE__=$__EXCLUDE__" \
     -e "HOME=/ya" \
-    "$IMAGE" bash
-
-  exit 0
-#    \
+    "$IMAGE" \
     yandex-disk start \
     --no-daemon \
     --dir=/ya/disk \
     --exclude-dirs="$__EXCLUDE__"
 
-
-#    --config=/app/config.cfg \
+  #    --config=/app/config.cfg \
+  #    --auth=/ya/config/passwd \
   ;;
-#    --auth=/ya/config/passwd \
 *)
   __info__ "Command not passed"
   help

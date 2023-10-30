@@ -15,7 +15,6 @@ export __CORE_TIME_REPO_LAST_UPDATED__="${__CORE_STATE_DIR__}/last-update-repo"
 # -debug
 # -yes
 #
-# __ENVI_BIN__ = путь к bin, устанавливается в профайле
 
 # Отвечать утвердительно на запросы к пользователю
 __YES__=
@@ -267,7 +266,8 @@ __realpath__() {
 
 # Выполнить конфигуратор
 __run_configurator__() {
-  "${__ENVI_BIN__}/utils/envi-configurator-app" $@ -config-file="${__ENVI_BIN__}/../configs/main.yml"
+  "${__CORE_STATE_DIR__}/configurator-app" $@ \
+    -config-file="${__INFRA_BIN__}/../configs/main.yml"
 }
 
 # Получить имя хоста

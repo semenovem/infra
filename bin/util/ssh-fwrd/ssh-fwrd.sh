@@ -14,10 +14,14 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 PREFIX_SERVICE_NAME="ssh-fwrd"
 SYSTEMMD_DIR="/etc/systemd/system"
 FILE_CONF="${ROOT:?}/ssh-fwrd.conf"
+LOCAL_DIR="${__CORE_STATE_DIR__}/ssh-fwrd"
 
 WORKING_DIRECTORY="$(__realpath__ "$ROOT")" || exit 1
 
-[ ! -d "$SYSTEMMD_DIR" ] && echo "ERR: dir '${SYSTEMMD_DIR}' not exist" && exit 1
+[ ! -d "$SYSTEMMD_DIR" ] && __err__ "dir [${SYSTEMMD_DIR}] not exist" && exit 1
+
+mkdir -p "${LOCAL_DIR}"
+[ $? -ne 0 ] && __err__ "can't mkdir [${LOCAL_DIR}]" &&  exit 1
 
 help() {
   echo "use: [ start | restart | stop | status | files | show ]"
@@ -29,11 +33,11 @@ tmpl() {
 }
 
 getPathAutosshLogFile() {
-  echo "${__CORE_STATE_DIR__}/${PREFIX_SERVICE_NAME}-$1.log"
+  echo "${LOCAL_DIR}/${PREFIX_SERVICE_NAME}-$1.log"
 }
 
 getPathAutosshPidFile() {
-  echo "${__CORE_STATE_DIR__}/${PREFIX_SERVICE_NAME}-$1.pid"
+  echo "${LOCAL_DIR}/${PREFIX_SERVICE_NAME}-$1.pid"
 }
 
 get_service_name() {

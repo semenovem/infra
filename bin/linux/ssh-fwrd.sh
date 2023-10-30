@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sh "${__ENVI_BIN__}/utils/ssh-fwrd/ssh-fwrd.sh" $@
+sh "${__INFRA_BIN__}/util/ssh-fwrd/ssh-fwrd.sh" $@

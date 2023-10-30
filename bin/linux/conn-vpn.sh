@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sh "${__ENVI_BIN__}/utils/conn-vpn/conn-vpn.sh" $@
+sh "${__INFRA_BIN__}/util/conn-vpn/conn-vpn.sh" $@

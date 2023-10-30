@@ -27,7 +27,7 @@ RAW=
 OPER=
 ERR=
 CANCEL=
-IMAGE="envi/qr:1.0"
+IMAGE="infra/qr:1.0"
 
 help() {
   __info__ "[help] use: [scan file.png] | [generate [file.png] -issuer xxxx] | [generate [file.png] -raw"

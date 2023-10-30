@@ -3,7 +3,9 @@ FROM curlimages/curl:8.4.0 as builder
 ARG DOWNLOAD_PATH="http://repo.yandex.ru/yandex-disk/yandex-disk_latest_amd64.deb"
 RUN curl -o /tmp/ya.deb -L ${DOWNLOAD_PATH}
 
-FROM debian:12.1-slim
+#FROM debian:12.1-slim
+FROM ubuntu:22.04
+ENV LC_ALL=C.UTF-8
 
 #ARG USER_ID=1001
 #ARG GROUP_ID=1001
