@@ -143,7 +143,8 @@ case $OPER in
     --no-daemon \
     --dir=/ya/disk \
     --exclude-dirs="$__EXCLUDE__"
-
+  #    \
+  #    --overwrite --read-only
   #    --config=/app/config.cfg \
   #    --auth=/ya/config/passwd \
   ;;

@@ -35,9 +35,8 @@ set +o allexport
 
 remove_container() {
   HAS=$(docker ps --filter=name="$CONTAINER_NAME" -q -a) || return 1
-  if [ -n "$HAS" ]; then
-    docker rm "$CONTAINER_NAME" >/dev/null || return 1
-  fi
+  [ -z "$HAS" ] && return 0
+  docker rm "$CONTAINER_NAME" >/dev/null || return 1
 }
 
 case $1 in
@@ -64,8 +63,12 @@ case $1 in
 
   remove_container || exit 1
 
-  docker run -d \
-    --restart unless-stopped \
+  docker build -f "${ROOT}/Dockerfile" \
+    --build-arg USER_ID="$(id -u)" \
+    --build-arg GROUP_ID="$(id -g)" \
+    -t "test/torrent:1.0" "$ROOT" || exit 1
+
+  docker run --detach --restart unless-stopped \
     --name="$CONTAINER_NAME" \
     --cpus 0.5 \
     -e PUID="$(id -u)" \
