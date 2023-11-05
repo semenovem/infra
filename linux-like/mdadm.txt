@@ -18,8 +18,15 @@ mount /dev/md1 /mnt/md1
 
 --
 blkid
+
 # добавить в /etc/fstab
 UUID="edd4e8bd-1f45-4c3e-962b-e93aa6c1fd23"    /mnt/md1    ext4    defaults    0 0
+UUID=2eff7db1-1bec-4a2d-a4d1-af4113b5a590 /var/flash_storage   ext4 nofail,errors=remount-ro 0 2
+
+
+UUID=e42bea03-bb2c-4a85-8faf-304405439448 /mnt/hdd-300   ext4 nofail 0 0
+# usb hdd 300g
+ 24 UUID=e42bea03-bb2c-4a85-8faf-304405439448 /mnt/hdd-300   ext4 nofail 0 0
 
 ------------------------
 # информация о raid

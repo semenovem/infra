@@ -12,10 +12,10 @@
 /swap.img	none	swap	sw	0	0
 
 # 4Tb raid-mainboard
-/dev/md126    /mnt/raid4t_hard  ext4  defaults  1 0
+/dev/md126    /mnt/raid4t_hard  ext4  defaults  0 0
 
 # 4Tb raid-linux-mdadm
-/dev/md402    /mnt/raid4t_soft  ext4  defaults  1 0
+/dev/md402    /mnt/raid4t_soft  ext4  defaults  0 0
 
 # myramdisk  /tmp/ramdisk  tmpfs  defaults,size=1G,x-gvfs-show  0  0
 tmpfs  /mnt/memfs  tmpfs  rw,size=10G  0   0

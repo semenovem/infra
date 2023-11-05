@@ -34,10 +34,9 @@ Host mini
 # -----------------------------
 # office
 Host office-core
-  HostName     192.168.41.31
-#  HostName     192.168.1.200
+  HostName     85.30.226.184
   User         evg
-  Port         22
+  Port         2022
   IdentityFile ~/.ssh/id_ecdsa
 
 Host office-tv
