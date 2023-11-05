@@ -14,6 +14,8 @@ https://elinux.org/RPi_USB_Wi-Fi_Adapters
 - https://github.com/Mange/rtl8192eu-linux-driver
 - https://github.com/lwfinger/rtl8188eu
 
+iwconfig
+
 --- 
 ASUSTek Computer, Inc. 802.11ac NIC  
 https://linux-hardware.org/?id=usb:0b05-1852
