@@ -33,7 +33,7 @@ Host mini
 
 # -----------------------------
 # office
-Host office-core
+Host office
   HostName     85.30.226.184
   User         evg
   Port         2022
