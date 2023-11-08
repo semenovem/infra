@@ -39,8 +39,8 @@ Host office
   Port         2022
   IdentityFile ~/.ssh/id_ecdsa
 
-Host office-tv
-  HostName     192.168.1.202
+Host office-local
+  HostName     192.168.5.200
   User         evg
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
