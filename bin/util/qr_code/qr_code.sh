@@ -36,12 +36,9 @@ help() {
 [ -n "$__HELP__" ] && help && exit 0
 [ -z "$1" ] && help && exit 0
 
-CMD=$(__core_get_virtualization_app__) || exit 1
-
 debug() {
   __debug__ "---------------------"
   __debug__ "OPER               = ${OPER}"
-  __debug__ "CMD                = ${CMD}"
   __debug__ "file_path          = ${FILE_PATH}"
   __debug__ "file_name          = ${FILE_NAME}"
   __debug__ "file_absolute_path = ${FILE_ABSOLUTE_PATH}"
@@ -200,7 +197,7 @@ case $? in
 0) ;;
 1)
   [ -n "$__DRY__" ] && __info__ "image assembly" && exit 0
-  $CMD build -f "${ROOT}/qr_code.dockerfile" -t "$IMAGE" "$ROOT" || exit 1
+  docker build -f "${ROOT}/qr_code.dockerfile" -t "$IMAGE" "$ROOT" || exit 1
   ;;
 *) exit 1 ;;
 esac
@@ -212,7 +209,7 @@ case $OPER in
 "scan")
   [ -n "$__DRY__" ] && exit 0
 
-  $CMD run -it --rm \
+  docker run -it --rm \
     --user "$(id -u):$(id -g)" \
     -w /app \
     -v "${FILE_ABSOLUTE_PATH}:/app/${FILE_NAME}" \
@@ -238,7 +235,7 @@ case $OPER in
 
   [ -n "$__DRY__" ] && exit 0
 
-  $CMD run -it --rm \
+  docker run -it --rm \
     --user "$(id -u):$(id -g)" \
     -w /app \
     -v "${FILE_ABSOLUTE_PATH}:/app/${FILE_NAME}" \
