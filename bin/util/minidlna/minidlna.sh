@@ -71,7 +71,7 @@ case "$1" in
   docker run -d --restart on-failure:10 \
     --name "$CONTAINER_NAME" \
     --memory=100m \
-    --memory-swap=0m \
+    --memory-swap=100m \
     --cpus 0.5 \
     -u "nobody:nobody" \
     --network host \
