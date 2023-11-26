@@ -10,13 +10,6 @@ Host eu eu1
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-# makecloud.ru 130.255.170.133
-Host rr rr1
-  HostName     rr1.evgio.com
-  Port         2257
-  User         adman
-  IdentityFile ~/.ssh/id_ecdsa
-
 # rhor-hosting ihor 194.67.205.149
 Host rr3
   HostName     rr3.evgio.com

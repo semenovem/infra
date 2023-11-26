@@ -114,7 +114,7 @@ func (o *DTOSSH) getMainUser() string {
 // -----------------------------------------------------------------------------
 type DTOSSHPortForward struct {
 	User      string   `yaml:"user,omitempty"`
-	Hosts     string   `yaml:"hosts,omitempty"`      // msk1 rr1 rr4
+	Hosts     string   `yaml:"hosts,omitempty"`      // msk1 rr4
 	Ports     []string `yaml:"ports,omitempty"`      // - 31194::1194 \n -31194:0.0.0.0:1194
 	ConnectTo []string `yaml:"connect_to,omitempty"` // user@host.dom -p 2022 2201::22 11941:0.0.0.0:1194
 }

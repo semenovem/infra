@@ -47,7 +47,7 @@ hosts:
         user:
         pub_key: ""
     ssh_remote_forward:
-      hosts: msk1 rr1 user4@rr4 srv5.vfstl.net
+      hosts: msk1 user4@rr4 srv5.vfstl.net
       user: remote-user
       ports:
         - 30022:0.0.0.0:22   # ssh
@@ -63,19 +63,6 @@ hosts:
   # ---------------------------------------------------------------------------------
   ### Proxy сервера
   # ---------------------------------------------------------------------------------
-  - name: rr1
-    role: PROXY_SERVER
-    pki: rrx
-    public:
-      url: rr1.evgio.com
-      ip: 130.255.170.133
-    ssh:
-      port: 2257
-      main:
-        user: adman
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHxkXrO9sNfrmnPF1Q3hDEmkxzaeXAjftsf43+mxXOPbRoXf4z4gcyNuPxuD8YCydhW+XaQBspdUoR31XB5VDIklUsVxMT31g+M0oiiWlFXuF1DdQ5ovcR/pIt5Ri3CmMg== adman@rr1
-
-
   - name: rr4
     role: PROXY_SERVER
     pki: rrx
@@ -141,7 +128,7 @@ hosts:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
     ssh_remote_forward:
-      hosts: msk1 rr1 rr4
+      hosts: msk1 rr4
       ports:
         - 30022:0.0.0.0:22   # ssh
         - 31194:0.0.0.0:1194 # vpn
@@ -211,7 +198,7 @@ hosts:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGyQMkD1kkI6cti/Srn8FNX8RzjUjlKq6ynoROeXHvp9aJHqMdETId1PFiJQjfPNCNKlVVDA8lyTkn9GZtaQSi8l7NoUsPfgGvfnBVmJpy2MlnDW83QOAwUc6fDI5oM8Kg== evg@home
     ssh_remote_forward:
-      hosts: rr1 rr4 msk1 kz2 eu1
+      hosts: rr4 msk1 kz2 eu1
       ports:
         - 2200::22            # ssh
         - 11940:0.0.0.0:1194  # openvpn
@@ -232,7 +219,7 @@ hosts:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBIMVsRQ2FzF/qKVAwUwASQ2Tk1JBiCKHkphOdXYzUFmGHM5wWM8e/6UBD/zdfrz3Tgtv7M8X4wbA4cnC8TzPCY0xlklB35criLsE1L7IZRGP7ghNo9SPuRbtybIdNJQ1yg== adman@srv1
     ssh_remote_forward:
-      hosts: rr1 rr4 msk1 kz2 eu1
+      hosts: rr4 msk1 kz2 eu1
       ports:
         - 2201::22            # ssh
         - 11941:0.0.0.0:1194  # openvpn
@@ -251,7 +238,7 @@ hosts:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGm16LDGpzavDoaqmDwHRswdSXjCJlcSFNFPHsJONoZs6DKJaveJk4ndqrLjoUKMcCCDnkprTNSG03jwO0VQGEd/2IA8tuGIwNQW8G4dKPvxzoUiN37uhYj3w8khUIHAqA== adman@srv2
     ssh_remote_forward:
-      hosts: rr1 rr4 msk1 kz2 eu1
+      hosts: rr4 msk1 kz2 eu1
       ports:
         - 2202::22            # ssh
         - 11942:0.0.0.0:1194  # openvpn
@@ -273,7 +260,7 @@ hosts:
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBE9qsJbSRrCYARg2uPSSX0TMzCaVzuEgv09FEnlRefzB6RbpmhHkPLJ+yn6k2qWQICYKebBY8nKjFZrgOAGQx+3tp+HKRESU2yP3+RBRtLCUBvQu1ULOYp5jk3gKcIDtFg== evg@office-server
 #    ssh_remote_forward:
 #      user: forward-user
-#      hosts: msk1 rr1 rr4
+#      hosts: msk1 rr4
 #      ports:
 #        - 61022:0.0.0.0:22    # ssh
 #        - 61194:0.0.0.0:1194  # vpn
@@ -295,7 +282,7 @@ hosts:
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOrXJXPdUGWv1AlkELzcFv+E7fatcPhi8Wg6vB+AFvNNXOqh5YZrp4ye3xH/PiOxh5LcV7Ghfc7phLTzN7AISMFJskCsiMq7QmCBgQhKx4kJXWxBdASHDBddvdlUYNVVKg== evg@office-mini-tv
     ssh_remote_forward:
       user: forward-user
-      hosts: msk1 rr1 rr4
+      hosts: msk1 rr4
       ports:
         - 62022:0.0.0.0:22    # ssh
         - 62194:0.0.0.0:1194  # vpn

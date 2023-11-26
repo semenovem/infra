@@ -20,7 +20,7 @@ SSH_HOST="home"
 SSH_PORT=""
 
 help() {
-  __info__ "[help] use: [-hosts msk1|rr1|spb|...] [-copy] [-restart] [-status]"
+  __info__ "[help] use: [-hosts msk1|spb|...] [-copy] [-restart] [-status]"
 }
 
 #exit 0
