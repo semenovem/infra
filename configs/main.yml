@@ -168,17 +168,6 @@ hosts:
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBLlqKam9sMUGEN629GpWOpDywtwKSlCnT26lFALkrAdvskn4BBW8j6KpcV2lJ5lBXepxU6yl8W/qJlzWdwZBjmmFmrqx9vXZeWKG01g4vJPVS9aFd9XYXPMFvFe6pjOlHw== sem@ibtv-8.local
 
 
-  # personal 13-2015
-  - name: laptop13
-    role: WORKSTATION
-    local:
-      url: ibtv-8.local
-    ssh:
-      main:
-        user: sem
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBJ8xEA1vYvFiJbbj960sNcLIoo790KmFWSgxxAFvvq+AcdoEQW4/Tfv0rB0/bOZ9D2jYxMLxQnaLaXyvm3VUMmk816i/+EjyOGRJxZzo4LCgDhr9p74725fZ9uh7hElmEg== evg@evg13-15.local
-
-
   # ---------------------------------------------------------------------------------
   ### Локальные сервера
   # ---------------------------------------------------------------------------------
@@ -287,18 +276,4 @@ hosts:
         - 62022:0.0.0.0:22    # ssh
         - 62194:0.0.0.0:1194  # vpn
         - 62059::5900  # vnc
-
-
-  - name: office-mini-pin1
-    role: OFFICE_SERVER
-    description: перезагрузка каждый вторник
-    crontab: 0 3 * * 3 /usr/bin/systemctl reboot
-    local:
-      url: mini-pin1.local
-      ip: 192.168.1.204
-    ssh:
-      main:
-        user: evg
-        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGqLDqDRifyckCeDIblL0vipBEPJ/ttML23l475xYI8zjYpaDOGoig8ivOckNPu4QKAke5/lvxrZ9MzSAY56U5eMTA9ARdVo+Hq0C0lZmBk3ih+t4XmVvOXSVd544iiz1Q== evg@office-mini-pin1
-
 
