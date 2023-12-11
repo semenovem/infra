@@ -15,7 +15,7 @@ case "$COMMAND" in
 "show-role") sh "${ENVI_SYS_DIR}/get-role.sh" ;;
 "set-role") sh "${ENVI_SYS_DIR}/set-role.sh" "$@" ;;
 "update-ssh-config") sh "${ENVI_SYS_DIR}/ssh-config-upd.sh" "$@" ;;
-"update-ssh-authorized-keys") sh "${ENVI_SYS_DIR}/ssh-config-upd.sh" "$@" ;;
+"update-ssh-authorized-keys") sh "${ENVI_SYS_DIR}/ssh-authorized-keys.sh" "$@" ;;
 "build-configurator-app")
   sh "${ROOT}/../app/configurator/build.sh" "${__CORE_STATE_DIR__}/configurator-app"
   ;;
