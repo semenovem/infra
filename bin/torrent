@@ -3,8 +3,8 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/_lib/core.sh" || exit 1
 
-CONFIG_FILE="${__CORE_STATE_DIR__}/torrent/config.env"
-CONFIG_DIR="${__CORE_STATE_DIR__}/torrent/config"
+CONFIG_FILE="${__CORE_LOCAL_DIR__}/torrent/config.env"
+CONFIG_DIR="${__CORE_LOCAL_DIR__}/torrent/config"
 CONTAINER_NAME="qbittorrent"
 
 if [ ! -d "${CONFIG_DIR}" ]; then

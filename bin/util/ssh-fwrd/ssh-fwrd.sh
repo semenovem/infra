@@ -14,7 +14,7 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 PREFIX_SERVICE_NAME="ssh-fwrd"
 SYSTEMMD_DIR="/etc/systemd/system"
 FILE_CONF="${ROOT:?}/ssh-fwrd.conf"
-LOCAL_DIR="${__CORE_STATE_DIR__}/ssh-fwrd"
+LOCAL_DIR="${__CORE_LOCAL_DIR__}/ssh-fwrd"
 
 WORKING_DIRECTORY="$(__realpath__ "$ROOT")" || exit 1
 

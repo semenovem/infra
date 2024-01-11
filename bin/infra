@@ -17,7 +17,7 @@ case "$COMMAND" in
 "update-ssh-config") sh "${ENVI_SYS_DIR}/ssh-config-upd.sh" "$@" ;;
 "update-ssh-authorized-keys") sh "${ENVI_SYS_DIR}/ssh-authorized-keys.sh" "$@" ;;
 "build-configurator-app")
-  sh "${ROOT}/../app/configurator/build.sh" "${__CORE_STATE_DIR__}/configurator-app"
+  sh "${ROOT}/../app/configurator/build.sh" "${__CORE_LOCAL_DIR__}/configurator-app"
   ;;
 
 "util" | "utils")
@@ -41,8 +41,7 @@ case "$COMMAND" in
   __info__ "util  - info about utils"
   __info__
   __info__
-  __info__
-  __info__ "[li cert scanLocalNet temp envi-utils !]"
+  __info__ "[li cert scanLocalNet temp infra-vpn]"
   __info__ "sudo netstat -lntup  # список приложений, использующих порты"
   ;;
 

@@ -11,7 +11,7 @@ LIB_DIR="${ROOT}/../../_lib/"
 
 ADDITIONAL_BIN_DIRS=
 USER_PROFILE_FILE=
-INFRA_PROFILE_FILE="${__CORE_STATE_DIR__}/profile.sh"
+INFRA_PROFILE_FILE="${__CORE_LOCAL_DIR__}/profile.sh"
 BIN_DIR="$(dirname "$ROOT")"
 BIN_DIR="$(dirname "$BIN_DIR")"
 
@@ -82,7 +82,7 @@ __info__ "Infrastructure profile file [${INFRA_PROFILE_FILE}] created"
 
 # ----------------------------------------------------------------
 # Добавление в profile PATH
-ERR=$(grep -i "$__CORE_STATE_DIR__" "$USER_PROFILE_FILE" -q 2>&1)
+ERR=$(grep -i "$__CORE_LOCAL_DIR__" "$USER_PROFILE_FILE" -q 2>&1)
 case $? in
 0)
   __info__ "Path to infrastructure profile file [${INFRA_PROFILE_FILE}] has already been added"
@@ -95,7 +95,7 @@ case $? in
     echo ""
   } >>"$USER_PROFILE_FILE"
 
-  __info__ "Path to infrastructure profile file [${__CORE_STATE_DIR__}] been added"
+  __info__ "Path to infrastructure profile file [${__CORE_LOCAL_DIR__}] been added"
   ;;
 *) __err__ "check file profile (${ERR})" ;;
 esac

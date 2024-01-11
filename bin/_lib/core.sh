@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Директория хранения локальных данных
-export __CORE_STATE_DIR__="${HOME}/_infra/.local"
+export __CORE_LOCAL_DIR__="${HOME}/_infra/.local"
 
 # Инфраструктура ключей vpn
 export __CORE_VPN_PKI_DIR__="${HOME}/.vpn_pki"
 
 # Время последнего обновления репозитория
-export __CORE_TIME_REPO_LAST_UPDATED__="${__CORE_STATE_DIR__}/last-update-repo"
+export __CORE_TIME_REPO_LAST_UPDATED__="${__CORE_LOCAL_DIR__}/last-update-repo"
 
 #
 # Конфигурация
@@ -266,7 +266,7 @@ __realpath__() {
 
 # Выполнить конфигуратор
 __run_configurator__() {
-  "${__CORE_STATE_DIR__}/configurator-app" $@ \
+  "${__CORE_LOCAL_DIR__}/configurator-app" $@ \
     -config-file="${__INFRA_BIN__}/../configs/main.yml"
 }
 
@@ -283,18 +283,18 @@ __get_hostname__() {
 #
 
 # Создать директорию данных окружения, если не существует
-if [ ! -d "$__CORE_STATE_DIR__" ]; then
-  __info__ "No directory [${__CORE_STATE_DIR__}]. Create and install chmod 0700..."
+if [ ! -d "$__CORE_LOCAL_DIR__" ]; then
+  __info__ "No directory [${__CORE_LOCAL_DIR__}]. Create and install chmod 0700..."
 
-  ERR=$(mkdir "$__CORE_STATE_DIR__" 2>&1)
+  ERR=$(mkdir "$__CORE_LOCAL_DIR__" 2>&1)
   if [ $? -ne 0 ]; then
-    __err__ "Creating a directory [${__CORE_STATE_DIR__}]. ($ERR)"
+    __err__ "Creating a directory [${__CORE_LOCAL_DIR__}]. ($ERR)"
     exit 1
   fi
 
-  ERR=$(chmod 0700 "$__CORE_STATE_DIR__" 2>&1)
+  ERR=$(chmod 0700 "$__CORE_LOCAL_DIR__" 2>&1)
   if [ $? -ne 0 ]; then
-    __err__ "Setting directory permissions [${__CORE_STATE_DIR__}]. ($ERR)"
+    __err__ "Setting directory permissions [${__CORE_LOCAL_DIR__}]. ($ERR)"
     exit 1
   fi
 

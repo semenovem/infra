@@ -3,49 +3,37 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/../../_lib/core.sh" || exit 1
 
-export __INFRA_PKI_DIRS__="${HOME}/_infra_pki_openvpn" # Инфраструктура ключей openvpn
+export __INFRA_PKI_DIRS__="${__CORE_LOCAL_DIR__}/pki_openvpn" # Инфраструктура ключей openvpn
 IMAGE="envi/easy_rsa:1.0"
-DOCKER_CMD=$(__core_get_virtualization_app__) || exit 1
 
 OPER="$1" # Command
 shift
 
-PKI_NAME=               # Repository with pki
-CN_NAME=                # Common Name of certificate
-export __SERVER__=      # server name
-export __VPN_SERVICE__= # vpn service name
+PKI_NAME= # Repository with pki
+CN_NAME=  # Common Name of certificate
+SERVER=   # server name
 ERR=
 PKI_DIR=
 
 help() {
-  __info__ 'help:'
-  __info__ 'install -pki {name}         - установка'
-  __info__ 'issue -pki {name} -cn {cn}  - выпуск сертификата'
-  __info__ 'ls                          - список репозиториев'
-  __info__ 'ls -pki {name}              - список сертификатов в репозитории'
-  __info__ 'revoke -pki {name} -cn {cn} - отозвать сертификат'
-  __info__ ''
-  __info__ ''
-  __info__ 'common properties:'
-  __info__ '  -pki     - имя репозитория (директории с инфраструктурой ключей)'
-  __info__ '  -cn      - имя сертификата'
-  __info__ '  -server  - имя сервера'
-  __info__ ''
-  __info__ 'Установка и обслуживание openvpn:'
-  __info__ 'openvpn-status  -server {name} [-vpn-service {name}] - статус службы openvpn на сервере'
-  __info__ 'openvpn-install -server {name}  - установить/обновить службу openvpn на сервер'
-  __info__ 'openvpn-stop    -server {name}  - установить/обновить службу openvpn на сервер'
-  __info__ 'update-crl      -server {name}  - обновить отозванные сертификаты crt.pem'
-  __info__ ''
-  __info__ ''
-}
-
-args() {
-  __info__ 'arguments: '
-  __info__ "PKI_NAME    = ${PKI_NAME}"
-  __info__ "CN_NAME     = ${CN_NAME}"
-  __info__ "__SERVER__      = ${__SERVER__}"
-  __info__ "__VPN_SERVICE__ = ${__VPN_SERVICE__}"
+  echo '======================== MANAGE VPN SETTINGS ========================'
+  echo 'install -pki {name}         - установка'
+  echo 'issue -pki {name} -cn {cn}  - выпуск сертификата'
+  echo 'ls                          - список репозиториев'
+  echo 'ls -pki {name}              - список сертификатов в репозитории'
+  echo 'revoke -pki {name} -cn {cn} - отозвать сертификат'
+  echo ''
+  echo 'common properties:'
+  echo '  -pki     - имя репозитория (директории с инфраструктурой ключей)'
+  echo '  -cn      - имя сертификата'
+  echo '  -server  - имя сервера'
+  echo ''
+  echo 'Установка и обслуживание openvpn:'
+  echo 'openvpn-status  -server {name} [-vpn-service {name}] - статус службы openvpn на сервере'
+  echo 'openvpn-install -server {name}  - установить/обновить службу openvpn на сервер'
+  echo 'openvpn-stop    -server {name}  - установить/обновить службу openvpn на сервер'
+  echo 'update-crl      -server {name}  - обновить отозванные сертификаты crt.pem'
+  echo ''
 }
 
 if [ ! -d "$__INFRA_PKI_DIRS__" ]; then
@@ -74,7 +62,7 @@ execute() {
   check_pki_dir_exists || return 1
 
   # shellcheck disable=SC2068
-  $DOCKER_CMD run -it --rm \
+  docker run -it --rm \
     --user "$(id -u):$(id -g)" \
     -w /app \
     -e "__PKI_DIR__=/app/pki" \
@@ -85,9 +73,9 @@ execute() {
     -e "__PKI_NAME__=${PKI_NAME}" \
     -v "${PKI_DIR}:/app/pki:rw" \
     -v "${__INFRA_PKI_DIRS__}:/app/crypto:rw" \
-    -v "${ROOT}/oper/install-pki.sh:/app/install-pki.sh:ro" \
-    -v "${ROOT}/oper/issue.sh:/app/issue.sh:ro" \
-    -v "${ROOT}/oper/revoke.sh:/app/revoke.sh:ro" \
+    -v "${ROOT}/pki/install-pki.sh:/app/install-pki.sh:ro" \
+    -v "${ROOT}/pki/issue.sh:/app/issue.sh:ro" \
+    -v "${ROOT}/pki/revoke.sh:/app/revoke.sh:ro" \
     "$IMAGE" $@
 }
 
@@ -100,7 +88,7 @@ for p in "$@"; do
     case "$PREV" in
     "-pki") PKI_NAME="$p" ;;
     "-cn") CN_NAME="$p" ;;
-    "-server") __SERVER__="$p" ;;
+    "-server") SERVER="$p" ;;
     "-vpn-service") __VPN_SERVICE__="$p" ;;
     *)
       ERR=1
@@ -131,9 +119,6 @@ unset PREV p
 # ------------------------------------------------
 
 case "$OPER" in
-"args") args ;;
-"dev") execute sh ;;
-
 "install") # Установка инфраструктуры PKI
   check_arg_pki || exit 1
 
@@ -162,20 +147,42 @@ case "$OPER" in
   if [ -n "$PKI_DIR" ]; then
     check_pki_dir_exists || exit 1
 
-    __info__ "list of certs in PKI [${PKI_NAME}]:"
+    echo "list of certs in PKI [${PKI_NAME}]:"
 
     for f in "${PKI_DIR}/issued/"*; do
       f="$(basename "$f")"
 
       echo "$f" | grep -Evq '^server.*' || continue
-      __info__ "${f%.*}"
+      echo "${f%.*}"
 
     done
   else
-    __info__ "list of pki dirs:"
-    for f in "${__INFRA_PKI_DIRS__}/"*; do __info__ "$(basename "$f")"; done
+    echo "list of pki dirs:"
+    for f in "${__INFRA_PKI_DIRS__}/"*; do echo "$(basename "$f")"; done
   fi
   ;;
+
+"cp") # копировать сертификаты для openvpn на сервер
+  echo "  PKI_NAME = $PKI_NAME"
+  echo "  SERVER   = $SERVER"
+  __confirm__ "copy to server '${SERVER}:~/openvpn-server-dat' ?" || exit 0
+  check_arg_pki || exit 1
+  check_pki_dir_exists || exit 1
+  ssh rr4 "mkdir -p ~/openvpn-server-dat && chmod 0700 ~/openvpn-server-dat"
+  scp "${PKI_DIR}/ta.key" \
+    "${PKI_DIR}/issued/server.crt" \
+    "${PKI_DIR}/ca.crt" \
+    "${PKI_DIR}/private/server.key" \
+    "${SERVER}:~/openvpn-server-dat"
+  ;;
+
+
+# подготовка и копирование на сервер конфигов openvpn
+# для 443 tcp/udp 33443 tcp/udp
+
+# установка сервера vpn - копирование сертификатов/конфигов в директорию
+
+# проверка статуса работы openvpn на удаленном сервере и локально
 
 "openvpn-status")
   sh "${ROOT}/openvpn-oper.sh" "status"

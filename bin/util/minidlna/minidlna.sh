@@ -8,7 +8,7 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 DOCKER_IMAGE="infra/minidlna:1.0"
 CONTAINER_NAME="minidlna"
 DOCKER_FILE="${ROOT}/minidlna.dockerfile"
-CONFIG_MEDIA="${__CORE_STATE_DIR__}/minidlna/media.conf"
+CONFIG_MEDIA="${__CORE_LOCAL_DIR__}/minidlna/media.conf"
 
 status_container() {
   HAS=$(docker ps -q --filter "name=${CONTAINER_NAME}") || return 1

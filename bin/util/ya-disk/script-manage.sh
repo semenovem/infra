@@ -9,7 +9,7 @@ IMAGE="infra/ya-disk:0.1"
 CONTAINER_NAME="ya-disk"
 
 NUMBER=1
-CONFIG_DIR="${__CORE_STATE_DIR__}/ya-disk"
+CONFIG_DIR="${__CORE_LOCAL_DIR__}/ya-disk"
 
 # Сборка образа
 __core_has_docker_image__ "$IMAGE"

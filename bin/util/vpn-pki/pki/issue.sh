@@ -8,7 +8,7 @@ ERR=
 [ "$__CN__" = "ca" ] && ERR=1 && echo "can not use __CN__=ca"
 
 case "$1" in
-"server") TYPE="server" && __CN__="server-${__PKI_NAME__}" ;;
+"server") TYPE="server" && __CN__="server" ;;
 "client") TYPE="client" ;;
 *) ERR=1 && echo "unknown command. Use [client|server]" ;;
 esac
