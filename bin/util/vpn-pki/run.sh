@@ -184,6 +184,8 @@ case "$OPER" in
 
 # проверка статуса работы openvpn на удаленном сервере и локально
 
+# подготовка конфига-клиента для openvpn
+
 "openvpn-status")
   sh "${ROOT}/openvpn-oper.sh" "status"
   ;;
