@@ -28,6 +28,8 @@ help() {
   echo '  -cn      - имя сертификата'
   echo '  -server  - имя сервера'
   echo ''
+  echo 'bash -pki {name} - зайти в контейнер'
+  echo ''
   echo 'Установка и обслуживание openvpn:'
   echo 'openvpn-status  -server {name} [-vpn-service {name}] - статус службы openvpn на сервере'
   echo 'openvpn-install -server {name}  - установить/обновить службу openvpn на сервер'
@@ -119,6 +121,9 @@ unset PREV p
 # ------------------------------------------------
 
 case "$OPER" in
+# зайти в докер
+"bash") execute bash || exit 1 ;;
+
 "install") # Установка инфраструктуры PKI
   check_arg_pki || exit 1
 
@@ -151,10 +156,7 @@ case "$OPER" in
 
     for f in "${PKI_DIR}/issued/"*; do
       f="$(basename "$f")"
-
-      echo "$f" | grep -Evq '^server.*' || continue
       echo "${f%.*}"
-
     done
   else
     echo "list of pki dirs:"
@@ -176,15 +178,14 @@ case "$OPER" in
     "${SERVER}:~/openvpn-server-dat"
   ;;
 
+  # подготовка и копирование на сервер конфигов openvpn
+  # для 443 tcp/udp 33443 tcp/udp
 
-# подготовка и копирование на сервер конфигов openvpn
-# для 443 tcp/udp 33443 tcp/udp
+  # установка сервера vpn - копирование сертификатов/конфигов в директорию
 
-# установка сервера vpn - копирование сертификатов/конфигов в директорию
+  # проверка статуса работы openvpn на удаленном сервере и локально
 
-# проверка статуса работы openvpn на удаленном сервере и локально
-
-# подготовка конфига-клиента для openvpn
+  # подготовка конфига-клиента для openvpn
 
 "openvpn-status")
   sh "${ROOT}/openvpn-oper.sh" "status"
