@@ -2,31 +2,28 @@
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/_lib/core.sh" || exit 1
-. "${ROOT}/_lib/os.sh" || exit 1
 
-echo "__CORE_OS_LINUX_DISTR__ = $__CORE_OS_LINUX_DISTR__"
+OS=$(sh "${ROOT}/_lib/os.sh") || exit $?
 
-if [ -n "$__CORE_OS_IS_MACOS__" ]; then
+case $OS in
+"raspbian") watch -t -n 1 vcgencmd measure_temp ;;
+"debian")
+  if ! which sensors >/dev/null; then
+    sudo apt update || exit 1
+    sudo apt -y install sensors || exit 1
+  fi
+
+  sensors
+  ;;
+
+#"fedora") ;;
+"macos")
   __info__ "TODO Работает только на процессоре intel"
   sudo powermetrics | grep -i "CPU die temperature"
   exit 0
-fi
-
-case "$__CORE_OS_LINUX_DISTR__" in
-"") __warn__ "Дистрибутив LINUX не определен" ;;
-
-"$__CORE_OS_LINUX_DISTR_DEBIAN_CONST__")
-  if which vcgencmd >/dev/null; then
-    watch -t -n 1 vcgencmd measure_temp
-  else
-    if ! which sensors >/dev/null; then
-      sudo apt update || exit 1
-      sudo apt -y install sensors || exit 1
-    fi
-
-    sensors
-  fi
   ;;
-
-*) __warn__ "Not supported for OS [${__CORE_OS_LINUX_DISTR__}]" ;;
+*)
+  __warn__ "Not supported for OS=${OS}"
+  ;;
 esac
+
