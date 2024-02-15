@@ -4,13 +4,13 @@
 # ----------------------------------
 
 Host home
-  HostName     192.168.11.100
+  HostName     95.165.137.210
   User         evg
-  Port         22
+  Port         2022
   IdentityFile ~/.ssh/id_ecdsa
 
-Host home2
-  HostName     192.168.12.120
+Host home-local
+  HostName     192.168.11.100
   User         evg
   Port         22
   IdentityFile ~/.ssh/id_ecdsa

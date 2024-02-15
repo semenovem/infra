@@ -167,9 +167,12 @@ case "$OPER" in
 "cp") # копировать сертификаты для openvpn на сервер
   echo "  PKI_NAME = $PKI_NAME"
   echo "  SERVER   = $SERVER"
-  __confirm__ "copy to server '${SERVER}:~/openvpn-server-dat' ?" || exit 0
   check_arg_pki || exit 1
+  __confirm__ "copy to server '${SERVER}:~/openvpn-server-dat' ?" || exit 0
   check_pki_dir_exists || exit 1
+
+
+  exit 0
   ssh rr4 "mkdir -p ~/openvpn-server-dat && chmod 0700 ~/openvpn-server-dat"
   scp "${PKI_DIR}/ta.key" \
     "${PKI_DIR}/issued/server.crt" \
