@@ -4,12 +4,12 @@
 # ----------------------------------
 
 Host home
-  HostName     95.165.137.210
+  HostName     home.evgio.com
   User         evg
   Port         2022
   IdentityFile ~/.ssh/id_ecdsa
 
-Host home-local
+Host home-local home-l
   HostName     192.168.11.100
   User         evg
   Port         22
@@ -20,9 +20,21 @@ Host srv1
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
+Host srv1-net srv1-home
+  HostName     home.evgio.com
+  User         adman
+  Port         2122
+  IdentityFile ~/.ssh/id_ecdsa
+
 Host srv2
   HostName     192.168.11.102
   User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host srv2-net srv2-home
+  HostName     home.evgio.com
+  User         adman
+  Port         2222
   IdentityFile ~/.ssh/id_ecdsa
 
 Host mini
