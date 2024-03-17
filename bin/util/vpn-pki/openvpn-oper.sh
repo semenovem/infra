@@ -7,6 +7,7 @@ OPER="$1"
 REMOTE_DIR="/etc/openvpn/server"
 
 __info__ "__INFRA_PKI_DIRS__ = $__INFRA_PKI_DIRS__"
+__info__ "__OPER__         = $OPER"
 __info__ "__SERVER__         = $__SERVER__"
 __info__ "__VPN_SERVICE__    = $__VPN_SERVICE__"
 __info__ "__PKI_NAME__       = $__PKI_NAME__"
@@ -44,12 +45,14 @@ copy_to_server() {
 case "$OPER" in
 "status")
   __info__ "status"
-  [ -n "$__VPN_SERVICE__" ] && CMD="systemctl status openvpn-server@${__VPN_SERVICE__}" ||
-    CMD="systemctl list-units 'openvpn-server*' -all"
 
-  # shellcheck disable=SC2086
-  ssh $SSH_CONN "$CMD"
+  sudo systemctl list-units 'openvpn-server*' -all
 
+#  [ -n "$__VPN_SERVICE__" ] && CMD="systemctl status openvpn-server@${__VPN_SERVICE__}" ||
+#    CMD="systemctl list-units 'openvpn-server*' -all"
+#
+#  # shellcheck disable=SC2086
+#  ssh $SSH_CONN "$CMD"
   ;;
 
 "install") echo "install" ;;
