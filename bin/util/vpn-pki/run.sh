@@ -7,7 +7,8 @@ export __INFRA_PKI_DIRS__="${__CORE_LOCAL_DIR__}/pki_openvpn" # Инфрастр
 IMAGE="envi/easy_rsa:1.0"
 
 OPER="$1" # Command
-shift
+
+[ "$#" -ne 0 ] && shift
 
 PKI_NAME= # Repository with pki
 CN_NAME=  # Common Name of certificate
@@ -45,8 +46,6 @@ if [ ! -d "$__INFRA_PKI_DIRS__" ]; then
   chmod 0700 "$__INFRA_PKI_DIRS__" || exit 1
 fi
 
-__core_build_docker_image_if_not__ "$IMAGE" "${ROOT}/easy-rsa.dockerfile" "$ROOT"
-
 check_arg_pki() {
   [ -z "$PKI_NAME" ] && __err__ "[PKI_NAME] pki name not passed" && return 1
   return 0
@@ -69,6 +68,7 @@ check_server_name() {
 
 execute() {
   check_pki_dir_exists || return 1
+  __core_build_docker_image_if_not__ "$IMAGE" "${ROOT}/easy-rsa.dockerfile" "$ROOT" || return 1
 
   # shellcheck disable=SC2068
   docker run -it --rm \
