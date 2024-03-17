@@ -30,6 +30,8 @@ help() {
   echo ''
   echo 'bash -pki {name} - зайти в контейнер'
   echo ''
+  echo 'cp -pki {name} -service {server} - скопировать файлы на сервер'
+  echo ''
   echo 'Установка и обслуживание openvpn:'
   echo 'openvpn-status  -server {name} [-vpn-service {name}] - статус службы openvpn на сервере'
   echo 'openvpn-install -server {name}  - установить/обновить службу openvpn на сервер'
@@ -57,6 +59,11 @@ check_arg_cn_cert() {
 
 check_pki_dir_exists() {
   [ ! -d "$PKI_DIR" ] && __err__ "dir PKI [${PKI_NAME}] no exists" && return 1
+  return 0
+}
+
+check_server_name() {
+  [ -z "$SERVER" ] && __err__ "-server {server} name not passed" && return 1
   return 0
 }
 
@@ -160,20 +167,23 @@ case "$OPER" in
     done
   else
     echo "list of pki dirs:"
-    for f in "${__INFRA_PKI_DIRS__}/"*; do echo "$(basename "$f")"; done
+    for f in "${__INFRA_PKI_DIRS__}/"*; do basename "$f"; done
   fi
   ;;
 
 "cp") # копировать сертификаты для openvpn на сервер
-  echo "  PKI_NAME = $PKI_NAME"
-  echo "  SERVER   = $SERVER"
+  echo " PKI_NAME = $PKI_NAME"
+  echo " SERVER   = $SERVER"
+  echo " PKI_DIR  = $PKI_DIR"
+
+  check_server_name || exit 1
   check_arg_pki || exit 1
-  __confirm__ "copy to server '${SERVER}:~/openvpn-server-dat' ?" || exit 0
   check_pki_dir_exists || exit 1
 
+  __confirm__ "copy to server '${SERVER}:~/openvpn-server-dat' ?" || exit 0
 
-  exit 0
-  ssh rr4 "mkdir -p ~/openvpn-server-dat && chmod 0700 ~/openvpn-server-dat"
+  ssh "$SERVER" "mkdir -p ~/openvpn-server-dat && chmod 0700 ~/openvpn-server-dat"
+
   scp "${PKI_DIR}/ta.key" \
     "${PKI_DIR}/issued/server.crt" \
     "${PKI_DIR}/ca.crt" \
