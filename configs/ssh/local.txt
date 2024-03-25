@@ -48,7 +48,7 @@ Host mini
 Host office
   HostName     85.30.226.184
   User         evg
-  Port         2022
+  Port         22
   IdentityFile ~/.ssh/id_ecdsa
 
 Host office-local
