@@ -31,7 +31,7 @@ help() {
   echo ''
   echo 'bash -pki {name} - зайти в контейнер'
   echo ''
-  echo 'cp -pki {name} -service {server} - скопировать файлы на сервер'
+  echo 'cp -pki {name} -server {server} - скопировать файлы на сервер'
   echo ''
   echo 'Установка и обслуживание openvpn:'
   echo 'openvpn-status  -server {name} [-vpn-service {name}] - статус службы openvpn на сервере'
