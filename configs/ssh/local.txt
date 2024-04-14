@@ -15,23 +15,23 @@ Host home-local home-l
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
 
-Host srv1
+Host srv1-local srv1-l
   HostName     192.168.11.101
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-Host srv1-net srv1-home
+Host srv1
   HostName     home.evgio.com
   User         adman
   Port         2122
   IdentityFile ~/.ssh/id_ecdsa
 
-Host srv2
+Host srv2-local srv2-l
   HostName     192.168.11.102
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-Host srv2-net srv2-home
+Host srv2
   HostName     home.evgio.com
   User         adman
   Port         2222
