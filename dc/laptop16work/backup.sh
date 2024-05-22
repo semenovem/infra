@@ -1,9 +1,11 @@
 #!/bin/bash
 
-ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+TARGET=/mnt/md1/backup/laptop16work/
 
-sh "${ROOT}/../../bin/util/backup/git-dirs.sh" \
-  home /Volumes/dat/_dev /mnt/soft/backup/laptop-16inno/13 1
 
-#sh "${ROOT}/../../bin/util/backup/git-dirs.sh" \
-#  home /Volumes/dat/dion /mnt/soft/backup/laptop-16inno/13 1
+sh "${__INFRA_BIN__}/util/backup/git-dirs.sh" \
+  office-local /Volumes/dat/dion "${TARGET}/dion/05-22" 2
+
+sh "${__INFRA_BIN__}/util/backup/git-dirs.sh" \
+  office-local /Volumes/dat/_dev "${TARGET}/dev/05-22" 2
+
