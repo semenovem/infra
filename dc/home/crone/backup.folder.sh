@@ -11,7 +11,7 @@ DAY=$(date +%m%d)
 INCREMENT_DIR="/mnt/hard/ya-disk/backups/glazkov/alex-incr/${DAY}"
 SRC_DIR="/mnt/hard/ya-disk/ИП Глазков/"
 DST_DIR="/mnt/hard/ya-disk/backups/glazkov/alex/"
-LOG_FILE="/home/evg/_envi_state/cron-glazkov-alex.log"
+LOG_FILE="/home/evg/_infra_log/cron-glazkov-alex.log"
 
 echo "$(date) incremental backup (rsync) start with dir [${INCREMENT_DIR}]" >>"$LOG_FILE"
 if [ -d "$INCREMENT_DIR" ]; then
