@@ -2,7 +2,7 @@
 
 #
 # Определение OS
-# $1 = hard вернуть macos / linux
+# $1 = platform вернуть macos / linux
 #
 HARD=$1
 
@@ -12,12 +12,12 @@ which uname >/dev/null
 uname -s | grep -iEq "^Darwin"
 if [ $? -eq 0 ]; then
   OUT="macos"
-  [ ! "$HARD" = "hard" ] && OUT="${OUT}-$(uname -m)"
+  [ ! "$HARD" = "platform" ] && OUT="${OUT}-$(uname -m)"
   echo "$OUT"
   exit 0
 fi
 
-[ "$HARD" = "hard" ] && echo "linux" && exit 0
+[ "$HARD" = "platform" ] && echo "linux" && exit 0
 
 which "/usr/bin/raspi-config" >/dev/null
 [ $? -eq 0 ] && echo "raspbian" && exit 0

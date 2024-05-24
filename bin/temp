@@ -3,7 +3,7 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/_lib/core.sh" || exit 1
 
-OS=$(sh "${ROOT}/_lib/os.sh") || exit $?
+OS=$(sh "${ROOT}/_lib/os.sh" "platform") || exit $?
 
 case $OS in
 "raspbian") watch -t -n 1 vcgencmd measure_temp ;;

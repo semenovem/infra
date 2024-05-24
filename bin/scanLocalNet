@@ -6,7 +6,7 @@
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 . "${ROOT}/_lib/core.sh" || exit 1
 
-OS_KIND="$(sh "${ROOT}/_lib/os.sh" "hard")" || exit 1
+OS_KIND="$(sh "${ROOT}/_lib/os.sh" "platform")" || exit 1
 IP_ADDRS=
 IP=
 TARGET_IP=
