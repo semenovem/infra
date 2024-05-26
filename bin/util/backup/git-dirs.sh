@@ -30,6 +30,9 @@ SRC_DIR=$(__absolute_path__ "$SRC_DIR")
 MAX_DEPTH=$(echo "$MAX_DEPTH" | grep -iEo '[0-9]*')
 [ -z "$MAX_DEPTH" ] && MAX_DEPTH=0
 
+# Проверить, если директория на удаленном сервере уже существует - ошибка
+ssh "$HOST" "[ -d '${DST_DIR}' ]" && __err__ "dir [${DST_DIR}] already exists" && exit 0
+
 ssh "$HOST" "mkdir -p ${DST_DIR}" || exit 1 # Создать директорию на удаленном хосте
 
 copy_via_ssh() {

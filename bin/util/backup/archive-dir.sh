@@ -23,7 +23,7 @@ DST_FILE=$3
 which tar >/dev/null || __err__ "не установлена утилита tar"
 [ $? -ne 0 ] && exit 1
 
-__info__ "tar [${SRC_DIR}] and ssh to ssh [${DST_FILE}]"
+__info__ "tar [${SRC_DIR}] transfer via ssh to [${DST_FILE}]"
 
 FILE="${DST_FILE}.downloading"
 
