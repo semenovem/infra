@@ -49,4 +49,6 @@ func_backup_dirs () {
 REMOTE_SERVER="office-local"
 REMOTE_BASE_PATH="/mnt/md1/backup/laptop16work/archive"
 
+# добавить периодичность полного копирования
+
 func_backup_dirs "$__BACKUP_FOR_OFFICE__" "$REMOTE_SERVER" "$REMOTE_BASE_PATH"
