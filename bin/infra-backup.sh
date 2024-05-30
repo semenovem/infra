@@ -23,6 +23,11 @@ fi
 . "${CFG_FILE}" || exit 1
 MONTH_DAY=$(date +%m%d)
 
+echo "[info] __SRC_NAME__          = ${__SRC_NAME__}"
+echo "[info] __BACKUP_FOR_OFFICE__ = ${__BACKUP_FOR_OFFICE__}"
+echo "[info] __BACKUP_FOR_HOME__   = ${__BACKUP_FOR_HOME__}"
+
+__confirm__ "run backup ?" || exit 0
 
 # $1 - список локальных директорий для резервного копирования
 # $2 - ssh подключение user@host
