@@ -7,7 +7,7 @@ OS=$(sh "${ROOT}/_lib/os.sh" "platform") || exit $?
 
 case $OS in
 "raspbian") watch -t -n 1 vcgencmd measure_temp ;;
-"debian")
+"debian" | "linux")
   if ! which sensors >/dev/null; then
     sudo apt update || exit 1
     sudo apt -y install sensors || exit 1
