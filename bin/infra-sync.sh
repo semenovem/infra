@@ -41,6 +41,8 @@ mkdir -p "${HOME}/_infra_log"
 
 
 REMOTE_HOST="office-local"
+REMOTE_HOST="evg@office.glazkoff.ru"
+REMOTE_HOST="office"
 DST_DIR="/mnt/md1/backup/laptop16work"
 INCREMENT_DIR="${DST_DIR}/$(basename "$SRC_DIR")-incr/${MONTH}/${DAY_HOUR_MIN}"
 
