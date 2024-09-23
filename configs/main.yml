@@ -74,6 +74,9 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBHJSfDV9l7r4MljCeXNHKxPlXcqTFofVqrSn+QTZSgSjD6kLN0t91i88ZT20s20vKvR5fkYMgSDEwKZz+Lr454fmsxQVLaAeDFAbtL4gtDFfqG/6FSREyngoAD+aRqqqOg== adman@rr4
+    wg0:
+      port: 21420
+      addr: 10.14.20.0/24
 
 
   - name: msk1
@@ -87,6 +90,9 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBI7eZR81lTDng2ibGoWsKUVPv2p5BOrgvdkPcZLceyqk1mRWOo98jH020d6G4Fwrd/peq3PL9Ergcav/Lc92LU2F09TD39sWgLhTPqJ1T5hyJXIL2MErp0p9nq5TSg28Zw== adman@msk1
+    wg0:
+      port: 51820
+      addr: 10.0.0.1/24
 
 
   - name: kz2
@@ -100,6 +106,9 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOXynokGGUu4Zq3GmqABFydfU1oCDyS3CYAMP0fhlzisN0K4Ovc68qWoA4DzFnpk2K0zQipp8NyP+H0WdBFLcURU3i62ygfQAVy//y1xig3SaWzweTVpeIZerA9++dNeMg== adman@kz2
+    wg0:
+      port: 21411
+      addr: 10.14.11.0/24
 
 
   - name: eu1
@@ -114,6 +123,9 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPpbwyFmbVB3ABe2rzyOd7Gm/oHr60swOw8B3J7pPBTsCSKjTNYcub+q4F7M44Q7Pam3VS4f0vgQkZMjduTWgvOQTWWAq/5Qv7jkNVX5tFhICFR2d3Bxas3Kj3/Vs/rkIg== adman@eu1
+    wg0:
+      port: 21415
+      addr: 10.14.15.0/24
 
 
   # ---------------------------------------------------------------------------------
@@ -255,6 +267,9 @@ hosts:
 #        - 61194:0.0.0.0:1194  # vpn
 #        - 61080:0.0.0.0:10080  # cctv xeoma
 #        - 61090:0.0.0.0:10090  # cctv http
+    wg0:
+      port: 16633
+      addr: 172.20.20.1/24
 
 
   - name: office-mini-tv
