@@ -10,7 +10,7 @@ CURRENT_DIR=$1
 # this is git repo
 if [ -d "${CURRENT_DIR}/.git" ]; then
   NOT_CLEAR=
-  SUCCESS_PULL="ERRO"
+  SUCCESS_PULL="\e[1;31mERRO\e[m"
   git -C "$CURRENT_DIR" diff --exit-code 1>/dev/null &&
   git -C "$CURRENT_DIR" diff --cached --exit-code  1>/dev/null || NOT_CLEAR=1
 
@@ -21,7 +21,7 @@ if [ -d "${CURRENT_DIR}/.git" ]; then
   SHOW_DIR="$(basename "$PRE_PRE_DIR")/$(basename "$PRE_DIR")/$(basename "$CURRENT_DIR")"
 
   [ -z "$NOT_CLEAR" ] && git -C "$CURRENT_DIR" pull origin --no-rebase --no-commit -q
-  [ "$?" -eq 0 ] && SUCCESS_PULL="INFO"
+  [ "$?" -eq 0 ] && SUCCESS_PULL="\e[1;32mINFO\e[m"
 
   printf "[$SUCCESS_PULL] %-50s  " "$SHOW_DIR"
 
