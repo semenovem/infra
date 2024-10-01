@@ -20,7 +20,7 @@ if [ -d "${CURRENT_DIR}/.git" ]; then
   PRE_PRE_DIR="$(dirname "$PRE_DIR")"
   SHOW_DIR="$(basename "$PRE_PRE_DIR")/$(basename "$PRE_DIR")/$(basename "$CURRENT_DIR")"
 
-  [ -z "$NOT_CLEAR" ] && git -C "$CURRENT_DIR" pull origin --no-rebase --no-commit -q
+  git -C "$CURRENT_DIR" pull origin --no-rebase --no-commit -q
   [ "$?" -eq 0 ] && SUCCESS_PULL="\e[1;32mINFO\e[m"
 
   printf "[$SUCCESS_PULL] %-50s  " "$SHOW_DIR"
