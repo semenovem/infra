@@ -14,6 +14,7 @@ USER_PROFILE_FILE=
 INFRA_PROFILE_FILE="${__CORE_LOCAL_DIR__}/profile.sh"
 BIN_DIR="$(dirname "$ROOT")"
 BIN_DIR="$(dirname "$BIN_DIR")"
+LOCAL_DIR="$(dirname "$BIN_DIR")/.local"
 
 add_dirs() {
   ADDITIONAL_BIN_DIRS="${ADDITIONAL_BIN_DIRS} $*"
@@ -67,6 +68,7 @@ esac
 
   echo
   echo "export __INFRA_BIN__=\"${BIN_DIR}\""
+  echo "export __INFRA_LOCAL__=\"${LOCAL_DIR}\""
   echo "export PATH=\"\${PATH}:${dirs}\""
   echo
   echo "## additional profile"
