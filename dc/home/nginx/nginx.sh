@@ -7,7 +7,9 @@ echo "run nginx"
 docker run -it --rm \
   -p 80:80 \
   -p 443:443 \
+  -w /etc/nginx \
   -v "${ROOT}/conf:/etc/nginx/conf.d:ro" \
   -v "${__INFRA_LOCAL__}/certbot/www:/var/www/certbot:ro" \
   -v "${__INFRA_LOCAL__}/certbot/conf/:/etc/nginx/ssl:ro" \
+  -v "${__INFRA_LOCAL__}/nginx/htpasswd:/etc/nginx/.htpasswd:rw" \
   nginx:1.27.1-bookworm-perl bash
