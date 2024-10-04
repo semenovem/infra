@@ -2,6 +2,3 @@
 
 alias ll='ls -l'
 alias la='ls -la'
-
-#
-export __INFRA_LOCAL__="$__INFRA_BIN__/../.local"
