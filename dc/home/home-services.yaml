@@ -1,0 +1,141 @@
+volumes:
+  nextcloud:
+  postgres:
+
+networks:
+  net-home-nextcloud:
+    external: true
+  net-home-gitlab:
+    external: true
+  net-home-yadisk:
+    external: true
+  net-home-minidlna:
+    external: true
+  net-home-torrent:
+    external: true
+
+services:
+  nginx:
+    networks:
+      - net-home-nextcloud
+      - net-home-gitlab
+      - net-home-yadisk
+      - net-home-minidlna
+      - net-home-torrent
+    image: nginx:1.27.1-bookworm-perl
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./nginx/conf:/etc/nginx/conf.d:ro"
+      - "../../.local/certbot/www:/var/www/certbot:ro"
+      - "../../.local/certbot/conf/:/etc/nginx/ssl:ro"
+      - "../../.local/nginx/htpasswd:/etc/nginx/.htpasswd:rw"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 500M
+        reservations:
+          cpus: '0.5'
+          memory: 500M
+
+
+# -------------------------------------------------------------
+# ------------------------- nextcloud -------------------------
+# -------------------------------------------------------------
+  nextcloud-postgres:
+    networks:
+      - net-home-nextcloud
+    image: postgres:17.0-alpine3.20
+    volumes:
+      # - postgres:/var/lib/postgresql/data:z
+      - /mnt/raid4t_soft/nextcloud/db:/var/lib/postgresql/data:rw
+    environment:
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nextcloud
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8 --locale=ru_RU.UTF-8'
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGPORT: 5000
+      TZ: UTC
+    healthcheck:
+      test: [ "CMD-SHELL", "psql -h localhost -p 5000 -U nextcloud -c 'select now()' -d nextcloud" ]
+      interval: 1s
+      timeout: 1s
+      retries: 1000
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 200M
+        reservations:
+          cpus: '0.5'
+          memory: 200M
+      restart_policy:
+        delay: 5s
+        window: 60s
+
+  nextcloud-redis:
+    image: redis:alpine
+    networks:
+      - net-home-nextcloud
+    restart: always
+
+  nextcloud-app:
+    networks:
+      - net-home-nextcloud
+    image: nextcloud:apache
+    restart: always
+    ports:
+      - 8081:80
+    volumes:
+      # - nextcloud:/var/www/html
+      - /mnt/raid4t_soft/nextcloud/app:/var/www/html
+    environment:
+      - VIRTUAL_HOST=cloud.evgio.com
+      - LETSENCRYPT_HOST=cloud.evgio.com
+      - LETSENCRYPT_EMAIL=semenovem@gmail.com
+
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_HOST=nextcloud-postgres:5000
+      - REDIS_HOST=nextcloud-redis
+      - NEXTCLOUD_TRUSTED_DOMAINS=cloud.evgio.com 192.168.11.100 cloud.local
+      - OVERWRITECLIURL=https://cloud.evgio.com
+      - OVERWRITEPROTOCOL=https
+    depends_on:
+      nextcloud-postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 2G
+      restart_policy:
+        delay: 5s
+        window: 60s
+
+
+
+
+
+# -------------------------------------------------------------
+# -------------------------- gitlab  --------------------------
+# -------------------------------------------------------------
+
+
+
+  # curl:
+  #   networks:
+  #     - net-home-nextcloud
+  #   image: curlimages/curl:8.10.1
+  #   command: sleep 3600
+  #   restart: always
+
