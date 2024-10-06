@@ -1,0 +1,22 @@
+;
+; BIND data file for home.local
+;
+$TTL    604800
+@       IN      SOA     home.local. root.home.local. (
+                        7           ; Serial
+                        86400       ; Refresh
+                        7200        ; Retry
+                        3600000     ; Expire
+                        172800 )    ; Negative Cache TTL
+;
+@       IN      NS      dns1.class.local.
+@       IN      A       192.168.11.100
+@       IN      AAAA    ::1
+dns1    IN      A       192.168.11.100
+main	  IN      A       192.168.11.100
+cloud	  IN      A       192.168.11.100
+git     IN      A       192.168.11.100
+srv1    IN      A       192.168.11.101
+srv2    IN      A       192.168.11.102
+cam1	  IN      A       192.168.11.61
+cam3	  IN      A       192.168.11.63

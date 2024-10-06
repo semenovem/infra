@@ -55,9 +55,9 @@ options {
 -------------------------------------------
 /etc/bind/named.conf.local
 -------------------------------------------
-zone "home" {
+zone "home.local" {
         type master;
-        file "/etc/bind/db.home";
+        file "/etc/bind/db.home.local";
         allow-transfer { 192.168.11.100; };
         also-notify { 192.168.11.100; };
 };
@@ -66,7 +66,7 @@ systemctl reload bind9
 
 
 -------------------------------------------
-vim /etc/bind/db.home
+vim /etc/bind/db.home.local
 -------------------------------------------
 $ORIGIN .
 $TTL 14400
@@ -81,12 +81,13 @@ home  IN  SOA  ns1.home.  root.ns1.home. (
          A 192.168.11.100
 $ORIGIN home.
 $TTL 14400
-ns1	A	192.168.11.100
+ns1	  A	192.168.11.100
+cloud	  IN      A       192.168.11.100
+git     IN      A       192.168.11.100
+main	A	192.168.11.100
 srv1	A	192.168.11.101
 srv2	A	192.168.11.102
-main	A	192.168.11.100
 cam1	A	192.168.11.61
-cam2	A	192.168.11.62
 cam3	A	192.168.11.63
 
 

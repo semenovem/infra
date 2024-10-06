@@ -76,14 +76,24 @@ services:
           memory: 200M
       restart_policy:
         delay: 5s
-        window: 60s
 
   nextcloud-redis:
     image: redis:alpine
     networks:
       - net-home-nextcloud
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 100M
+        reservations:
+          cpus: '0.1'
+          memory: 100M
+      restart_policy:
+        delay: 5s
 
+  # https://github.com/docker-library/docs/blob/master/nextcloud/README.md
   nextcloud-app:
     networks:
       - net-home-nextcloud
@@ -96,15 +106,13 @@ services:
       - /mnt/raid4t_soft/nextcloud/app:/var/www/html
     environment:
       - VIRTUAL_HOST=cloud.evgio.com
-      - LETSENCRYPT_HOST=cloud.evgio.com
-      - LETSENCRYPT_EMAIL=semenovem@gmail.com
-
+      # - LETSENCRYPT_HOST=cloud.evgio.com
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
       - POSTGRES_PASSWORD=nextcloud
       - POSTGRES_HOST=nextcloud-postgres:5000
       - REDIS_HOST=nextcloud-redis
-      - NEXTCLOUD_TRUSTED_DOMAINS=cloud.evgio.com 192.168.11.100 cloud.local
+      - NEXTCLOUD_TRUSTED_DOMAINS=cloud.evgio.com 192.168.11.100 cloud.home.local
       - OVERWRITECLIURL=https://cloud.evgio.com
       - OVERWRITEPROTOCOL=https
     depends_on:
@@ -120,7 +128,6 @@ services:
           memory: 2G
       restart_policy:
         delay: 5s
-        window: 60s
 
 
 

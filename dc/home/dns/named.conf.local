@@ -1,0 +1,9 @@
+zone "home.local" {
+    type master;
+    file "/etc/bind/db.home.local";
+};
+
+zone "126.168.192.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.10";
+};

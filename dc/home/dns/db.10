@@ -1,0 +1,13 @@
+;
+; BIND reverse data file for local 192.168.11.xxx network
+;
+$TTL    604800
+@       IN      SOA     dns1.home.local. root.home.local. (
+                              7           ; Serial
+                          86400           ; Refresh
+                          7200            ; Retry
+                          3600000         ; Expire
+                          172800 )        ; Negative Cache TTL
+;
+@       IN      NS      dns1.
+10      IN      PTR     dns1.home.local.
