@@ -191,3 +191,9 @@ sudo dhclient usb0
 systemctl status rsyslog
 systemctl stop rsyslog
 systemctl disable rsyslog
+
+systemctl mask systemd-journald.service
+systemctl mask rsyslog.service
+
+# отключить файл подкачки
+systemctl disable dphys-swapfile
