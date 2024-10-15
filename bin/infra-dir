@@ -1,0 +1,165 @@
+#!/bin/bash
+
+# Алгоритм:
+
+# - директория:
+# - - .git директория:
+# - - - size < 1G --> архивируем
+# - - - size > 1G --> [ERRO] показываем ошибку
+#
+# - - обычная директория внутри которой нет .git репозиториев
+# - - - size < 1G --> архивируем
+# - - - size > 1G:
+# - - - - файлы < 1G --> архивируем
+# - - - - файлы > 1G --> делии по 1G -> архивируем, создаем файл со списком частей
+
+# 1G
+LIMIT_DIR=$((1024*1024*1024*10))
+# 1G
+LIMIT_FILE=$((1024*1024*1024))
+DEPTH_FOR_GIT_REPO=5
+
+
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+
+SOURCE= # откуда копировать
+TARGET="${@: -1}" # куда копировать
+[ -n "$TARGET" ] && set -- "${@:1:$(($#-1))}"
+
+
+# ------------------------------------------------
+# ----------     разбор аргументов     -----------
+# ------------------------------------------------
+for arg in "$@"; do
+  if [ -d "$arg" ]; then
+    SOURCE="${arg%/}"
+    continue
+  fi
+
+  # case "$PREV" in
+  #   "-d") shift; continue ;;
+  #   *) break;;
+  # esac
+done
+
+[ -z "$TARGET" ] && echo "[ERRO] destination directory not specified" && exit 1
+
+[ -d "$TARGET" ] && [ -n "$(ls -A "$TARGET")" ] \
+  && echo "[ERRO] destination directory not empty [${TARGET}]" && exit 1
+
+[ -z "$SOURCE" ] && SOURCE="$(pwd)"
+BASEPATH="$(basename "$SOURCE")"
+
+echo "[INFO] SOURCE            =${SOURCE}"
+echo "[INFO] BASEPATH          =${BASEPATH}"
+echo "[INFO] SOURCE            =${SOURCE}"
+echo "[INFO] TARGET            =${TARGET}"
+echo "[INFO] LIMIT_DIR         =${LIMIT_DIR}"
+echo "[INFO] LIMIT_FILE        =${LIMIT_FILE}"
+echo "[INFO] DEPTH_FOR_GIT_REPO=${DEPTH_FOR_GIT_REPO}"
+
+
+# $1 - директрия
+# $2 - depth - текущая глубина рекурсии
+# return 0 - не содержит директорию
+# return 1 - ошибка
+# echo yes - содержит git репозиторий
+func_has_inside_git_repo() {
+  [ "$2" -eq "$DEPTH_FOR_GIT_REPO" ] && return 0
+
+  for f in "$1/"*; do
+    [ ! -d "$f" ] && continue
+    [ -d "${f}/.git" ] && echo "yes, contains git repos:[${f}]" && return 0
+    func_has_inside_git_repo "$f" "$(($2 + 1))" || return
+  done
+
+  return 0
+}
+
+# $1 - путь к директории
+# return 0 - укладывается в лимит
+# return 1 - ошибка
+# echo large - размер больше LIMIT_DIR
+func_size_dir() {
+  size="$(du -sb "$1" | awk '{print $1}')" || return
+  [ "$LIMIT_DIR" -lt "$size" ] && echo "large"
+  return 0
+}
+
+# $1 - путь к файлу
+# return large - размер больше LIMIT_FILE
+func_size_file() {
+  du -s "$1" | awk '{print $1}'
+}
+
+# $1 - директория
+func_achive_dir() {
+  distination="${TARGET}/${1}.enc"
+  # distination="${TARGET}/${BASEPATH}/${1}.enc"
+  distination="${distination//\/\///}"
+  dir="$(dirname "$distination")"
+
+  [ -f "$distination" ] && echo "[ERRO] archive file already exists [${distination}]" && exit 1
+  mkdir -p "$dir"
+
+  echo "[INFO] >> dir = $1" "(size=$(du -sh "$1" | awk '{print $1}'))  ->>> ${distination}"
+
+  tar zcf - -C "$1" . \
+    | openssl aes-256-cbc -salt -pbkdf2 --pass "file:${HOME}/.ssh/passwd-one" -out "$distination"
+
+  # mkdir -p ./unpack && \
+  #   openssl aes-256-cbc -d -salt -pbkdf2 --pass "file:${HOME}/.ssh/passwd-one"  -in h264.enc \
+  #   | tar -C ./unpack -xzf -
+}
+
+# $1 - путь к файлу
+func_achive_file() {
+  echo "[INFO] >> func_achive_file = $1"
+}
+
+#
+#
+#
+# $1 - путь к директории
+func_main_cycle() {
+  for path in "$1/"*; do
+    # для файла
+    if [ -f "$path" ]; then
+      # wip
+      func_achive_file "$path" || exit
+      continue
+    fi
+
+    # - git рерозиторий (любого размера)
+    if [ -d "${path}/.git" ]; then
+      func_achive_dir "$path" || exit
+      continue
+    fi
+
+
+    large="$(func_size_dir "$path")"
+    [ "$?" -ne 0 ] && echo "[ERRO] for [${path}]" && continue
+
+    # - большая директория
+    if [ -n "$large" ]; then
+      func_main_cycle "$path" || exit
+      continue
+    fi
+
+    # -----------
+    # echo ">>>> path = ${path} large=${large}"
+
+    # директория содержит git репозитории
+    yes_git=$(func_has_inside_git_repo "$path" 0) || exit
+    if [ -n "$yes_git" ]; then
+      func_main_cycle "$path" || exit
+      continue
+    fi
+
+    func_achive_dir "$path" || exit
+
+  done
+}
+
+
+func_main_cycle "$SOURCE"
