@@ -15,10 +15,10 @@ if [ ! -f "$SYNC_CONF_FILE" ]; then
     echo
     echo "# table of sync tacks"
     echo "# REMOTE_HOST | PERIOD_HOUR | LOCAL_PATH      | REMOTE_PATH"
-    echo "-----------------------------------------------------------------------"
-    echo "office        |      1      | /Vol/data/proj  | /mnt/md1/backup/laptop16work"
-    echo "office        |      5      | /Vol/data/_dev  | /mnt/md1/backup/laptop16work"
-    echo "home          |     24      | /Vol/data/test  | /mnt/soft/backup001/laptop16work"
+    echo "# -----------------------------------------------------------------------"
+    echo "# office      |      1      | /Vol/data/proj  | /mnt/md1/backup/laptop16work"
+    echo "# office      |      5      | /Vol/data/_dev  | /mnt/md1/backup/laptop16work"
+    echo "# home        |     24      | /Vol/data/test  | /mnt/soft/backup001/laptop16work"
     echo
   } > "$SYNC_CONF_FILE"
 fi
