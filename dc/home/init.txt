@@ -1,0 +1,29 @@
+
+
+# quota disk space:
+# https://souptonuts.sourceforge.net/quota_tutorial.html
+
+sudo su
+mkdir -p /mnt/xeoma
+mkdir -p /usr/disk-img
+
+# 100Gb
+dd if=/dev/zero of=/usr/disk-img/disk-xeoma.ext3 bs=1G count=100
+
+# check
+ls -lh /usr/disk-img/disk-xeoma.ext3
+
+# format
+/sbin/mkfs -t ext3 -q /usr/disk-img/disk-xeoma.ext3 -F
+
+# add to /etc/fstab
+# /usr/disk-img/disk-xeoma.ext3    /mnt/xeoma ext3    defaults,rw,loop  0 0
+# /usr/disk-img/disk-xeoma.ext3    /mnt/xeoma ext3    rw,loop,usrquota,grpquota  0 0
+
+# mount /mnt/xeoma
+# Or if you didn't edit /etc/fstab above
+# mount -o loop,rw /usr/disk-img/disk-xeoma.ext3 /mnt/xeoma
+# mount -o loop,rw,usrquota,grpquota /usr/disk-img/disk-xeoma.ext3 /mnt/xeoma
+
+
+# -----------------------------------------------------
