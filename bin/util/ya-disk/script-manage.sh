@@ -127,9 +127,9 @@ case $OPER in
     --name "$CONTAINER_NAME" \
     -u "$(id -u):$(id -g)" \
     -w /ya \
-    --memory=500m \
-    --memory-swap=500m \
-    --cpus=0.3 \
+    --memory=1g \
+    --memory-swap=1g \
+    --cpus=1 \
     -v "/etc/group:/etc/group:ro" \
     -v "/etc/passwd:/etc/passwd:ro" \
     -v "${__YA_DISK_DIR__}:/ya/disk:rw" \

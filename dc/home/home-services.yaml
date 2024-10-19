@@ -1,27 +1,18 @@
 volumes:
-  nextcloud:
-  postgres:
+  # nextcloud:
+  # postgres:
+  opensearch-data1:
+  opensearch-data2:
+
 
 networks:
-  net-home-nextcloud:
-    external: true
-  net-home-gitlab:
-    external: true
-  net-home-yadisk:
-    external: true
-  net-home-minidlna:
-    external: true
-  net-home-torrent:
+  net-home:
     external: true
 
 services:
   nginx:
     networks:
-      - net-home-nextcloud
-      - net-home-gitlab
-      - net-home-yadisk
-      - net-home-minidlna
-      - net-home-torrent
+      - net-home
     image: nginx:1.27.1-bookworm-perl
     restart: always
     ports:
@@ -33,14 +24,28 @@ services:
       - "../../.local/certbot/www:/var/www/certbot:ro"
       - "../../.local/certbot/conf/:/etc/nginx/ssl:ro"
       - "../../.local/nginx/htpasswd:/etc/nginx/.htpasswd:rw"
+      - type: tmpfs
+        target: /var/cache/nginx
+        tmpfs:
+          size: 50m
+          mode: 0777
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 127.0.0.1:24224
+        tag: nginx.logs
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: 500M
+          cpus: '1'
+          memory: 300M
         reservations:
-          cpus: '0.5'
-          memory: 500M
+          memory: 300M
+      replicas: 1
+    depends_on:
+      - fluentbit
+    read_only: true
+
 
 
 # -------------------------------------------------------------
@@ -48,7 +53,7 @@ services:
 # -------------------------------------------------------------
   nextcloud-postgres:
     networks:
-      - net-home-nextcloud
+      - net-home
     image: postgres:17.0-alpine3.20
     volumes:
       # - postgres:/var/lib/postgresql/data:z
@@ -66,37 +71,43 @@ services:
       interval: 1s
       timeout: 1s
       retries: 1000
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: 127.0.0.1:24224
+    #     tag: nextcloud.postgres
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: '1'
           memory: 200M
         reservations:
-          cpus: '0.5'
           memory: 200M
       restart_policy:
         delay: 5s
+      replicas: 1
 
   nextcloud-redis:
     image: redis:alpine
     networks:
-      - net-home-nextcloud
+      - net-home
     restart: always
+    command:
+      - "--loglevel warning"
     deploy:
       resources:
         limits:
           cpus: '0.1'
-          memory: 100M
+          memory: 50M
         reservations:
-          cpus: '0.1'
-          memory: 100M
+          memory: 50M
       restart_policy:
         delay: 5s
 
   # https://github.com/docker-library/docs/blob/master/nextcloud/README.md
   nextcloud-app:
     networks:
-      - net-home-nextcloud
+      - net-home
     image: nextcloud:apache
     restart: always
     ports:
@@ -118,16 +129,21 @@ services:
     depends_on:
       nextcloud-postgres:
         condition: service_healthy
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: 127.0.0.1:24224
+    #     tag: nextcloud.app
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: 2G
+          cpus: '3'
+          memory: 3G
         reservations:
-          cpus: '0.5'
-          memory: 2G
+          memory: 3G
       restart_policy:
         delay: 5s
+      replicas: 1
 
 
 
@@ -137,8 +153,6 @@ services:
 # -------------------------- gitlab  --------------------------
 # -------------------------------------------------------------
 
-
-
   # curl:
   #   networks:
   #     - net-home-nextcloud
@@ -146,3 +160,115 @@ services:
   #   command: sleep 3600
   #   restart: always
 
+
+
+
+
+
+# -------------------------------------------------------------
+# -----------------------  opensearch  ------------------------
+# -------------------------------------------------------------
+  # [ERROR] Max virtual memory areas .max_map_count [65530] is too low
+  # solve:
+  # sudo echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
+  # sudo sysctl --system
+  opensearch-node1:
+    image: opensearchproject/opensearch:latest
+    networks:
+      - net-home
+    container_name: opensearch-node1
+    environment:
+      # - cluster.name=opensearch-cluster
+      # - plugins.security.ssl.http.enabled=false
+      # - plugins.security.disabled=true
+      - node.name=opensearch-node1
+      # - discovery.seed_hosts=opensearch-node1,opensearch-node2
+      - discovery.type=single-node
+      # - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2
+      - bootstrap.memory_lock=true  # along with the memlock settings below, disables swapping
+      - OPENSEARCH_JAVA_OPTS=-Xms2048m -Xmx2048m  # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536  # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        hard: 65536
+    volumes:
+      - opensearch-data1:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+      - 9600:9600  # required for Performance Analyzer
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4G
+      restart_policy:
+        delay: 5s
+      replicas: 1
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    ports:
+      - 5601:5601
+    expose:
+      - '5601'
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch-node1:9200"]'
+    networks:
+      - net-home
+    volumes:
+      - "./opensearch/opensearch-dashboard.conf:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml:ro"
+    depends_on:
+      - opensearch-node1
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 500M
+      restart_policy:
+        delay: 5s
+      replicas: 1
+
+
+  # logstash:
+  #   image: home/logstash-opensearsh-plugin:8.15.2
+  #   build: ./logstash
+  #   container_name: logstash
+  #   networks:
+  #     - net-home
+  #   environment:
+  #     LS_JAVA_OPTS: "-Xmx1g -Xms1g"
+  #   volumes:
+  #     - "./logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro"
+  #     - "./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro"
+  #   depends_on:
+  #     - opensearch-node1
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '4'
+  #         memory: 2G
+  #     restart_policy:
+  #       delay: 5s
+
+
+  fluentbit:
+    image: fluent/fluent-bit:3.1.9-amd64
+    networks:
+      - net-home
+    ports:
+      - 127.0.0.1:24224:24224
+      - 127.0.0.1:24224:24224/udp
+    volumes:
+      - ./fluent:/fluent-bit/etc
+      # - /var/log:/var/log
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 100M
+      restart_policy:
+        delay: 5s
