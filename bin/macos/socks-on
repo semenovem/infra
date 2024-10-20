@@ -1,0 +1,2 @@
+networksetup -setsocksfirewallproxy Wi-Fi 127.0.0.1 1080
+ssh -D 1080 eu1
