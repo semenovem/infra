@@ -1,0 +1,5 @@
+FROM logstash:8.15.2
+
+# https://opensearch.org/blog/Discontinuing-custom-Logstash-distribution/
+RUN export LS_JAVA_OPTS="-Xmx2g -Xms2g"; \
+  bin/logstash-plugin install logstash-output-opensearch logstash-input-opensearch

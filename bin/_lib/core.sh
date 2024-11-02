@@ -191,6 +191,14 @@ __core_has_docker_image__() {
   return 1
 }
 
+# check if there is an image is running
+# $1 - name of image [name:1.0]
+# return != 0 - error
+# echo "image_id"  - image is exists
+__core_is_running_docker_image__() {
+  echo "$(docker ps -q --filter "name=$1" || return)"
+}
+
 # проверить существование образа и собрать в случае отсутствия
 # $1 - название образа [name:1.0]
 # $2 - файл docker

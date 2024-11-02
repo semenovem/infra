@@ -1,8 +1,5 @@
 volumes:
-  # nextcloud:
-  # postgres:
   opensearch-data1:
-  opensearch-data2:
 
 
 networks:
@@ -10,6 +7,11 @@ networks:
     external: true
 
 services:
+
+  # данные сертификатов:
+  # .local/certbot/www
+  # .local/certbot/conf
+  # .local/nginx/htpasswd
   nginx:
     networks:
       - net-home
@@ -22,18 +24,18 @@ services:
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
       - "./nginx/conf:/etc/nginx/conf.d:ro"
       - "../../.local/certbot/www:/var/www/certbot:ro"
-      - "../../.local/certbot/conf/:/etc/nginx/ssl:ro"
+      - "../../.local/certbot/conf:/etc/nginx/ssl:ro"
       - "../../.local/nginx/htpasswd:/etc/nginx/.htpasswd:rw"
       - type: tmpfs
         target: /var/cache/nginx
         tmpfs:
           size: 50m
           mode: 0777
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: 127.0.0.1:24224
-        tag: nginx.logs
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: 127.0.0.1:24224
+    #     tag: nginx.logs
     deploy:
       resources:
         limits:
@@ -56,7 +58,6 @@ services:
       - net-home
     image: postgres:17.0-alpine3.20
     volumes:
-      # - postgres:/var/lib/postgresql/data:z
       - /mnt/raid4t_soft/nextcloud/db:/var/lib/postgresql/data:rw
     environment:
       POSTGRES_DB: nextcloud
@@ -103,18 +104,33 @@ services:
           memory: 50M
       restart_policy:
         delay: 5s
+      replicas: 1
 
   # https://github.com/docker-library/docs/blob/master/nextcloud/README.md
+  # включение / выключение режима обслуживания
+  # https://docs.nextcloud.com/server/latest/admin_manual/maintenance/backup.html#maintenance-mode
+  # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --on
+  # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --off
   nextcloud-app:
     networks:
       - net-home
-    image: nextcloud:apache
+    # image: nextcloud:apache
+    image: nextcloud:30.0.1-apache
     restart: always
-    ports:
-      - 8081:80
+    # ports:
+    #   - 8081:80
+      # - 127.0.0.1:8081:80
     volumes:
-      # - nextcloud:/var/www/html
       - /mnt/raid4t_soft/nextcloud/app:/var/www/html
+      - ./nextcloud/trusted.config.php:/var/www/html/config/trusted.config.php:ro
+      - ./nextcloud/crone.sh:/nextcloud-crone.sh:ro
+    # entrypoint: 'sh -c "nohup /nextcloud-crone.sh & /entrypoint.sh apache2-foreground"'
+    entrypoint:
+      - sh
+      - -c
+      # для /nextcloud-crone.sh требуется chmod o+x что бы запускался в контейнере
+      # /entrypoint.sh apache2-foreground - смотреть в инспекторе образа entrypoint + cmd
+      - "nohup /nextcloud-crone.sh & /entrypoint.sh apache2-foreground"
     environment:
       - VIRTUAL_HOST=cloud.evgio.com
       # - LETSENCRYPT_HOST=cloud.evgio.com
@@ -126,6 +142,8 @@ services:
       - NEXTCLOUD_TRUSTED_DOMAINS=cloud.evgio.com 192.168.11.100 cloud.home.local
       - OVERWRITECLIURL=https://cloud.evgio.com
       - OVERWRITEPROTOCOL=https
+      - PHP_MEMORY_LIMIT=2G
+      - PHP_UPLOAD_LIMIT=50G
     depends_on:
       nextcloud-postgres:
         condition: service_healthy
@@ -139,14 +157,59 @@ services:
         limits:
           cpus: '3'
           memory: 3G
-        reservations:
-          memory: 3G
       restart_policy:
         delay: 5s
       replicas: 1
 
+  # регулярно синхронизирует директорию на хосте с облаком cli клиентом nextcloud
+  # https://docs.nextcloud.com/desktop/latest/advancedusage.html#nextcloud-command-line-client
+  # подготовка к работе
+  # mkdir -p /mnt/nextcloud-exchanger
+  # chown evg:evg /mnt/nextcloud-exchanger
+  # Создать в nextcloud пользователя __NEXTCLOUD_ADMIN_NAME__
+  # Создать в nextcloud облаке путь /mnt/nextcloud-exchanger
+  # переменные в ../../.local/services.env
+  # __NEXTCLOUD_ADMIN_NAME__
+  # __NEXTCLOUD_ADMIN_PASSWD__
+  nextcloud-exchanger:
+    networks:
+      - net-home
+    image: home/nextcloud-exchanger:1.0
+    build:
+      context: ./nextcloud
+      dockerfile: exchanger.dockerfile
+    command:
+      - sh
+      - -c
+      - |
+        while true; do
+          sleep 60
+          echo "[INFO][$(date)] start sync nextcloud-exchanger"
 
+          #  --silent
+          nextcloudcmd --trust \
+            --non-interactive \
+            -u ${__NEXTCLOUD_ADMIN_NAME__} \
+            -p ${__NEXTCLOUD_ADMIN_PASSWD__} \
+            --path /nextcloud-exchanger /nextcloud-exchanger \
+            http://nextcloud-app:80
 
+          echo "[INFO][$(date)] end sync nextcloud-exchanger"
+        done
+    volumes:
+      - "/mnt/nextcloud-exchanger:/nextcloud-exchanger"
+    working_dir: /nextcloud-exchanger
+    user: "${UID}:${GID}"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 300M
+      restart_policy:
+        delay: 15s
+        # condition: on-failure
+        condition: any
+      replicas: 1
 
 
 # -------------------------------------------------------------
@@ -187,7 +250,7 @@ services:
       # - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2
       - bootstrap.memory_lock=true  # along with the memlock settings below, disables swapping
       - OPENSEARCH_JAVA_OPTS=-Xms2048m -Xmx2048m  # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
-      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${__OPENSEARCH_INITIAL_ADMIN_PASSWORD__}
     ulimits:
       memlock:
         soft: -1
@@ -196,6 +259,7 @@ services:
         soft: 65536  # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
         hard: 65536
     volumes:
+      # TODO перенести хранение на md1
       - opensearch-data1:/usr/share/opensearch/data
     ports:
       - 9200:9200
@@ -220,7 +284,7 @@ services:
     networks:
       - net-home
     volumes:
-      - "./opensearch/opensearch-dashboard.conf:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml:ro"
+      - "../../.local/opensearch/opensearch-dashboard.conf:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml:ro"
     depends_on:
       - opensearch-node1
     deploy:
@@ -272,3 +336,53 @@ services:
           memory: 100M
       restart_policy:
         delay: 5s
+      replicas: 0
+
+# -------------------------------------------------------------
+# --------------------------  samba  --------------------------
+# -------------------------------------------------------------
+  # переменные в ../../.local/services.env
+  # пароли для соответствующих пользователей, создаются с command:
+  # __SAMBA_EVG_PASSWD__
+  # __SAMBA_LEN_PASSWD__
+  smb-server:
+    build:
+      context: ../../docker-files
+      dockerfile: samba.dockerfile
+    image: home/samba:4.19.6.a
+    networks:
+      - net-home
+    ports:
+      - 445:7070
+    volumes:
+      - "/mnt/hdd-2t:/mnt/media:rw"
+      - "/mnt/1gb_hdd_3_5/torrents:/mnt/torrents:rw"
+      # time machine
+      - "/mnt/md1/backups/evg:/mnt/backups/evg:rw"
+      - "/mnt/raid4t_soft/backups/len:/mnt/backups/len:rw"
+      # служебное
+      - "./samba/samba.conf:/etc/samba/smb.conf:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/group:/etc/group:ro"
+      # для логов
+      - "/mnt/memfs/samba-log:/var/log/samba:rw"
+    command:
+      - sh
+      - -c
+      - |
+        # добавляем пользователей
+        echo -e "${__SAMBA_EVG_PASSWD__}\n${__SAMBA_EVG_PASSWD__}" | smbpasswd -s -a evg
+        echo -e "${__SAMBA_LEN_PASSWD__}\n${__SAMBA_LEN_PASSWD__}" | smbpasswd -s -a len
+        smbd -d=1 -F -p=7070
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+      restart_policy:
+        delay: 5s
+      replicas: 1
+
+
+
+# https://github.com/AdguardTeam/AdGuardHome

@@ -12,13 +12,25 @@
 /swap.img	none	swap	sw	0	0
 
 # 4Tb raid-mainboard
-/dev/md126    /mnt/raid4t_hard  ext4  defaults  0 0
+# /dev/md126    /mnt/raid4t_hard  ext4  defaults  0 0
 
 # 4Tb raid-linux-mdadm
 /dev/md402    /mnt/raid4t_soft  ext4  defaults  0 0
 
+# 1Tb ssd raid-linux-mdadm
+/dev/md1 /mnt/md1  ext4  defaults,nofail  1 0
+
+# tmp ssd disk for any (/dev/sdf) 1t
+# UUID=4af6e1b2-00be-4fde-8f03-43fa83b30fdf /mnt/tmp/ ext4 rw,users 0 0
+
+# 1Tb hdd 3.5
+UUID=c70d4195-fdfd-4119-a55b-1833f6ae5920  /mnt/1gb_hdd_3_5   ext4  defaults,nofail  1 0
+
 # myramdisk  /tmp/ramdisk  tmpfs  defaults,size=1G,x-gvfs-show  0  0
 tmpfs  /mnt/memfs  tmpfs  rw,size=10G  0   0
+
+# details in the file ./init.txt
+/usr/disk-img/disk-xeoma.ext3    /mnt/xeoma-archive ext3    defaults,loop  0 0
 
 
 # --------------
