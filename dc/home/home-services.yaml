@@ -187,8 +187,7 @@ services:
           echo "[INFO][$(date)] start sync nextcloud-exchanger"
 
           #  --silent
-          nextcloudcmd --trust \
-            --non-interactive \
+          nextcloudcmd --trust --non-interactive \
             -u ${__NEXTCLOUD_ADMIN_NAME__} \
             -p ${__NEXTCLOUD_ADMIN_PASSWD__} \
             --path /nextcloud-exchanger /nextcloud-exchanger \
@@ -224,7 +223,9 @@ services:
   #   restart: always
 
 
-
+# nextcloudcmd --trust --non-interactive -u evg -p 121212212121 \
+#             --path /nextcloud-exchanger /nextcloud-exchanger \
+#             http://nextcloud-app:80
 
 
 
