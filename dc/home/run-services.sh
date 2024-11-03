@@ -20,11 +20,12 @@ for ARG in "$@"; do
 
     func_create_networks
 
-      set -o allexport
-      . "${__INFRA_LOCAL__}/services.env" || exit 1
-      set +o allexport
+    set -o allexport
+    . "${__INFRA_LOCAL__}/services.env" || exit 1
+    set +o allexport
 
-    export OPENSEARCH_INITIAL_ADMIN_PASSWORD=123456!!@@QQww
+    export UID=$(id -u)
+    export GID=$(id -g)
 
     docker compose -p home --project-directory "$ROOT" \
       -f "${ROOT}/home-services.yaml" \

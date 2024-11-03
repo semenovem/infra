@@ -8,8 +8,9 @@ mdadm --create --verbose /dev/md0 -l 1 -n 2 /dev/sd{a,b}
 
 --
 mkdir /etc/mdadm
-echo "DEVICE partitions" > /etc/mdadm/mdadm.conf
+echo "DEVICE partitions" >> /etc/mdadm/mdadm.conf
 mdadm --detail --scan --verbose | awk '/ARRAY/ {print}' >> /etc/mdadm/mdadm.conf
+update-initramfs -u
 
 --
 mkfs.ext4 /dev/md
@@ -26,7 +27,7 @@ UUID=2eff7db1-1bec-4a2d-a4d1-af4113b5a590 /var/flash_storage   ext4 nofail,error
 
 UUID=e42bea03-bb2c-4a85-8faf-304405439448 /mnt/hdd-300   ext4 nofail 0 0
 # usb hdd 300g
- 24 UUID=e42bea03-bb2c-4a85-8faf-304405439448 /mnt/hdd-300   ext4 nofail 0 0
+UUID=e42bea03-bb2c-4a85-8faf-304405439448 /mnt/hdd-300   ext4 nofail 0 0
 
 ------------------------
 # информация о raid
