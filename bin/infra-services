@@ -1,0 +1,8 @@
+#!/bin/sh
+
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+
+# TODO для каждой платформы сделать свой путь к своему файлу
+
+# shellcheck disable=SC2068
+sh "${ROOT}/../dc/home/run-services.sh" $@

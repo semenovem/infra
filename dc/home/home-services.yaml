@@ -25,7 +25,7 @@ services:
       - "./nginx/conf:/etc/nginx/conf.d:ro"
       - "../../.local/certbot/www:/var/www/certbot:ro"
       - "../../.local/certbot/conf:/etc/nginx/ssl:ro"
-      - "../../.local/nginx/htpasswd:/etc/nginx/.htpasswd:rw"
+      - "../../.local/nginx/htpasswd:/etc/nginx/.htpasswd:ro"
       - type: tmpfs
         target: /var/cache/nginx
         tmpfs:
@@ -183,10 +183,15 @@ services:
       - -c
       - |
         while true; do
-          sleep 60
+          sleep 600
           echo "[INFO][$(date)] start sync nextcloud-exchanger"
 
-          #  --silent
+          # Важно: в директории облака всегда должен оставаться один файл
+          # Если директория в облаке становится пустой - синхронизация останавливается
+          # (требуется подтвердить удаление всех файлов локально на хостовой машине)
+          # также нельзя его переименовывать - тоже сломает синхронизацию
+
+          # --silent
           nextcloudcmd --trust --non-interactive \
             -u ${__NEXTCLOUD_ADMIN_NAME__} \
             -p ${__NEXTCLOUD_ADMIN_PASSWD__} \
@@ -202,38 +207,27 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: 300M
+          cpus: '2'
+          memory: 1G
       restart_policy:
         delay: 15s
         # condition: on-failure
         condition: any
       replicas: 1
+    read_only: true
 
 
 # -------------------------------------------------------------
 # -------------------------- gitlab  --------------------------
 # -------------------------------------------------------------
-
-  # curl:
-  #   networks:
-  #     - net-home-nextcloud
-  #   image: curlimages/curl:8.10.1
-  #   command: sleep 3600
-  #   restart: always
-
-
-# nextcloudcmd --trust --non-interactive -u evg -p 121212212121 \
-#             --path /nextcloud-exchanger /nextcloud-exchanger \
-#             http://nextcloud-app:80
-
+# TODO
 
 
 # -------------------------------------------------------------
 # -----------------------  opensearch  ------------------------
 # -------------------------------------------------------------
-  # [ERROR] Max virtual memory areas .max_map_count [65530] is too low
-  # solve:
+  # если возникает ошибка: [ERROR] Max virtual memory areas .max_map_count [65530] is too low
+  # решение:
   # sudo echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
   # sudo sysctl --system
   opensearch-node1:
