@@ -42,11 +42,12 @@ func (w *WidgetRole) DrawEditor() {
 		})
 
 	list.
-		AddItem("HOME_SERVER", "", '1', nil).
-		AddItem("WORKSTATION", "", '2', nil).
-		AddItem("STANDBY_SERVER", "", '3', nil).
-		AddItem("MINI_SERVER", "", '4', nil).
-		AddItem("OFFICE_SERVER", "", '5', nil).
+		AddItem("PROXY_SERVER", "", '1', nil).
+		AddItem("HOME_SERVER", "", '2', nil).
+		AddItem("WORKSTATION", "", '3', nil).
+		AddItem("STANDBY_SERVER", "", '4', nil).
+		AddItem("MINI_SERVER", "", '5', nil).
+		AddItem("OFFICE_SERVER", "", '6', nil).
 		SetSelectedFunc(func(_ int, s string, _ string, _ rune) {
 			w.selectedRole = s
 		}).
