@@ -1,10 +1,12 @@
 #!/bin/sh
 
-if [ -z "$1" ]; then
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+
+if [ -n "$1" ]; then
   while true; do
-    sh run.sh "run"
+    sh "${ROOT}/run.sh"
     sleep 1
   done
 else
-  go run *.go
+  go run "${ROOT}/"*.go
 fi

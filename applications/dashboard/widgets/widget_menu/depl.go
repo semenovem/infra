@@ -23,6 +23,7 @@ type Config struct {
 	HandlerSetFocus         func(tview.Primitive)
 	HandlerChangeRole       func()
 	HandlerShowConfirmModal func(confirmMessage string, action func())
+	HandlerExecuteShellFile func(ctx context.Context, shellFilePath string, args ...string)
 }
 
 func New(conf Config, logger *slog.Logger) *WidgetMenu {
@@ -59,23 +60,43 @@ func (w *WidgetMenu) draw(ctx context.Context) {
 			)
 		}).
 		AddItem("Update ssh config", "", '3', func() {
-
-			//w.logger.Info("Before Python shell:")
-			//cmd := exec.Command(
-			//	"bash",
-			//	"-c",
-			//	"echo '>>>>>>>>>>>>>>>>'; sleep 3",
-			//	//"/Users/sem/_infra/bin/util/sys/_test_set-role.sh",
-			//)
-			//cmd.Stdin = os.Stdin
-			//cmd.Stdout = os.Stdout
-			//cmd.Stderr = os.Stderr
-			//err := cmd.Run() // add error checking
-			//w.logger.Info("After Python shell", err)
-
+			const path = "/bin/util/sys/ssh-config-upd.sh"
+			w.conf.HandlerShowConfirmModal(
+				"Update ssh config ?",
+				func() {
+					w.conf.HandlerExecuteShellFile(ctx, w.conf.PathRepo+path)
+					w.conf.HandlerHideModal()
+				},
+			)
 		}).
-		AddItem("Update ssh authorized keys", "", '4', nil).
-		AddItem("Build configurator app", "", '5', nil).
+		AddItem("Update ssh authorized keys", "", '4', func() {
+			const path = "/bin/util/sys/ssh-authorized-keys.sh"
+			w.conf.HandlerShowConfirmModal(
+				"Update ssh authorized keys ?",
+				func() {
+					w.conf.HandlerExecuteShellFile(ctx, w.conf.PathRepo+path)
+					w.conf.HandlerHideModal()
+				},
+			)
+		}).
+		AddItem("Build configurator app", "", '5', func() {
+			const (
+				path      = "/app/configurator/build.sh"
+				targetApp = "/.local/configurator-app"
+			)
+
+			w.conf.HandlerShowConfirmModal(
+				"Build configurator app ?",
+				func() {
+					w.conf.HandlerExecuteShellFile(
+						ctx,
+						w.conf.PathRepo+path,
+						w.conf.PathRepo+targetApp,
+					)
+					w.conf.HandlerHideModal()
+				},
+			)
+		}).
 		AddItem("Change role", "Press to exit", '6', func() {
 			w.conf.HandlerChangeRole()
 		}).

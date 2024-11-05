@@ -13,7 +13,7 @@ const (
 
 func (w *WidgetRole) DrawEditor() {
 	var (
-		itemStyle = tcell.StyleDefault.Foreground(fonColor).Background(fonColor)
+		itemStyle = tcell.StyleDefault.Background(fonColor)
 
 		list = tview.NewList().
 			ShowSecondaryText(false).
@@ -67,6 +67,8 @@ func (w *WidgetRole) DrawEditor() {
 		}).
 		SetBackgroundColor(fonColor).
 		SetBorderPadding(1, 1, 2, 2)
+
+	//list.SetMainTextStyle(tcell.StyleDefault.Foreground(tcell.ColorRed))
 
 	{
 		ls := list.FindItems(w.currentRole, "", false, true)

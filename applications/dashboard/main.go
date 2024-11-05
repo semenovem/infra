@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"infra_menu/root"
+	"dashboard/root"
 	"log/slog"
 	"os"
 	"time"
@@ -36,7 +36,7 @@ func (m *loggerMiddleware) Write(p []byte) (n int, err error) {
 
 func main() {
 	logger = slog.New(slog.NewTextHandler(&middleware, &slog.HandlerOptions{
-		Level: slog.LevelInfo,
+		Level: slog.LevelDebug,
 		ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
 			if a.Key == slog.TimeKey {
 				return slog.Attr{}
@@ -51,19 +51,6 @@ func main() {
 	defer logger.Info("exit application")
 
 	logger.Info("start application")
-
-	//logger.Info("Before Python shell:")
-	//cmd := exec.Command(
-	//	"bash",
-	//	"-c",
-	//	//"echo '>>>>>>>>>>>>>>>>'; sleep 5",
-	//	"sh /Users/sem/_infra/bin/util/sys/_test_set-role.sh",
-	//)
-	//cmd.Stdin = os.Stdin
-	//cmd.Stdout = os.Stdout
-	//cmd.Stderr = os.Stderr
-	//err := cmd.Run()
-	//logger.Info("After Python shell", err)
 
 	_ = root.New(mainCtx, logger, infraRepoPath, inputLog)
 }

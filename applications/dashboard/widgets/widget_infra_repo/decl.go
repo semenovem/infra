@@ -2,9 +2,9 @@ package widget_infra_repo
 
 import (
 	"context"
+	"dashboard/timeago"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
-	"infra_menu/timeago"
 	"io"
 	"log/slog"
 	"os"

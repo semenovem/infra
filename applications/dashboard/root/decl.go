@@ -2,9 +2,9 @@ package root
 
 import (
 	"context"
+	"dashboard/widgets/widget_role"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
-	"infra_menu/widgets/widget_role"
 	"log/slog"
 )
 
@@ -16,6 +16,7 @@ type Controller struct {
 	isModalOpened    bool
 	focusedElemStack []tview.Primitive
 	widgetRole       *widget_role.WidgetRole
+	isRestart        bool
 }
 
 func New(
@@ -23,7 +24,7 @@ func New(
 	logger *slog.Logger,
 	infraRepoPath string,
 	inputLog <-chan []byte,
-) *Controller {
+) error {
 	v := &Controller{
 		logger:        logger,
 		app:           tview.NewApplication(),
@@ -57,24 +58,31 @@ func New(
 		}
 
 		switch event.Key() {
-		case tcell.KeySI:
-			logger.Info(">>>>>>>>>>>")
+		case tcell.KeySI: // перейти в shell
+			v.interactiveShell(ctx)
 			return nil
 		default:
 		}
 
-		logger.With(
-			"key", event.Key(),
-			"name", event.Name(),
-			"rune", event.Rune(),
-		).Info("root")
+		//logger.With(
+		//	"key", event.Key(),
+		//	"name", event.Name(),
+		//	"rune", event.Rune(),
+		//).Debug("root")
 
 		return event
 	})
 
-	if err := v.app.Run(); err != nil {
-		v.logger.Error("run: %w", err)
-	}
+	for {
+		v.isRestart = false
 
-	return v
+		if err := v.app.Run(); err != nil {
+			v.logger.Error("run: %w", err)
+			return err
+		}
+
+		if !v.isRestart {
+			return nil
+		}
+	}
 }

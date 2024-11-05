@@ -2,10 +2,10 @@ package root
 
 import (
 	"context"
+	"dashboard/widgets/widget_infra_repo"
+	"dashboard/widgets/widget_log"
+	"dashboard/widgets/widget_menu"
 	"github.com/rivo/tview"
-	"infra_menu/widgets/widget_infra_repo"
-	"infra_menu/widgets/widget_log"
-	"infra_menu/widgets/widget_menu"
 )
 
 func (t *Controller) buildRootLayout(ctx context.Context, outputLog <-chan []byte) {
@@ -29,6 +29,7 @@ func (t *Controller) buildRootLayout(ctx context.Context, outputLog <-chan []byt
 			HandlerSetFocus:         t.SetFocus,
 			HandlerChangeRole:       t.OpenViewChangeRole,
 			HandlerShowConfirmModal: t.ShowConfirmModal,
+			HandlerExecuteShellFile: t.ExecuteShellFile,
 		}, t.logger)
 	)
 

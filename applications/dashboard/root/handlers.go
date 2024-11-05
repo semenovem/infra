@@ -1,6 +1,7 @@
 package root
 
 import (
+	"fmt"
 	"github.com/rivo/tview"
 )
 
@@ -10,15 +11,11 @@ func (t *Controller) Exit() {
 }
 
 func (t *Controller) SetFocus(el tview.Primitive) {
+	t.logger.Info(fmt.Sprintf("(Controller.SetFocus) open view change role %T", el))
 	t.app.SetFocus(el)
 }
 
 func (t *Controller) OpenViewChangeRole() {
 	t.logger.Info("(Controller.OpenViewChangeRole) open view change role")
-	t.widgetRole.DrawEditor()
-}
-
-func (t *Controller) hideApp() {
-	t.logger.Info("(OpenViewChangeRole) open view change role")
 	t.widgetRole.DrawEditor()
 }
