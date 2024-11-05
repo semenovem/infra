@@ -89,6 +89,6 @@ func (w *WidgetRole) DrawEditor() {
 	panel.SetTitle(" change role ")
 	panel.AddItem(content, 0, 1, true)
 
-	w.conf.HandlerShowModal(panel, 50, 12)
+	w.conf.HandlerShowModal(panel, 60, 12)
 	w.conf.HandlerSetFocus(list)
 }

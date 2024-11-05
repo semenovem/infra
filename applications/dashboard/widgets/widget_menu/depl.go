@@ -52,7 +52,7 @@ func (w *WidgetMenu) draw(ctx context.Context) {
 		AddItem("Reinstall", "", '1', nil).
 		AddItem("Update repo", "", '2', func() {
 			w.conf.HandlerShowConfirmModal(
-				"Confirm Update Repo ?",
+				"Confirm\nUpdate Repo ?",
 				func() {
 					w.updateRepo(ctx)
 					w.conf.HandlerHideModal()
@@ -62,7 +62,7 @@ func (w *WidgetMenu) draw(ctx context.Context) {
 		AddItem("Update ssh config", "", '3', func() {
 			const path = "/bin/util/sys/ssh-config-upd.sh"
 			w.conf.HandlerShowConfirmModal(
-				"Update ssh config ?",
+				"Confirm\nUpdate ssh config ?",
 				func() {
 					w.conf.HandlerExecuteShellFile(ctx, w.conf.PathRepo+path)
 					w.conf.HandlerHideModal()
@@ -72,7 +72,7 @@ func (w *WidgetMenu) draw(ctx context.Context) {
 		AddItem("Update ssh authorized keys", "", '4', func() {
 			const path = "/bin/util/sys/ssh-authorized-keys.sh"
 			w.conf.HandlerShowConfirmModal(
-				"Update ssh authorized keys ?",
+				"Confirm\nUpdate ssh authorized keys ?",
 				func() {
 					w.conf.HandlerExecuteShellFile(ctx, w.conf.PathRepo+path)
 					w.conf.HandlerHideModal()
@@ -86,7 +86,7 @@ func (w *WidgetMenu) draw(ctx context.Context) {
 			)
 
 			w.conf.HandlerShowConfirmModal(
-				"Build configurator app ?",
+				"Confirm\nBuild configurator app ?",
 				func() {
 					w.conf.HandlerExecuteShellFile(
 						ctx,
