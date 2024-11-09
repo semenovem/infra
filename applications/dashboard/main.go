@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"dashboard/root"
+	"dashboard/controller"
 	"log/slog"
 	"os"
 	"time"
@@ -52,5 +52,5 @@ func main() {
 
 	logger.Info("start application")
 
-	_ = root.New(mainCtx, logger, infraRepoPath, inputLog)
+	_ = controller.New(mainCtx, logger, infraRepoPath, inputLog)
 }
