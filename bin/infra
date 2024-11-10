@@ -1,6 +1,18 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+
+
+if [ "$1" = "old" ]; then
+  shift
+else
+  cd "${ROOT}/../applications/dashboard" || exit
+  sh "run.sh" $@
+
+  exit
+fi
+
+
 . "${ROOT}/_lib/core.sh" || exit 1
 
 ENVI_SYS_DIR="${ROOT}/util/sys"

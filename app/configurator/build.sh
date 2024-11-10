@@ -8,6 +8,8 @@ VERSION="1.2.0"
 
 FILE=$1
 
+echo "[INFO] file=${FILE}"
+
 [ -z "$FILE" ] && FILE="${ROOT}/bin/configuration-app"
 
 #export GOOS=linux
