@@ -25,7 +25,13 @@ func gitBranchName(ctx context.Context, path string) (string, error) {
 }
 
 func gitShortCommit(ctx context.Context, path string) (string, error) {
-	cmd := exec.CommandContext(ctx, "git", "-C", path, "rev-parse", "--short", "HEAD")
+	cmd := exec.CommandContext(
+		ctx,
+		"sh",
+		"-c",
+		fmt.Sprintf("cd %s && git rev-parse --short HEAD", path),
+	)
+	//cmd := exec.CommandContext(ctx, "git", "-C", path, "rev-parse", "--short", "HEAD")
 
 	stdout, err := cmd.Output()
 	if err != nil {
