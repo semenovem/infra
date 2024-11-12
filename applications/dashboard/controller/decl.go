@@ -1,8 +1,8 @@
 package controller
 
 import (
+	"applications/dashboard/widgets/role"
 	"context"
-	"dashboard/widgets/widget_role"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 	"log/slog"
@@ -15,7 +15,7 @@ type Controller struct {
 	infraRepoPath    string
 	isModalOpened    bool
 	focusedElemStack []tview.Primitive
-	widgetRole       *widget_role.WidgetRole
+	widgetRole       *role.Widget
 	isRestart        bool
 }
 
@@ -34,7 +34,7 @@ func New(
 
 	v.app.SetRoot(v.pages, true)
 
-	widgetRole := widget_role.NewWidgetRole(widget_role.Config{
+	widgetRole := role.NewWidgetRole(role.Config{
 		PathRepo:         v.infraRepoPath,
 		HandlerShowModal: v.ShowModal,
 		HandlerHideModal: v.HideModal,

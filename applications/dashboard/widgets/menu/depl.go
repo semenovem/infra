@@ -1,4 +1,4 @@
-package widget_menu
+package menu
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-type WidgetMenu struct {
+type Widget struct {
 	box    *tview.List
 	once   sync.Once
 	conf   Config
@@ -26,28 +26,34 @@ type Config struct {
 	HandlerExecuteShellFile func(ctx context.Context, shellFilePath string, args ...string)
 }
 
-func New(conf Config, logger *slog.Logger) *WidgetMenu {
-	box := tview.NewList().ShowSecondaryText(false)
-	box.SetBorder(true).
-		SetBorderPadding(0, 0, 1, 0).
-		SetTitle("  role  ")
-
-	return &WidgetMenu{
-		box:    box,
+func New(conf Config, logger *slog.Logger) *Widget {
+	return &Widget{
 		conf:   conf,
-		logger: logger.With("module", "widget_menu"),
+		logger: logger.With("widget", "menu"),
 	}
 }
 
-func (w *WidgetMenu) Draw(ctx context.Context) tview.Primitive {
+func (w *Widget) Draw(ctx context.Context) tview.Primitive {
 	w.once.Do(func() {
-		w.draw(ctx)
+		w.instantiate(ctx)
 	})
 
 	return w.box
 }
 
-func (w *WidgetMenu) draw(ctx context.Context) {
+func (w *Widget) instantiate(ctx context.Context) {
+	box := tview.NewList().ShowSecondaryText(false)
+	box.SetTitle(" menu ").
+		SetBorder(true).
+		SetBorderStyle(tcell.Style{}.Bold(true).Dim(true).Normal().StrikeThrough(true)).
+		SetBorderPadding(0, 1, 1, 1)
+
+	w.box = box
+
+	w.drawItems(ctx)
+}
+
+func (w *Widget) drawItems(ctx context.Context) {
 	w.box.
 		AddItem("Reinstall", "", '1', nil).
 		AddItem("Update repo", "", '2', func() {
@@ -103,9 +109,4 @@ func (w *WidgetMenu) draw(ctx context.Context) {
 		AddItem("Exit", "Press to exit", 'q', func() {
 			w.conf.HandlerExit()
 		})
-
-	w.box.SetTitle(" Operations ").
-		SetBorder(true).
-		SetBorderStyle(tcell.Style{}.Bold(true).Dim(true).Normal().StrikeThrough(true)).
-		SetBorderPadding(0, 1, 1, 1)
 }

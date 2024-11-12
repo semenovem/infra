@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# размер директорий
-
-[ -n "$1" ] && dir="$1" || dir="."
-
-du -xhd 1 "$dir" 2> /dev/null | sort -rh
-
-# du -xhd 1 . 2> /dev/null | sort -rh

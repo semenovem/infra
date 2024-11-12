@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"applications/dashboard/widgets/menu"
+	"applications/dashboard/widgets/widget_infra_repo"
+	"applications/dashboard/widgets/widget_log"
 	"context"
-	"dashboard/widgets/widget_infra_repo"
-	"dashboard/widgets/widget_log"
-	"dashboard/widgets/widget_menu"
 	"github.com/rivo/tview"
 )
 
@@ -21,7 +21,7 @@ func (t *Controller) buildRootLayout(ctx context.Context, outputLog <-chan []byt
 
 	// --------------------- Left Menu
 	var (
-		widgetMenu = widget_menu.New(widget_menu.Config{
+		widgetMenu = menu.New(menu.Config{
 			PathRepo:                t.infraRepoPath,
 			HandlerExit:             t.Exit,
 			HandlerShowModal:        t.ShowModal,

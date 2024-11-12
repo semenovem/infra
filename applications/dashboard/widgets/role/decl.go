@@ -1,6 +1,7 @@
-package widget_role
+package role
 
 import (
+	"applications/dashboard/types"
 	"github.com/rivo/tview"
 	"io"
 	"log/slog"
@@ -8,38 +9,31 @@ import (
 	"strings"
 )
 
-type WidgetRole struct {
+type Widget struct {
 	logger       *slog.Logger
 	informerView *tview.TextView
 	panel        *tview.Flex
 	roleFilePath string
-	conf         Config
 	currentRole  string
 	selectedRole string
+	core         types.Core
 }
 
-type Config struct {
-	PathRepo         string
-	HandlerShowModal func(el tview.Primitive, width, height int)
-	HandlerHideModal func()
-	HandlerSetFocus  func(tview.Primitive)
-}
-
-func NewWidgetRole(conf Config, logger *slog.Logger) *WidgetRole {
+func NewWidgetRole(logger *slog.Logger, core types.Core) *Widget {
 	box := tview.NewTextView().SetMaxLines(1)
 	box.SetBorder(true).
 		SetBorderPadding(0, 0, 1, 0).
 		SetTitle("  role  ")
 
-	return &WidgetRole{
-		logger:       logger.With("comp", "WidgetRole"),
+	return &Widget{
+		logger:       logger.With("widget", "role"),
 		informerView: box,
-		roleFilePath: conf.PathRepo + "/.local/role",
-		conf:         conf,
+		roleFilePath: core.GetPathToRepo() + "/.local/role",
+		core:         core,
 	}
 }
 
-func (w *WidgetRole) DrawInformer() tview.Primitive {
+func (w *Widget) DrawInformer() tview.Primitive {
 	w.informerView.SetTextColor(tview.Styles.PrimaryTextColor)
 
 	err := w.readRole()
@@ -53,12 +47,12 @@ func (w *WidgetRole) DrawInformer() tview.Primitive {
 	return w.informerView
 }
 
-func (w *WidgetRole) updateInformer() {
-	w.logger.Info("(WidgetRole.updateInformer) currentRole: " + w.currentRole)
+func (w *Widget) updateInformer() {
+	w.logger.Info("(Widget.updateInformer) currentRole: " + w.currentRole)
 	w.informerView.SetText(w.currentRole)
 }
 
-func (w *WidgetRole) readRole() error {
+func (w *Widget) readRole() error {
 	file, err := os.Open(w.roleFilePath)
 	if err != nil {
 		w.logger.With("error", err).Error("(getLastUpdate) failed os.Open")

@@ -1,4 +1,4 @@
-package widget_role
+package role
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (w *WidgetRole) saveRole() {
+func (w *Widget) saveRole() {
 	w.logger.Info(fmt.Sprintf("(saveRole) old: %s new: %s ", w.selectedRole))
 
 	content := strings.ToUpper(strings.TrimSpace(w.selectedRole))
@@ -21,5 +21,5 @@ func (w *WidgetRole) saveRole() {
 
 	// TODO показать модальное окно с ошибкой
 
-	w.conf.HandlerHideModal()
+	w.core.HideModal()
 }

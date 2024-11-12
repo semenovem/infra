@@ -1,4 +1,4 @@
-module dashboard
+module applications
 
 go 1.21
 

@@ -1,8 +1,8 @@
 package main
 
 import (
+	"applications/dashboard/controller"
 	"context"
-	"dashboard/controller"
 	"log/slog"
 	"os"
 	"time"

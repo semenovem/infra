@@ -1,8 +1,7 @@
 version: 1.0.0
 
-# Свойства роли
 roles:
-  - name: EXAMPLE       # Название роли
+  - name: EXAMPLE
     # Разрешены входящие ssh подключения
     allow_incoming_ssh_for_roles: WORKSTATION MINI_SERVER MINI_SERVER
 
@@ -25,7 +24,6 @@ roles:
 
 
 hosts:
-  # Определение
   - name: example
     role: PROXY_SERVER
     description: перезагрузка в среду в 3:00
@@ -139,12 +137,12 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBFZL/3/5gSC5FSmOE/yW19HoY2bzzB5ejqhwwSJt85D72TgfcPc4UKyY6OfokUOXle9dq66zUytiCxeTH99AbnT7DpjGTtWDIWxUsQgzZRumJsyPVqWbJMWxoFUyT9cvWA== adman@mini
-    ssh_remote_forward:
-      hosts: msk1 rr4
-      ports:
-        - 30022:0.0.0.0:22   # ssh
-        - 31194:0.0.0.0:1194 # vpn
-        - 35900::5900        # vnc
+#    ssh_remote_forward:
+#      hosts: msk1 rr4
+#      ports:
+#        - 30022:0.0.0.0:22   # ssh
+#        - 31194:0.0.0.0:1194 # vpn
+#        - 35900::5900        # vnc
 
 
   # work 16"
@@ -191,20 +189,15 @@ hosts:
     local:
       url: home.local core.home
       ip: 192.168.11.100
-    local2:
-      url: home2.local
-      ip: 192.168.12.100
     ssh:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGyQMkD1kkI6cti/Srn8FNX8RzjUjlKq6ynoROeXHvp9aJHqMdETId1PFiJQjfPNCNKlVVDA8lyTkn9GZtaQSi8l7NoUsPfgGvfnBVmJpy2MlnDW83QOAwUc6fDI5oM8Kg== evg@home
-    ssh_remote_forward:
-      hosts: rr4 msk1 kz2 eu1
-      ports:
-        - 2200::22            # ssh
-        - 11940:0.0.0.0:1194  # openvpn
-        - 10080::10080        # xeoma
-        - 10090::10090        # xeoma
+#    ssh_remote_forward:
+#      hosts: rr4 msk1 kz2 eu1
+#      ports:
+#        - 2200::22            # ssh
+#        - 11940:0.0.0.0:1194  # openvpn
 
 
   - name: srv1
@@ -219,11 +212,11 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBIMVsRQ2FzF/qKVAwUwASQ2Tk1JBiCKHkphOdXYzUFmGHM5wWM8e/6UBD/zdfrz3Tgtv7M8X4wbA4cnC8TzPCY0xlklB35criLsE1L7IZRGP7ghNo9SPuRbtybIdNJQ1yg== adman@srv1
-    ssh_remote_forward:
-      hosts: rr4 msk1 kz2 eu1
-      ports:
-        - 2201::22            # ssh
-        - 11941:0.0.0.0:1194  # openvpn
+#    ssh_remote_forward:
+#      hosts: rr4 msk1 kz2 eu1
+#      ports:
+#        - 2201::22            # ssh
+#        - 11941:0.0.0.0:1194  # openvpn
 
 
   - name: srv2
@@ -238,11 +231,11 @@ hosts:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBGm16LDGpzavDoaqmDwHRswdSXjCJlcSFNFPHsJONoZs6DKJaveJk4ndqrLjoUKMcCCDnkprTNSG03jwO0VQGEd/2IA8tuGIwNQW8G4dKPvxzoUiN37uhYj3w8khUIHAqA== adman@srv2
-    ssh_remote_forward:
-      hosts: rr4 msk1 kz2 eu1
-      ports:
-        - 2202::22            # ssh
-        - 11942:0.0.0.0:1194  # openvpn
+#    ssh_remote_forward:
+#      hosts: rr4 msk1 kz2 eu1
+#      ports:
+#        - 2202::22            # ssh
+#        - 11942:0.0.0.0:1194  # openvpn
 
 
   # ---------------------------------------------------------------------------------
@@ -259,14 +252,6 @@ hosts:
       main:
         user: evg
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBE9qsJbSRrCYARg2uPSSX0TMzCaVzuEgv09FEnlRefzB6RbpmhHkPLJ+yn6k2qWQICYKebBY8nKjFZrgOAGQx+3tp+HKRESU2yP3+RBRtLCUBvQu1ULOYp5jk3gKcIDtFg== evg@office-server
-#    ssh_remote_forward:
-#      user: forward-user
-#      hosts: msk1 rr4
-#      ports:
-#        - 61022:0.0.0.0:22    # ssh
-#        - 61194:0.0.0.0:1194  # vpn
-#        - 61080:0.0.0.0:10080  # cctv xeoma
-#        - 61090:0.0.0.0:10090  # cctv http
     wg0:
       port: 16633
       addr: 172.20.20.1/24
@@ -284,11 +269,11 @@ hosts:
       main:
         user: evg
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOrXJXPdUGWv1AlkELzcFv+E7fatcPhi8Wg6vB+AFvNNXOqh5YZrp4ye3xH/PiOxh5LcV7Ghfc7phLTzN7AISMFJskCsiMq7QmCBgQhKx4kJXWxBdASHDBddvdlUYNVVKg== evg@office-mini-tv
-    ssh_remote_forward:
-      user: forward-user
-      hosts: msk1 rr4
-      ports:
-        - 62022:0.0.0.0:22    # ssh
-        - 62194:0.0.0.0:1194  # vpn
-        - 62059::5900  # vnc
+#    ssh_remote_forward:
+#      user: forward-user
+#      hosts: msk1 rr4
+#      ports:
+#        - 62022:0.0.0.0:22    # ssh
+#        - 62194:0.0.0.0:1194  # vpn
+#        - 62059::5900  # vnc
 

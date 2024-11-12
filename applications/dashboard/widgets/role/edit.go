@@ -1,4 +1,4 @@
-package widget_role
+package role
 
 import (
 	"github.com/gdamore/tcell/v2"
@@ -11,7 +11,7 @@ const (
 	fonColor = tcell.ColorGrey
 )
 
-func (w *WidgetRole) DrawEditor() {
+func (w *Widget) DrawEditor() {
 	var (
 		itemStyle = tcell.StyleDefault.Background(fonColor)
 

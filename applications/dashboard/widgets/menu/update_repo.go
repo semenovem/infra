@@ -1,11 +1,11 @@
-package widget_menu
+package menu
 
 import (
 	"context"
 	"os/exec"
 )
 
-func (w *WidgetMenu) updateRepo(ctx context.Context) {
+func (w *Widget) updateRepo(ctx context.Context) {
 	cmd := exec.CommandContext(
 		ctx,
 		"git",

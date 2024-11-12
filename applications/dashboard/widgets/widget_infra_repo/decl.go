@@ -1,8 +1,8 @@
 package widget_infra_repo
 
 import (
+	"applications/pkg/timeago"
 	"context"
-	"dashboard/timeago"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 	"io"
