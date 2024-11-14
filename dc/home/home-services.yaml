@@ -292,26 +292,27 @@ services:
       replicas: 1
 
 
-  # logstash:
-  #   image: home/logstash-opensearsh-plugin:8.15.2
-  #   build: ./logstash
-  #   container_name: logstash
-  #   networks:
-  #     - net-home
-  #   environment:
-  #     LS_JAVA_OPTS: "-Xmx1g -Xms1g"
-  #   volumes:
-  #     - "./logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro"
-  #     - "./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro"
-  #   depends_on:
-  #     - opensearch-node1
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '4'
-  #         memory: 2G
-  #     restart_policy:
-  #       delay: 5s
+  logstash:
+    image: home/logstash-opensearsh-plugin:8.15.2
+    build: ./logstash
+    container_name: logstash
+    networks:
+      - net-home
+    environment:
+      LS_JAVA_OPTS: "-Xmx1g -Xms1g"
+    volumes:
+      - "./logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro"
+      - "./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro"
+    depends_on:
+      - opensearch-node1
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 2G
+      restart_policy:
+        delay: 5s
+      replicas: 0
 
 
   fluentbit:
@@ -331,7 +332,7 @@ services:
           memory: 100M
       restart_policy:
         delay: 5s
-      replicas: 0
+      replicas: 1
 
 # -------------------------------------------------------------
 # --------------------------  samba  --------------------------
