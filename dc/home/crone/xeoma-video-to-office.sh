@@ -4,8 +4,21 @@
 # crontab
 # 1 * * * * sh /home/evg/_infra/dc/home/crone/xeoma-video-to-office.sh
 LOG_FILE=/home/evg/_infra/dc/home/crone/.xeoma-video-to-office.log
+LOG_FILE_1=/home/evg/_infra/dc/home/crone/.xeoma-video-to-office_1.log
 
 # sudo grep --color -i cron /var/log/syslog
+
+
+
+if [ -f "$LOG_FILE" ]; then
+  SIZE_LOG_FILE="$(stat --printf="%s" "$LOG_FILE")"
+
+  # 10485760
+  if [ "$SIZE_LOG_FILE" -gt 1048576 ]; then
+    mv "$LOG_FILE" "$LOG_FILE_1"
+  fi
+fi
+
 
 SOURCE=/mnt/xeoma-archive
 TARGET=/mnt/memfs/xeoma-video-last
@@ -19,11 +32,8 @@ cd "$SOURCE" || exit
 
 pipe() {
   while read -r file; do
-    # echo ">>>> $file"
     echo "[$(date)] >>> ${file}" >> "$LOG_FILE"
-
     mkdir -p "$(dirname "${TARGET}/${file}")" || continue
-
     ln -s "${SOURCE}/${file}" "${TARGET}/${file}" || continue
   done
 }
