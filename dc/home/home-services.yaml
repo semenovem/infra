@@ -353,6 +353,7 @@ services:
     volumes:
       - "/mnt/hdd-2t:/mnt/media:rw"
       - "/mnt/1gb_hdd_3_5/torrents:/mnt/torrents:rw"
+      - "/mnt/raid4t_soft/smb_share:/mnt/smd-home:rw"
       # time machine
       - "/mnt/md1/backups/evg:/mnt/backups/evg:rw"
       - "/mnt/raid4t_soft/backups/len:/mnt/backups/len:rw"
