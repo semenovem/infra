@@ -10,4 +10,21 @@ docker run -it --rm \
   certbot/certbot:v2.11.0 \
   certonly --webroot --webroot-path /var/www/certbot -d cloud.evgio.com
 
+
+docker run -it --rm \
+  -v "${__INFRA_LOCAL__}/certbot/www:/var/www/certbot:rw" \
+  -v "${__INFRA_LOCAL__}/certbot/conf:/etc/letsencrypt:rw" \
+  certbot/certbot:v2.11.0 \
+  certonly --webroot --webroot-path /var/www/certbot -d git.evgio.com
+
+
+docker run -it --rm \
+  -v "${__INFRA_LOCAL__}/certbot/www:/var/www/certbot:rw" \
+  -v "${__INFRA_LOCAL__}/certbot/conf:/etc/letsencrypt:rw" \
+  certbot/certbot:v2.11.0 \
+  certonly --webroot --webroot-path /var/www/certbot -d cam.evgio.com
+
+
+
+
   # -d nextcloud.evgio.com -d cam.evgio.com
