@@ -5,6 +5,8 @@ volumes:
 networks:
   net-home:
     external: true
+  net-gitlab:
+    name: net-gitlab
 
 services:
 
@@ -15,8 +17,8 @@ services:
   nginx:
     networks:
       - net-home
+      - net-gitlab
     image: nginx:1.27.1-bookworm-perl
-    restart: always
     ports:
       - 80:80
       - 443:443
@@ -36,6 +38,7 @@ services:
     #   options:
     #     fluentd-address: 127.0.0.1:24224
     #     tag: nginx.logs
+    restart: always
     deploy:
       resources:
         limits:
@@ -77,6 +80,7 @@ services:
     #   options:
     #     fluentd-address: 127.0.0.1:24224
     #     tag: nextcloud.postgres
+    # restart: always
     deploy:
       resources:
         limits:
@@ -86,15 +90,17 @@ services:
           memory: 200M
       restart_policy:
         delay: 5s
+        condition: any
       replicas: 1
 
+  # -------------
   nextcloud-redis:
     image: redis:alpine
     networks:
       - net-home
-    restart: always
     command:
       - "--loglevel warning"
+    # restart: always
     deploy:
       resources:
         limits:
@@ -104,6 +110,7 @@ services:
           memory: 50M
       restart_policy:
         delay: 5s
+        condition: any
       replicas: 1
 
   # https://github.com/docker-library/docs/blob/master/nextcloud/README.md
@@ -116,7 +123,7 @@ services:
       - net-home
     # image: nextcloud:apache
     image: nextcloud:30.0.1-apache
-    restart: always
+
     # ports:
     #   - 8081:80
       # - 127.0.0.1:8081:80
@@ -152,6 +159,7 @@ services:
     #   options:
     #     fluentd-address: 127.0.0.1:24224
     #     tag: nextcloud.app
+    # restart: always
     deploy:
       resources:
         limits:
@@ -159,6 +167,7 @@ services:
           memory: 3G
       restart_policy:
         delay: 5s
+        condition: any
       replicas: 1
 
   # регулярно синхронизирует директорию на хосте с облаком cli клиентом nextcloud
@@ -204,6 +213,7 @@ services:
       - "/mnt/nextcloud-exchanger:/nextcloud-exchanger"
     working_dir: /nextcloud-exchanger
     user: "${UID}:${GID}"
+    # restart: always
     deploy:
       resources:
         limits:
@@ -211,16 +221,9 @@ services:
           memory: 1G
       restart_policy:
         delay: 15s
-        # condition: on-failure
         condition: any
       replicas: 1
     read_only: true
-
-
-# -------------------------------------------------------------
-# -------------------------- gitlab  --------------------------
-# -------------------------------------------------------------
-# TODO
 
 
 # -------------------------------------------------------------
@@ -259,6 +262,7 @@ services:
     ports:
       - 9200:9200
       - 9600:9600  # required for Performance Analyzer
+    # restart: always
     deploy:
       resources:
         limits:
@@ -266,7 +270,9 @@ services:
           memory: 4G
       restart_policy:
         delay: 5s
+        condition: any
       replicas: 1
+
 
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:latest
@@ -282,6 +288,7 @@ services:
       - "../../.local/opensearch/opensearch-dashboard.conf:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml:ro"
     depends_on:
       - opensearch-node1
+    # restart: always
     deploy:
       resources:
         limits:
@@ -289,9 +296,11 @@ services:
           memory: 500M
       restart_policy:
         delay: 5s
+        condition: any
       replicas: 1
 
 
+  # ------
   logstash:
     image: home/logstash-opensearsh-plugin:8.15.2
     build: ./logstash
@@ -305,6 +314,7 @@ services:
       - "./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro"
     depends_on:
       - opensearch-node1
+    # restart: always
     deploy:
       resources:
         limits:
@@ -312,9 +322,11 @@ services:
           memory: 2G
       restart_policy:
         delay: 5s
+        condition: any
       replicas: 0
 
 
+  # -------
   fluentbit:
     image: fluent/fluent-bit:3.1.9-amd64
     networks:
@@ -325,6 +337,7 @@ services:
     volumes:
       - ./fluent:/fluent-bit/etc
       # - /var/log:/var/log
+    # restart: always
     deploy:
       resources:
         limits:
@@ -332,6 +345,7 @@ services:
           memory: 100M
       restart_policy:
         delay: 5s
+        condition: any
       replicas: 1
 
 # -------------------------------------------------------------
@@ -378,6 +392,7 @@ services:
           memory: 1G
       restart_policy:
         delay: 5s
+        condition: any
       replicas: 1
 
 

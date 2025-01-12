@@ -1,0 +1,125 @@
+
+networks:
+  net-gitlab:
+    name: net-gitlab
+
+
+services:
+  # https://habr.com/ru/companies/timeweb/articles/680594/
+  gitlab:
+    image: gitlab/gitlab-ce:17.7.1-ce.0
+    container_name: hs-gitlab
+    hostname: gitlab
+    networks:
+      - net-gitlab
+    environment:
+      # GITLAB_LOG_LEVEL: WARN
+      GITLAB_ROOT_PASSWORD: qwQW12!@qw12QW
+      GITLAB_OMNIBUS_CONFIG: |
+        # Add any other gitlab.rb configuration here, each on its own line
+        external_url 'https://git.evgio.com'
+        # настройка registry + Nginx
+        # https://habr.com/ru/companies/timeweb/articles/589675/
+        registry_external_url 'https://registry.evgio.com'
+        nginx['listen_port'] = 80;
+        nginx['listen_https'] = false;
+        registry_nginx['listen_port'] = 80;
+        registry_nginx['listen_https'] = false;
+        gitlab_rails['gitlab_shell_ssh_port'] = 1999;
+        gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8', '172.0.0.0/8', '192.168.11.0/24']
+      # TODO setup smtp
+      # https://docs.gitlab.com/omnibus/settings/smtp.html#yandex
+    ports:
+      - '1999:22'
+    volumes:
+      - '/mnt/md1/gitlab/config:/etc/gitlab'
+      - '/mnt/md1/gitlab/logs:/var/log/gitlab'
+      - '/mnt/md1/gitlab/data:/var/opt/gitlab'
+    shm_size: '256m'
+    healthcheck:
+      test: "curl -f http://gitlab/-/health"
+      interval: 1s
+      timeout: 1s
+      retries: 1000
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 10G
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+
+  # dind:
+  #     image: docker:20-dind
+  #     restart: always
+  #     privileged: true
+  #     environment:
+  #         DOCKER_TLS_CERTDIR: ""
+  #     command:
+  #         - --storage-driver=overlay2
+  #     volumes:
+  #         - /mnt/md1/gitlab/gitlab-runner-data/dind/docker:/var/lib/docker
+  #     networks:
+  #         - net-gitlab
+  #     depends_on:
+  #         - gitlab
+
+
+  runner:
+          #  gitlab/gitlab-runner:latest
+    image: gitlab/gitlab-runner:alpine
+    container_name: hs-gitlab-runner
+    restart: unless-stopped
+    # environment:
+    #     - DOCKER_HOST=tcp://dind:2375
+    volumes:
+        - /mnt/md1/gitlab/gitlab-runner-config:/etc/gitlab-runner:z
+        - /mnt/md1/gitlab/gitlab-runner-cache:/cache
+        - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+        - net-gitlab
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 300m
+      restart_policy:
+        delay: 5s
+        condition: any
+    # depends_on:
+    #     - gitlab
+    depends_on:
+      gitlab:
+        condition: service_healthy
+
+
+  # register-runner:
+  #     restart: no
+  #     image: gitlab/gitlab-runner:alpine
+  #     environment:
+  #         - REGISTRATION_TOKEN=glrt-t1_i4ynyY4Q4krjF9GQXy1F
+  #         - CI_SERVER_URL=http://gitlab
+  #     command:
+  #         - register
+  #         - --non-interactive
+  #         - --locked=false
+  #         # Имя для runner, обычно название такое же как у проекта
+  #         - --name=personale123
+  #         - --executor=docker
+  #         # Url до своего gitlab сервера, тут он у нас в одной сети
+  #         - --url=http://gitlab
+  #         - --clone-url=http://gitlab
+  #         - --docker-image=docker:20-dind
+  #         - --docker-volumes=/var/run/docker.sock:/var/run/docker.sock
+  #         # Чтобы контейнре мог иметь сетевой доступ к контейнеру с gitlab
+  #         - --docker-network-mode=host
+  #     volumes:
+  #         - /mnt/md1/gitlab/gitlab-runner-config:/etc/gitlab-runner:z
+  #         - /mnt/md1/gitlab/gitlab-runner-data/dind/docker:/var/lib/docker
+  #     networks:
+  #         - net-gitlab
+  #     depends_on:
+  #         - dind

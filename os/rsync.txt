@@ -1,2 +1,3 @@
 
+# https://www.manpagez.com/man/1/rsync/
 rsync --progress -aivz ..source.. office-local:/mnt/md1/any/vms/copy1

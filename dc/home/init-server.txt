@@ -72,9 +72,11 @@ sudo ufw enable
 sudo ufw allow in on enp2s0 to any port 22
 sudo ufw allow in on enp7s0 to any port 22
 
-# srv,,,
+# 22/tcp 80/tcp 443/tcp 1900 1999 8090 8200 10090
 sudo ufw allow 22
 sudo ufw allow 1194
+sudo ufw allow 1999/tcp
+
 
 # ---------------------------------
 sudo apt-get install davfs2
