@@ -1,0 +1,175 @@
+networks:
+  net-nextcloud:
+    name: net-nextcloud
+
+services:
+# -------------------------------------------------------------
+# ------------------------- nextcloud -------------------------
+# -------------------------------------------------------------
+  postgres:
+    hostname: nextcloud-postgres
+    networks:
+      - net-nextcloud
+    image: postgres:17.0-alpine3.20
+    volumes:
+      - /mnt/raid4t_soft/nextcloud/db:/var/lib/postgresql/data:rw
+    environment:
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nextcloud
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8 --locale=ru_RU.UTF-8'
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGPORT: 5000
+      TZ: UTC
+    healthcheck:
+      test: [ "CMD-SHELL", "psql -h localhost -p 5000 -U nextcloud -c 'select now()' -d nextcloud" ]
+      interval: 1s
+      timeout: 1s
+      retries: 1000
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: 127.0.0.1:24224
+    #     tag: nextcloud.postgres
+    # restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 200M
+        reservations:
+          memory: 200M
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+  # -------------
+  redis:
+    hostname: nextcloud-redis
+    image: redis:alpine
+    networks:
+      - net-nextcloud
+    command:
+      - "--loglevel warning"
+    # restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+        reservations:
+          memory: 50M
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+  # https://github.com/docker-library/docs/blob/master/nextcloud/README.md
+  # включение / выключение режима обслуживания
+  # https://docs.nextcloud.com/server/latest/admin_manual/maintenance/backup.html#maintenance-mode
+  # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --on
+  # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --off
+  nextcloud-app:
+    container_name: home-nextcloud-app
+    networks:
+      - net-nextcloud
+    image: nextcloud:30.0.1-apache
+    volumes:
+      - /mnt/raid4t_soft/nextcloud/app:/var/www/html
+      - ./nextcloud/trusted.config.php:/var/www/html/config/trusted.config.php:ro
+      - ./nextcloud/crone.sh:/nextcloud-crone.sh:ro
+    # entrypoint: 'sh -c "nohup /nextcloud-crone.sh & /entrypoint.sh apache2-foreground"'
+    entrypoint:
+      - sh
+      - -c
+      # для /nextcloud-crone.sh требуется chmod o+x что бы запускался в контейнере
+      # /entrypoint.sh apache2-foreground - смотреть в инспекторе образа entrypoint + cmd
+      - "nohup /nextcloud-crone.sh & /entrypoint.sh apache2-foreground"
+    environment:
+      - VIRTUAL_HOST=cloud.evgio.com
+      # - LETSENCRYPT_HOST=cloud.evgio.com
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_HOST=nextcloud-postgres:5000
+      - REDIS_HOST=nextcloud-redis
+      - NEXTCLOUD_TRUSTED_DOMAINS=cloud.evgio.com 192.168.11.100 cloud.home.local
+      - OVERWRITECLIURL=https://cloud.evgio.com
+      - OVERWRITEPROTOCOL=https
+      - PHP_MEMORY_LIMIT=2G
+      - PHP_UPLOAD_LIMIT=50G
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: 127.0.0.1:24224
+    #     tag: nextcloud.app
+    # restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '3'
+          memory: 3G
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+
+  # регулярно синхронизирует директорию на хосте с облаком cli клиентом nextcloud
+  # https://docs.nextcloud.com/desktop/latest/advancedusage.html#nextcloud-command-line-client
+  # подготовка к работе:
+  # mkdir -p /mnt/nextcloud-exchanger
+  # chown evg:evg /mnt/nextcloud-exchanger
+  # Создать в nextcloud пользователя __NEXTCLOUD_ADMIN_NAME__
+  # Создать в nextcloud облаке путь /mnt/nextcloud-exchanger
+  # переменные в ../../.local/services.env
+  # __NEXTCLOUD_ADMIN_NAME__
+  # __NEXTCLOUD_ADMIN_PASSWD__
+  exchanger:
+    hostname: nextcloud-exchanger
+    networks:
+      - net-nextcloud
+    image: home/nextcloud-exchanger:1.0
+    build:
+      context: ./nextcloud
+      dockerfile: exchanger.dockerfile
+    command:
+      - sh
+      - -c
+      - |
+        while true; do
+          sleep 600
+          echo "[INFO][$(date)] start sync nextcloud-exchanger"
+
+          # Важно: в директории облака всегда должен оставаться один файл
+          # Если директория в облаке становится пустой - синхронизация останавливается
+          # (требуется подтвердить удаление всех файлов локально на хостовой машине)
+          # также нельзя его переименовывать - тоже сломает синхронизацию
+
+          # --silent
+          nextcloudcmd --trust --non-interactive \
+            -u ${__NEXTCLOUD_ADMIN_NAME__} \
+            -p ${__NEXTCLOUD_ADMIN_PASSWD__} \
+            --path /nextcloud-exchanger /nextcloud-exchanger \
+            http://nextcloud-app:80
+
+          echo "[INFO][$(date)] end sync nextcloud-exchanger"
+        done
+    volumes:
+      - "/mnt/nextcloud-exchanger:/nextcloud-exchanger"
+    working_dir: /nextcloud-exchanger
+    user: "${UID}:${GID}"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+      restart_policy:
+        delay: 15s
+        condition: any
+      replicas: 1
+    read_only: true
