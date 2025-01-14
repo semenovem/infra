@@ -9,6 +9,9 @@ networks:
     name: net-gitlab
   net-nextcloud:
     name: net-nextcloud
+  net-monitoring:
+    name: net-monitoring
+
 
 services:
 
@@ -21,6 +24,7 @@ services:
       - net-home
       - net-gitlab
       - net-nextcloud
+      - net-monitoring
     image: nginx:1.27.1-bookworm-perl
     ports:
       - 80:80
