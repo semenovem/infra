@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+ARGUMENTS=
 OPERATION=
 PROJECT=
 CONST_PROJ_HOME_CORE="home"
@@ -8,6 +9,19 @@ CONST_PROJ_HOME_GITLAB="home-gitlab"
 CONST_PROJ_HOME_NEXTCLOUD="home-nextcloud"
 CONST_PROJ_YA_DISK="home-ya-disk" ## TODO
 CONST_PROJ_MINIDLNA="home-minidlna" ## TODO
+
+
+func_help() {
+  echo "allow [up|down|clean|logs|curl|core|gitlab|nextcloud|minidlna]"
+}
+
+if [ "$#" -eq 0 ]; then
+  docker stats --no-stream
+  echo ""
+  func_help
+
+  exit 0
+fi
 
 
 func_create_networks() {
@@ -35,8 +49,6 @@ func_analysis_arguments() {
   opers=
   projs=
 
-  echo "++++++++++++++++++++"
-
   for arg in "$@"; do
     oper=
     proj=
@@ -51,10 +63,10 @@ func_analysis_arguments() {
       "nextcloud") proj="$CONST_PROJ_HOME_NEXTCLOUD" ;;
 
       "eof_arg") ;;
-      "clean" | "curl") items="${arg} ${items}"; continue ;;
+      "clean" | "curl" | "minidlna") items="${arg} ${items}"; continue ;;
       *)
-        echo "[ERRO] unknown [$ARG] - allow [up|down|clean|logs|curl|gitlab|nextcloud]"
-        exit 0
+        echo "[ERRO] unknown [$arg] - $(func_help)"
+        return 1
       ;;
     esac
 
@@ -88,8 +100,10 @@ func_analysis_arguments() {
 
   [ -n "$proj_for_logs" ] && [ -n "$on_logs" ] && items="${items} LOGS ${proj_for_logs}"
 
-  echo $items
+  ARGUMENTS=$items
 }
+
+func_analysis_arguments $@ || exit
 
 # $1 - OPERATION
 # $2 - PROJECT
@@ -137,10 +151,7 @@ func_exe() {
   esac
 }
 
-args="$(func_analysis_arguments $@)" || exit 1
-
-# analysis of arguments
-for ARG in $args; do
+for ARG in $ARGUMENTS; do
   case "$ARG" in
     "curl")
       docker run -it --rm --network net-home --network net-gitlab --network net-nextcloud curlimages/curl:8.10.1 sh
@@ -153,7 +164,7 @@ for ARG in $args; do
     #   done
     #   ;;
 
-   "UP" | "DOWN" | "LOGS") OPERATION="$ARG"; continue ;;
+    "UP" | "DOWN" | "LOGS") OPERATION="$ARG"; continue ;;
     *) PROJECT="$ARG" ;;
   esac
 

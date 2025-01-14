@@ -1,3 +1,10 @@
 
 # https://www.manpagez.com/man/1/rsync/
+# simple copy ..from ..to
 rsync --progress -aivz ..source.. office-local:/mnt/md1/any/vms/copy1
+
+
+# complex synchronization
+rsync --progress --times --recursive --size-only --delete --delete-excluded --copy-links \
+    "$TARGET"/* msk1:~/_xeoma_home_last_video
+

@@ -65,6 +65,8 @@ services:
         condition: any
       replicas: 1
 
+
+  # https://github.com/nextcloud/all-in-one
   # https://github.com/docker-library/docs/blob/master/nextcloud/README.md
   # включение / выключение режима обслуживания
   # https://docs.nextcloud.com/server/latest/admin_manual/maintenance/backup.html#maintenance-mode
@@ -84,7 +86,7 @@ services:
       - sh
       - -c
       # для /nextcloud-crone.sh требуется chmod o+x что бы запускался в контейнере
-      # /entrypoint.sh apache2-foreground - смотреть в инспекторе образа entrypoint + cmd
+      # /entrypoint.sh apache2-foreground - смотреть в инспекторе docker-образа entrypoint + cmd
       - "nohup /nextcloud-crone.sh & /entrypoint.sh apache2-foreground"
     environment:
       - VIRTUAL_HOST=cloud.evgio.com

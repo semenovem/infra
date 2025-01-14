@@ -1,0 +1,12 @@
+# sudo grep --color -i cron /var/log/syslog
+
+sudo crontab -e
+
+# для root перезагрузка раз в мес
+0 3 1 * * /usr/bin/systemctl reboot
+
+# for user evg
+crontab -e
+
+
+
