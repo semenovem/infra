@@ -6,6 +6,7 @@ networks:
 
 services:
   prometheus:
+    container_name: monitoring-prometheus
     image: prom/prometheus:v3.1.0
     hostname: prometheus
     networks:
@@ -28,8 +29,8 @@ services:
 
   # https://github.com/prometheus/node_exporter
   node-exporter:
+    container_name: monitoring-node-exporter
     image: quay.io/prometheus/node-exporter:latest
-    # container_name: hs-gitlab
     hostname: node-exporter
     networks:
       - net-monitoring
@@ -54,6 +55,7 @@ services:
 
   # https://grafana.com/grafana/dashboards/1860-node-exporter-full
   grafana:
+    container_name: monitoring-grafana
     image: grafana/grafana-oss:11.4.0-ubuntu
     hostname: grafana
     user: "${UID}:${GID}"
@@ -72,4 +74,3 @@ services:
         delay: 5s
         condition: any
       replicas: 1
-

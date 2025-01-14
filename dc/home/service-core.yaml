@@ -11,6 +11,8 @@ networks:
     name: net-nextcloud
   net-monitoring:
     name: net-monitoring
+  net-logging:
+    name: net-logging
 
 
 services:
@@ -25,6 +27,7 @@ services:
       - net-gitlab
       - net-nextcloud
       - net-monitoring
+      - net-logging
     image: nginx:1.27.1-bookworm-perl
     ports:
       - 80:80
@@ -54,8 +57,8 @@ services:
         reservations:
           memory: 300M
       replicas: 1
-    depends_on:
-      - fluentbit
+    # depends_on:
+    #   - fluentbit
     read_only: true
 
 
@@ -66,120 +69,120 @@ services:
   # решение:
   # sudo echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
   # sudo sysctl --system
-  opensearch-node1:
-    image: opensearchproject/opensearch:latest
-    networks:
-      - net-home
-    container_name: opensearch-node1
-    environment:
-      # - cluster.name=opensearch-cluster
-      # - plugins.security.ssl.http.enabled=false
-      # - plugins.security.disabled=true
-      - node.name=opensearch-node1
-      # - discovery.seed_hosts=opensearch-node1,opensearch-node2
-      - discovery.type=single-node
-      # - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2
-      - bootstrap.memory_lock=true  # along with the memlock settings below, disables swapping
-      - OPENSEARCH_JAVA_OPTS=-Xms2048m -Xmx2048m  # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
-      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${__OPENSEARCH_INITIAL_ADMIN_PASSWORD__}
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536  # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
-        hard: 65536
-    volumes:
-      # TODO перенести хранение на md1
-      - opensearch-data1:/usr/share/opensearch/data
-    ports:
-      - 9200:9200
-      - 9600:9600  # required for Performance Analyzer
-    # restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: '4'
-          memory: 4G
-      restart_policy:
-        delay: 5s
-        condition: any
-      replicas: 1
+  # opensearch-node1:
+  #   image: opensearchproject/opensearch:latest
+  #   networks:
+  #     - net-home
+  #   container_name: opensearch-node1
+  #   environment:
+  #     # - cluster.name=opensearch-cluster
+  #     # - plugins.security.ssl.http.enabled=false
+  #     # - plugins.security.disabled=true
+  #     - node.name=opensearch-node1
+  #     # - discovery.seed_hosts=opensearch-node1,opensearch-node2
+  #     - discovery.type=single-node
+  #     # - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2
+  #     - bootstrap.memory_lock=true  # along with the memlock settings below, disables swapping
+  #     - OPENSEARCH_JAVA_OPTS=-Xms2048m -Xmx2048m  # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+  #     - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${__OPENSEARCH_INITIAL_ADMIN_PASSWORD__}
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #     nofile:
+  #       soft: 65536  # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+  #       hard: 65536
+  #   volumes:
+  #     # TODO перенести хранение на md1
+  #     - opensearch-data1:/usr/share/opensearch/data
+  #   ports:
+  #     - 9200:9200
+  #     - 9600:9600  # required for Performance Analyzer
+  #   # restart: always
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '4'
+  #         memory: 4G
+  #     restart_policy:
+  #       delay: 5s
+  #       condition: any
+  #     replicas: 1
 
 
-  opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:latest
-    ports:
-      - 5601:5601
-    expose:
-      - '5601'
-    environment:
-      OPENSEARCH_HOSTS: '["https://opensearch-node1:9200"]'
-    networks:
-      - net-home
-    volumes:
-      - "../../.local/opensearch/opensearch-dashboard.conf:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml:ro"
-    depends_on:
-      - opensearch-node1
-    # restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 500M
-      restart_policy:
-        delay: 5s
-        condition: any
-      replicas: 1
+  # opensearch-dashboards:
+  #   image: opensearchproject/opensearch-dashboards:latest
+  #   ports:
+  #     - 5601:5601
+  #   expose:
+  #     - '5601'
+  #   environment:
+  #     OPENSEARCH_HOSTS: '["https://opensearch-node1:9200"]'
+  #   networks:
+  #     - net-home
+  #   volumes:
+  #     - "../../.local/opensearch/opensearch-dashboard.conf:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml:ro"
+  #   depends_on:
+  #     - opensearch-node1
+  #   # restart: always
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '1'
+  #         memory: 500M
+  #     restart_policy:
+  #       delay: 5s
+  #       condition: any
+  #     replicas: 1
 
 
   # ------
-  logstash:
-    image: home/logstash-opensearsh-plugin:8.15.2
-    build: ./logstash
-    container_name: logstash
-    networks:
-      - net-home
-    environment:
-      LS_JAVA_OPTS: "-Xmx1g -Xms1g"
-    volumes:
-      - "./logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro"
-      - "./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro"
-    depends_on:
-      - opensearch-node1
-    # restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: '4'
-          memory: 2G
-      restart_policy:
-        delay: 5s
-        condition: any
-      replicas: 0
+  # logstash:
+  #   image: home/logstash-opensearsh-plugin:8.15.2
+  #   build: ./logstash
+  #   container_name: logstash
+  #   networks:
+  #     - net-home
+  #   environment:
+  #     LS_JAVA_OPTS: "-Xmx1g -Xms1g"
+  #   volumes:
+  #     - "./logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro"
+  #     - "./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro"
+  #   depends_on:
+  #     - opensearch-node1
+  #   # restart: always
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '4'
+  #         memory: 2G
+  #     restart_policy:
+  #       delay: 5s
+  #       condition: any
+  #     replicas: 0
 
 
   # -------
-  fluentbit:
-    image: fluent/fluent-bit:3.1.9-amd64
-    networks:
-      - net-home
-    ports:
-      - 127.0.0.1:24224:24224
-      - 127.0.0.1:24224:24224/udp
-    volumes:
-      - ./fluent:/fluent-bit/etc
-      # - /var/log:/var/log
-    # restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 100M
-      restart_policy:
-        delay: 5s
-        condition: any
-      replicas: 1
+  # fluentbit:
+  #   image: fluent/fluent-bit:3.1.9-amd64
+  #   networks:
+  #     - net-home
+  #   ports:
+  #     - 127.0.0.1:24224:24224
+  #     - 127.0.0.1:24224:24224/udp
+  #   volumes:
+  #     - ./fluent:/fluent-bit/etc
+  #     # - /var/log:/var/log
+  #   # restart: always
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '1'
+  #         memory: 100M
+  #     restart_policy:
+  #       delay: 5s
+  #       condition: any
+  #     replicas: 1
 
 # -------------------------------------------------------------
 # --------------------------  samba  --------------------------
@@ -198,7 +201,6 @@ services:
     ports:
       - 445:7070
     volumes:
-      - "/mnt/hdd-2t:/mnt/media:rw"
       - "/mnt/1gb_hdd_3_5/torrents:/mnt/torrents:rw"
       - "/mnt/raid4t_soft/smb_share:/mnt/smd-home:rw"
       # time machine

@@ -8,12 +8,13 @@ CONST_PROJ_HOME_CORE="home"
 CONST_PROJ_HOME_GITLAB="home-gitlab"
 CONST_PROJ_HOME_NEXTCLOUD="home-nextcloud"
 CONST_PROJ_MONITORING="home-monitoring"
+CONST_PROJ_LOGGING="home-logging"
 CONST_PROJ_YA_DISK="home-ya-disk" ## TODO
 CONST_PROJ_MINIDLNA="home-minidlna" ## TODO
 
 
 func_help() {
-  echo "allow [up|down|clean|logs|curl|core|gitlab|nextcloud|monitoring|minidlna]"
+  echo "allow [up|down|clean|logs|curl|core|gitlab|nextcloud|monitoring|logging|minidlna]"
 }
 
 if [ "$#" -eq 0 ]; then
@@ -59,10 +60,11 @@ func_analysis_arguments() {
       "down") oper="DOWN" ;;
       "logs") on_logs=1; continue ;;
 
-      "core")      proj="$CONST_PROJ_HOME_CORE" ;;
-      "gitlab")    proj="$CONST_PROJ_HOME_GITLAB" ;;
-      "nextcloud") proj="$CONST_PROJ_HOME_NEXTCLOUD" ;;
+      "core")       proj="$CONST_PROJ_HOME_CORE" ;;
+      "gitlab")     proj="$CONST_PROJ_HOME_GITLAB" ;;
+      "nextcloud")  proj="$CONST_PROJ_HOME_NEXTCLOUD" ;;
       "monitoring") proj="$CONST_PROJ_MONITORING" ;;
+      "logging")    proj="$CONST_PROJ_LOGGING" ;;
 
       "eof_arg") ;;
       "clean" | "curl" | "minidlna") items="${arg} ${items}"; continue ;;
@@ -154,6 +156,13 @@ func_exe() {
             -f "${ROOT}/service-monitoring.yaml" \
             --parallel=3 up --quiet-pull --detach
         ;;
+
+        "$CONST_PROJ_LOGGING")
+          docker compose -p "$CONST_PROJ_LOGGING" --project-directory "$ROOT" \
+            -f "${ROOT}/service-logging.yaml" \
+            --parallel=3 up --quiet-pull --detach
+        ;;
+
       esac
     ;;
   esac
@@ -163,7 +172,7 @@ for ARG in $ARGUMENTS; do
   case "$ARG" in
     "curl")
       docker run -it --rm \
-        --network net-home --network net-gitlab --network net-nextcloud --network net-monitoring \
+        --network net-home --network net-gitlab --network net-nextcloud --network net-monitoring --network net-logging \
         curlimages/curl:8.10.1 sh
       ;;
 
