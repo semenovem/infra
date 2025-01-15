@@ -2,6 +2,8 @@
 networks:
   net-monitoring:
     name: net-monitoring
+  net-prometheus:
+    name: net-prometheus
 
 
 services:
@@ -11,6 +13,7 @@ services:
     hostname: prometheus
     networks:
       - net-monitoring
+      - net-prometheus
     ports:
       - 9090:9090
     volumes:
