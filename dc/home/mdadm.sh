@@ -27,7 +27,7 @@
 UUID=c70d4195-fdfd-4119-a55b-1833f6ae5920  /mnt/1gb_hdd_3_5   ext4  defaults,nofail  1 0
 
 # myramdisk  /tmp/ramdisk  tmpfs  defaults,size=1G,x-gvfs-show  0  0
-tmpfs  /mnt/memfs  tmpfs  rw,size=10G  0   0
+tmpfs  /mnt/memfs  tmpfs  rw,size=1G  0   0
 
 # details in the file ./init.txt
 /usr/disk-img/disk-xeoma.ext3    /mnt/xeoma-archive ext3    defaults,loop  0 0
