@@ -48,6 +48,7 @@ services:
         tmpfs:
           size: 50m
           mode: 0777
+      - "./cctv-rtsp-to-web/www:/var/www/cctv-rtsp-to-web:ro"
     # logging:
     #   driver: "fluentd"
     #   options:
@@ -76,12 +77,12 @@ services:
     ports:
       - 9113:9113
     command:
-      - '--nginx.scrape-uri=http://nginx:81/basic_status'
+      - '--nginx.scrape-uri=http://nginx:80/basic_status'
     deploy:
       resources:
         limits:
           cpus: '0.2'
-          memory: 50M
+          memory: 40M
       restart_policy:
         delay: 5s
         condition: any
@@ -89,9 +90,29 @@ services:
     read_only: true
 
 
-# -------------------------------------------------------------
-# --------------------------  samba  --------------------------
-# -------------------------------------------------------------
+# --- RTSPtoWeb -----------------------------------------------
+# https://github.com/deepch/RTSPtoWeb
+  rtsp-to-web:
+    image: ghcr.io/deepch/rtsptoweb:latest
+    networks:
+      - net-nginx
+    # ports:
+    #   - 8083:8083
+    volumes:
+      - "./cctv-rtsp-to-web/rtsp-conf.json:/config/config.json:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 40M
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+    read_only: true
+
+
+# --- samba ---------------------------------------------------
   # переменные в ../../.local/services.env
   # пароли для соответствующих пользователей, создаются с command:
   # __SAMBA_EVG_PASSWD__
