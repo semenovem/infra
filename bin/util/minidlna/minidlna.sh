@@ -82,6 +82,11 @@ case "$1" in
   [ -z "$VOLUMES_ARGS" ] && echo "configuration file ${CONFIG_MEDIA} not contain media directories " && exit 1
 
 
+  # echo ">>>>>>>>>> $VOLUMES_ARGS"
+
+  # exit 0
+
+
   docker run -d --restart on-failure:10 \
     --network host \
     --name "$CONTAINER_NAME" \

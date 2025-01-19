@@ -68,11 +68,13 @@ services:
       - 3000:3000
     volumes:
       - '/mnt/md1/grafana:/var/lib/grafana:rw'
+    memswap_limit: 500m
+    mem_swappiness: 0
     deploy:
       resources:
         limits:
           cpus: '1'
-          memory: 1G
+          memory: 500m
       restart_policy:
         delay: 5s
         condition: any

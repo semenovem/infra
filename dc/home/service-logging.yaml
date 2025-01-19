@@ -45,6 +45,8 @@ services:
     ports:
       - 9200:9200
       - 9600:9600  # required for Performance Analyzer
+    memswap_limit: 4g
+    mem_swappiness: 0
     deploy:
       resources:
         limits:
@@ -71,11 +73,13 @@ services:
       - "../../.local/opensearch/opensearch-dashboard.conf:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml:ro"
     depends_on:
       - opensearch-node1
+    memswap_limit: 500m
+    mem_swappiness: 0
     deploy:
       resources:
         limits:
           cpus: '1'
-          memory: 500M
+          memory: 500m
       restart_policy:
         delay: 5s
         condition: any
@@ -96,11 +100,13 @@ services:
       - "./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro"
     depends_on:
       - opensearch-node1
+    memswap_limit: 4g
+    mem_swappiness: 0
     deploy:
       resources:
         limits:
           cpus: '4'
-          memory: 2G
+          memory: 2g
       restart_policy:
         delay: 5s
         condition: any
