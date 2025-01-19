@@ -2,19 +2,21 @@
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 ARGUMENTS=
-OPERATION=
-PROJECT=
-CONST_PROJ_HOME_CORE="home"
-CONST_PROJ_HOME_GITLAB="home-gitlab"
-CONST_PROJ_HOME_NEXTCLOUD="home-nextcloud"
-CONST_PROJ_MONITORING="home-monitoring"
+
+CONST_PROJ_CORE="home"
 CONST_PROJ_LOGGING="home-logging"
+CONST_PROJ_MONITORING="home-monitoring"
+CONST_PROJ_GITLAB="home-gitlab"
+CONST_PROJ_NEXTCLOUD="home-nextcloud"
+
 CONST_PROJ_YA_DISK="home-ya-disk" ## TODO
 CONST_PROJ_MINIDLNA="home-minidlna" ## TODO
 
+ALL_PROJS="${CONST_PROJ_CORE} ${CONST_PROJ_LOGGING} ${CONST_PROJ_MONITORING} ${CONST_PROJ_NEXTCLOUD} ${CONST_PROJ_GITLAB} "
+
 
 func_help() {
-  echo "allow [up|down|clean|logs|curl|core|gitlab|nextcloud|monitoring|logging|minidlna]"
+  echo "allow commands: [up|down|clean|logs|curl] projects: [all|core|gitlab|nextcloud|monitoring|logging|minidlna]"
 }
 
 if [ "$#" -eq 0 ]; then
@@ -50,6 +52,7 @@ func_analysis_arguments() {
   act_type=
   opers=
   projs=
+  all_selected=
 
   for arg in "$@"; do
     oper=
@@ -60,11 +63,12 @@ func_analysis_arguments() {
       "down") oper="DOWN" ;;
       "logs") on_logs=1; continue ;;
 
-      "core")       proj="$CONST_PROJ_HOME_CORE" ;;
-      "gitlab")     proj="$CONST_PROJ_HOME_GITLAB" ;;
-      "nextcloud")  proj="$CONST_PROJ_HOME_NEXTCLOUD" ;;
+      "core")       proj="$CONST_PROJ_CORE" ;;
+      "gitlab")     proj="$CONST_PROJ_GITLAB" ;;
+      "nextcloud")  proj="$CONST_PROJ_NEXTCLOUD" ;;
       "monitoring") proj="$CONST_PROJ_MONITORING" ;;
       "logging")    proj="$CONST_PROJ_LOGGING" ;;
+      "all")        all_selected=1; proj="ALL" ;;
 
       "eof_arg") ;;
       "clean" | "curl" | "minidlna") items="${arg} ${items}"; continue ;;
@@ -102,7 +106,7 @@ func_analysis_arguments() {
     opers="$oper"
   done
 
-  [ -n "$proj_for_logs" ] && [ -n "$on_logs" ] && items="${items} LOGS ${proj_for_logs}"
+  [ -n "$proj_for_logs" ] && [ -n "$on_logs" ] && [ -z "$all_selected" ] && items="${items} LOGS ${proj_for_logs}"
 
   ARGUMENTS=$items
 }
@@ -118,7 +122,7 @@ func_exe() {
 
   case "$1" in
     "LOGS") docker compose -p "$2" logs -f ;;
-    "DOWN") docker compose -p "$2" down;;
+    "DOWN") docker compose -p "$2" down ;;
 
     "CLEAN") ;;
 
@@ -133,20 +137,20 @@ func_exe() {
       export GID=$(id -g)
 
       case "$2" in
-        "$CONST_PROJ_HOME_CORE")
-          docker compose -p "$CONST_PROJ_HOME_CORE" --project-directory "$ROOT" \
+        "$CONST_PROJ_CORE")
+          docker compose -p "$CONST_PROJ_CORE" --project-directory "$ROOT" \
             -f "${ROOT}/service-core.yaml" \
             --parallel=2 up --quiet-pull --detach
         ;;
 
-        "$CONST_PROJ_HOME_GITLAB")
-          docker compose -p "$CONST_PROJ_HOME_GITLAB" --project-directory "$ROOT" \
+        "$CONST_PROJ_GITLAB")
+          docker compose -p "$CONST_PROJ_GITLAB" --project-directory "$ROOT" \
             -f "${ROOT}/service-gitlab.yaml" \
             --parallel=2 up --quiet-pull --detach
         ;;
 
-        "$CONST_PROJ_HOME_NEXTCLOUD")
-          docker compose -p "$CONST_PROJ_HOME_NEXTCLOUD" --project-directory "$ROOT" \
+        "$CONST_PROJ_NEXTCLOUD")
+          docker compose -p "$CONST_PROJ_NEXTCLOUD" --project-directory "$ROOT" \
             -f "${ROOT}/service-nextcloud.yaml" \
             --parallel=3 up --quiet-pull --detach
         ;;
@@ -162,11 +166,25 @@ func_exe() {
             -f "${ROOT}/service-logging.yaml" \
             --parallel=3 up --quiet-pull --detach
         ;;
-
       esac
     ;;
   esac
 }
+
+# $1 - operatoon [UP|DOWN]
+# $2... - name of services
+func_all() {
+  o="$1"
+  shift
+  for proj in $@; do
+    func_exe "$o" "$proj"
+  done
+  return 0
+}
+
+
+OPERATION=
+PROJECT=
 
 for ARG in $ARGUMENTS; do
   case "$ARG" in
@@ -189,6 +207,14 @@ for ARG in $ARGUMENTS; do
 
   # ---
   if [ -n "$PROJECT" ] && [ -n "$OPERATION" ]; then
+    if [ "$PROJECT" = "ALL" ]; then
+      [ "$OPERATION" = "UP" ] && func_all "UP" $ALL_PROJS
+      [ "$OPERATION" = "DOWN" ] && \
+        func_all "DOWN" $(echo "$ALL_PROJS" | awk '{ for (i=NF; i>1; i--) printf("%s ",$i); print $1; }')
+
+      continue
+    fi
+
     func_exe "$OPERATION" "$PROJECT"
 
     OPERATION=

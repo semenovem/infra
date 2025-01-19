@@ -26,6 +26,7 @@ services:
   # .local/certbot/conf
   # .local/nginx/htpasswd
   nginx:
+    container_name: core-nginx
     networks:
       - net-nginx
       - net-home
@@ -70,6 +71,7 @@ services:
 
 # https://github.com/nginx/nginx-prometheus-exporter
   nginx-exporter:
+    container_name: core-nginx-exporter-mert
     image: nginx/nginx-prometheus-exporter:1.4.1
     networks:
       - net-nginx
@@ -93,6 +95,7 @@ services:
 # --- RTSPtoWeb -----------------------------------------------
 # https://github.com/deepch/RTSPtoWeb
   rtsp-to-web:
+    container_name: core-cam-rtsp-to-web
     image: ghcr.io/deepch/rtsptoweb:latest
     networks:
       - net-nginx
@@ -118,6 +121,7 @@ services:
   # __SAMBA_EVG_PASSWD__
   # __SAMBA_LEN_PASSWD__
   smb-server:
+    container_name: core-smb-server
     build:
       context: ../../docker-files
       dockerfile: samba.dockerfile

@@ -82,18 +82,13 @@ case "$1" in
   [ -z "$VOLUMES_ARGS" ] && echo "configuration file ${CONFIG_MEDIA} not contain media directories " && exit 1
 
 
-  # echo ">>>>>>>>>> $VOLUMES_ARGS"
-
-  # exit 0
-
-
+    # -u "nobody:nobody" \
   docker run -d --restart on-failure:10 \
     --network host \
     --name "$CONTAINER_NAME" \
     --memory=100m \
     --memory-swap=100m \
     --cpus 0.5 \
-    -u "nobody:nobody" \
     -v "${ROOT}/minidlna.conf:/minidlna/minidlna.conf:ro" \
     $VOLUMES_ARGS \
     "$DOCKER_IMAGE" \

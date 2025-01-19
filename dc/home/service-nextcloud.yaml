@@ -7,6 +7,7 @@ services:
 # ------------------------- nextcloud -------------------------
 # -------------------------------------------------------------
   postgres:
+    container_name: nextcloud-postgres
     hostname: nextcloud-postgres
     networks:
       - net-nextcloud
@@ -46,6 +47,7 @@ services:
 
   # -------------
   redis:
+    container_name: nextcloud-redis
     hostname: nextcloud-redis
     image: redis:alpine
     networks:
@@ -73,7 +75,7 @@ services:
   # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --on
   # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --off
   nextcloud-app:
-    container_name: home-nextcloud-app
+    container_name: nextcloud-app
     networks:
       - net-nextcloud
     image: nextcloud:30.0.1-apache
@@ -81,13 +83,12 @@ services:
       - /mnt/raid4t_soft/nextcloud/app:/var/www/html
       - ./nextcloud/trusted.config.php:/var/www/html/config/trusted.config.php:ro
       - ./nextcloud/crone.sh:/nextcloud-crone.sh:ro
-    # entrypoint: 'sh -c "nohup /nextcloud-crone.sh & /entrypoint.sh apache2-foreground"'
     entrypoint:
       - sh
       - -c
       # для /nextcloud-crone.sh требуется chmod o+x что бы запускался в контейнере
       # /entrypoint.sh apache2-foreground - смотреть в инспекторе docker-образа entrypoint + cmd
-      - "nohup /nextcloud-crone.sh & /entrypoint.sh apache2-foreground"
+      - "nohup sh -c 'sh /nextcloud-crone.sh' > /crone.log 2>&1 & /entrypoint.sh apache2-foreground"
     environment:
       - VIRTUAL_HOST=cloud.evgio.com
       # - LETSENCRYPT_HOST=cloud.evgio.com
@@ -132,6 +133,7 @@ services:
   # __NEXTCLOUD_ADMIN_NAME__
   # __NEXTCLOUD_ADMIN_PASSWD__
   exchanger:
+    container_name: nextcloud-exchanger
     hostname: nextcloud-exchanger
     networks:
       - net-nextcloud
