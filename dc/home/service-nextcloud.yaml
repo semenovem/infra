@@ -1,6 +1,8 @@
 networks:
   net-nextcloud:
     name: net-nextcloud
+  net-prometheus:
+    name: net-prometheus
 
 services:
 # -------------------------------------------------------------
@@ -54,7 +56,6 @@ services:
       - net-nextcloud
     command:
       - "--loglevel warning"
-    # restart: always
     deploy:
       resources:
         limits:
@@ -76,6 +77,7 @@ services:
   # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --off
   nextcloud-app:
     container_name: nextcloud-app
+    hostname: nextcloud-app
     networks:
       - net-nextcloud
     image: nextcloud:30.0.1-apache
@@ -172,6 +174,35 @@ services:
         limits:
           cpus: '2'
           memory: 1G
+      restart_policy:
+        delay: 15s
+        condition: any
+      replicas: 1
+    read_only: true
+
+
+  # https://github.com/xperimental/nextcloud-exporter
+  nextcloud-exporter:
+    container_name: nextcloud-exporter
+    hostname: nextcloud-exporter
+    networks:
+      - net-nextcloud
+      - net-prometheus
+    image: ghcr.io/xperimental/nextcloud-exporter:0.8.0
+    # command:
+    #   - --auth-token
+    #   - xxxxx
+    environment:
+      - NEXTCLOUD_SERVER=http://nextcloud-app:80
+      - NEXTCLOUD_TIMEOUT=30s
+      - NEXTCLOUD_TLS_SKIP_VERIFY=true
+      - NEXTCLOUD_USERNAME=${__NEXTCLOUD_ADMIN_NAME__}
+      - NEXTCLOUD_PASSWORD=${__NEXTCLOUD_ADMIN_PASSWD__}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 50m
       restart_policy:
         delay: 15s
         condition: any
