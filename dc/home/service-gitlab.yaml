@@ -2,6 +2,8 @@
 networks:
   net-gitlab:
     name: net-gitlab
+  net-prometheus:
+    name: net-prometheus
 
 
 services:
@@ -12,6 +14,7 @@ services:
     hostname: gitlab
     networks:
       - net-gitlab
+      - net-prometheus
     environment:
       # GITLAB_LOG_LEVEL: WARN
       GITLAB_ROOT_PASSWORD: qwQW12!@qw12QW
