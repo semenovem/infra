@@ -74,7 +74,7 @@ sudo ufw allow 1999/tcp
 
 
 # --- ya disk -------------------------------------------------
-/mnt/single4g/ya-disk
+/mnt/vol_backup_1/ya-disk
 - cron переносит видео-записи в xeoma-reut-archive
 
 

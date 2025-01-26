@@ -61,10 +61,10 @@ find "./" -type f -mmin -180 | pipe
 
 # TODO проверить - есть ли новые файлы с момента последней синхронизации
 
-echo "[$(date)] sending to office"
-# --progress
-rsync --progress --times --recursive --size-only --delete --delete-excluded --copy-links \
-    "$TARGET"/* office:~/_backup_xeoma_reut_last_video
+# echo "[$(date)] sending to office"
+# # --progress
+# rsync --progress --times --recursive --size-only --delete --delete-excluded --copy-links \
+#     "$TARGET"/* office:~/_backup_xeoma_reut_last_video
 
 
 echo "[$(date)] sending to msk1"

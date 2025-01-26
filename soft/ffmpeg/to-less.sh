@@ -39,7 +39,7 @@
 
 # exit 0
 
-for file in "/mnt/single4g/torrents/StarGate SG-1 (Season 1-10) [BDRemux]/StarGate.SG-1.S10"*; do
+for file in "/mnt/vol_media_1/torrents/StarGate SG-1 (Season 1-10) [BDRemux]/StarGate.SG-1.S10"*; do
   # echo "$file" | grep -q S04 || continue
   echo ">>>>> file = $file"
 

@@ -55,6 +55,24 @@ services:
       replicas: 1
 
 
+  smartctl-exporter:
+    container_name: monitoring-smartctl-exporter
+    image: matusnovak/prometheus-smartctl:v2.5.0
+    privileged: true
+    networks:
+      - net-prometheus
+    ports:
+      - "9902:9902"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50m
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
 
   # https://grafana.com/grafana/dashboards/1860-node-exporter-full
   grafana:

@@ -34,4 +34,4 @@ func_logs_maintain() {
 # 10485760
 func_logs_maintain "${HOME}/logs/xeoma-last-video.log" 10485760
 
-rsync -avzhHl --delete /mnt/xeoma-archive/ /mnt/single4g/ya-disk/xeoma-reut-archive
+rsync -avzhHl --delete /mnt/xeoma-archive/ /mnt/vol_backup_1/ya-disk/xeoma-reut-archive
