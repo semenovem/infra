@@ -81,7 +81,7 @@ case $1 in
     -v "${__DOWNLOADS_DIR2__}:/downloads2" \
     -v "${__INCOMPLETE_DIR__}:/incomplete" \
     -v "${__TORRENT_FILES_DIR__}:/torrent-files" \
-    lscr.io/linuxserver/qbittorrent:4.5.5
+    lscr.io/linuxserver/qbittorrent:4.6.7
 
     # TODO check for update
     # linuxserver/qbittorrent:5.0.3

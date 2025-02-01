@@ -131,7 +131,7 @@ services:
     ports:
       - 445:7070
     volumes:
-      - "/mnt/1gb_hdd_3_5/torrents:/mnt/torrents:rw"
+      - "/mnt/vol_media_1/torrents:/mnt/torrents:rw"
       - "/mnt/raid4t_soft/smb_share:/mnt/smd-home:rw"
       # time machine
       - "/mnt/vol_backup_1/evg_time_machine:/mnt/backups/evg_time_machine:rw"

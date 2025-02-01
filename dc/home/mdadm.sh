@@ -27,7 +27,7 @@ UUID=0fce83b5-138a-496c-a044-4533412cf877  /mnt/vol_media_1  ext4  defaults,nofa
 # UUID=4af6e1b2-00be-4fde-8f03-43fa83b30fdf /mnt/tmp/ ext4 rw,users 0 0
 
 # 1Tb hdd 3.5
-UUID=c70d4195-fdfd-4119-a55b-1833f6ae5920  /mnt/1gb_hdd_3_5   ext4  defaults,nofail  1 0
+# UUID=c70d4195-fdfd-4119-a55b-1833f6ae5920  /mnt/1gb_hdd_3_5   ext4  defaults,nofail  1 0
 
 # myramdisk  /tmp/ramdisk  tmpfs  defaults,size=1G,x-gvfs-show  0  0
 tmpfs  /mnt/memfs  tmpfs  rw,size=1G  0   0
