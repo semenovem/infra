@@ -19,6 +19,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
     echo
     echo "# Каталог для загрузки:"
     echo "__DOWNLOADS_DIR__="
+    echo "__DOWNLOADS_DIR2__="
     echo
     echo "# Каталог для не завершенных загрузок:"
     echo "__INCOMPLETE_DIR__="
@@ -51,6 +52,7 @@ case $1 in
 "run" | "start")
   ERR=
   [ -z "$__DOWNLOADS_DIR__" ] && ERR=1 && __info__ "не указано значение __DOWNLOADS_DIR__"
+  [ -z "$__DOWNLOADS_DIR2__" ] && ERR=1 && __info__ "не указано значение __DOWNLOADS_DIR2__"
   [ -z "$__INCOMPLETE_DIR__" ] && ERR=1 && __info__ "не указано значение __INCOMPLETE_DIR__"
   [ -z "$__TORRENT_FILES_DIR__" ] && ERR=1 && __info__ "не указано значение __TORRENT_FILES_DIR__"
   [ -n "$ERR" ] && __info__ "Заполните значения в файле [${CONFIG_FILE}]" && exit 1
@@ -76,9 +78,13 @@ case $1 in
     -p 6881:6881/udp \
     -v "${CONFIG_DIR}:/config" \
     -v "${__DOWNLOADS_DIR__}:/downloads" \
+    -v "${__DOWNLOADS_DIR2__}:/downloads2" \
     -v "${__INCOMPLETE_DIR__}:/incomplete" \
     -v "${__TORRENT_FILES_DIR__}:/torrent-files" \
-    lscr.io/linuxserver/qbittorrent:4.5.5
+    lscr.io/linuxserver/qbittorrent:4.6.7
+
+    # TODO check for update
+    # linuxserver/qbittorrent:5.0.3
 
   docker logs -f "$CONTAINER_NAME"
   ;;

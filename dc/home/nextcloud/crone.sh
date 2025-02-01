@@ -1,15 +1,17 @@
 #!/bin/sh
 
-while true; do
-  sleep 600
+echo "[INFO][$(date)] start"
 
-  echo "[INFO] maintains nextcloud via crone start"
+while true; do
+  sleep 60
+
+  echo "[INFO][$(date)] maintains nextcloud via crone start"
 
   # скрипт нужно запускать от пользователя www-data
-  usermod -s /bin/sh www-data || continue
-
-  # выполнение регулярных задач обслуживания в nextcloud
   # https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/background_jobs_configuration.html
-  runuser -l www-data -c "php -f /var/www/html/cron.php"
-  usermod -s /usr/sbin/nologin www-data
+  su www-data -s /bin/bash -c "php -f /var/www/html/cron.php"
+
+  echo "[INFO][$(date)] maintains nextcloud via crone end"
+
+  sleep 600
 done

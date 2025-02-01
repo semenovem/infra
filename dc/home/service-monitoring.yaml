@@ -1,0 +1,99 @@
+
+networks:
+  net-monitoring:
+    name: net-monitoring
+  net-prometheus:
+    name: net-prometheus
+
+
+services:
+  prometheus:
+    container_name: monitoring-prometheus
+    image: prom/prometheus:v3.1.0
+    hostname: prometheus
+    networks:
+      - net-monitoring
+      - net-prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - './monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro'
+      - '/mnt/md1/prometheus:/prometheus:rw'
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+
+  # https://github.com/prometheus/node_exporter
+  node-exporter:
+    container_name: monitoring-node-exporter
+    image: quay.io/prometheus/node-exporter:latest
+    hostname: node-exporter
+    networks:
+      - net-monitoring
+    command:
+      - '--path.rootfs=/host'
+    # network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 50m
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+
+  smartctl-exporter:
+    container_name: monitoring-smartctl-exporter
+    image: matusnovak/prometheus-smartctl:v2.5.0
+    privileged: true
+    networks:
+      - net-prometheus
+    ports:
+      - "9902:9902"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50m
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+
+  # https://grafana.com/grafana/dashboards/1860-node-exporter-full
+  grafana:
+    container_name: monitoring-grafana
+    image: grafana/grafana-oss:11.4.0-ubuntu
+    hostname: grafana
+    user: "${UID}:${GID}"
+    networks:
+      - net-monitoring
+    ports:
+      - 3000:3000
+    volumes:
+      - '/mnt/md1/grafana:/var/lib/grafana:rw'
+    memswap_limit: 500m
+    mem_swappiness: 0
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 500m
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1

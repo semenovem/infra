@@ -1,0 +1,48 @@
+{
+  "channel_defaults": {
+    "on_demand": true
+  },
+  "server": {
+    "debug": true,
+    "http_debug": false,
+    "http_demo": true,
+    "http_dir": "",
+    "http_login": "demo",
+    "http_password": "demo",
+    "http_port": ":8083",
+    "https": false,
+    "https_auto_tls": false,
+    "https_auto_tls_name": "",
+    "https_cert": "",
+    "https_key": "",
+    "https_port": "",
+    "ice_credential": "",
+    "ice_servers": [
+      "stun:stun.l.google.com:19302"
+    ],
+    "ice_username": "",
+    "log_level": "info",
+    "rtsp_port": ":5541",
+    "token": {
+      "backend": "",
+      "enable": false
+    },
+    "webrtc_port_max": 0,
+    "webrtc_port_min": 0
+  },
+  "streams": {
+    "e30e9db7-0d39-40f7-ab7d-c39d9be93fca": {
+      "channels": {
+        "0": {
+          "on_demand": true,
+          "url": "rtsp://viewer:1212qwqwQWQW@192.168.11.63/cam/realmonitor?channel=1&subtype=0"
+        },
+        "1": {
+          "on_demand": true,
+          "url": "rtsp://viewer:1212qwqwQWQW@192.168.11.63/cam/realmonitor?channel=1&subtype=1"
+        }
+      },
+      "name": "test"
+    }
+  }
+}

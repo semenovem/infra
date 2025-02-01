@@ -1,0 +1,165 @@
+volumes:
+  opensearch-data1:
+
+
+networks:
+  net-prometheus:
+    name: net-prometheus
+  net-home:
+    external: true
+  net-nginx:
+    name: net-nginx
+  net-gitlab:
+    name: net-gitlab
+  net-nextcloud:
+    name: net-nextcloud
+  net-monitoring:
+    name: net-monitoring
+  net-logging:
+    name: net-logging
+
+
+services:
+
+  # данные сертификатов:
+  # .local/certbot/www
+  # .local/certbot/conf
+  # .local/nginx/htpasswd
+  nginx:
+    container_name: core-nginx
+    networks:
+      - net-nginx
+      - net-home
+      - net-gitlab
+      - net-nextcloud
+      - net-monitoring
+      - net-logging
+    image: nginx:1.27.1-bookworm-perl
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./nginx/conf:/etc/nginx/conf.d:ro"
+      - "../../.local/certbot/www:/var/www/certbot:ro"
+      - "../../.local/certbot/conf:/etc/nginx/ssl:ro"
+      - "../../.local/nginx/htpasswd:/etc/nginx/.htpasswd:ro"
+      - type: tmpfs
+        target: /var/cache/nginx
+        tmpfs:
+          size: 50m
+          mode: 0777
+      - "./cctv-rtsp-to-web/www:/var/www/cctv-rtsp-to-web:ro"
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: 127.0.0.1:24224
+    #     tag: nginx.logs
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 300M
+        reservations:
+          memory: 300M
+      replicas: 1
+    # depends_on:
+    #   - fluentbit
+    read_only: true
+
+
+# https://github.com/nginx/nginx-prometheus-exporter
+  nginx-exporter:
+    container_name: core-nginx-exporter-mert
+    image: nginx/nginx-prometheus-exporter:1.4.1
+    networks:
+      - net-nginx
+      - net-prometheus
+    ports:
+      - 9113:9113
+    command:
+      - '--nginx.scrape-uri=http://nginx:80/basic_status'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 40M
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+    read_only: true
+
+
+# --- RTSPtoWeb -----------------------------------------------
+# https://github.com/deepch/RTSPtoWeb
+  rtsp-to-web:
+    container_name: core-cam-rtsp-to-web
+    image: ghcr.io/deepch/rtsptoweb:latest
+    networks:
+      - net-nginx
+    # ports:
+    #   - 8083:8083
+    volumes:
+      - "./cctv-rtsp-to-web/rtsp-conf.json:/config/config.json:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 40M
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+    read_only: true
+
+
+# --- samba ---------------------------------------------------
+  # переменные в ../../.local/services.env
+  # пароли для соответствующих пользователей, создаются с command:
+  # __SAMBA_EVG_PASSWD__
+  # __SAMBA_LEN_PASSWD__
+  smb-server:
+    container_name: core-smb-server
+    build:
+      context: ../../docker-files
+      dockerfile: samba.dockerfile
+    image: home/samba:4.19.6.a
+    networks:
+      - net-home
+    ports:
+      - 445:7070
+    volumes:
+      - "/mnt/vol_media_1/torrents:/mnt/torrents:rw"
+      - "/mnt/raid4t_soft/smb_share:/mnt/smd-home:rw"
+      # time machine
+      - "/mnt/vol_backup_1/evg_time_machine:/mnt/backups/evg_time_machine:rw"
+      - "/mnt/raid4t_soft/backups/len:/mnt/backups/len:rw"
+      # служебное
+      - "./samba/samba.conf:/etc/samba/smb.conf:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/group:/etc/group:ro"
+      # для логов
+      - "/mnt/memfs/samba-log:/var/log/samba:rw"
+    command:
+      - sh
+      - -c
+      - |
+        # добавляем пользователей
+        echo -e "${__SAMBA_EVG_PASSWD__}\n${__SAMBA_EVG_PASSWD__}" | smbpasswd -s -a evg
+        echo -e "${__SAMBA_LEN_PASSWD__}\n${__SAMBA_LEN_PASSWD__}" | smbpasswd -s -a len
+        smbd -d=1 -F -p=7070
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+
+
+# https://github.com/AdguardTeam/AdGuardHome

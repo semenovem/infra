@@ -1,0 +1,137 @@
+volumes:
+  opensearch-data1:
+
+
+networks:
+  net-logging:
+    name: net-logging
+
+
+services:
+
+# -------------------------------------------------------------
+# -----------------------  opensearch  ------------------------
+# -------------------------------------------------------------
+  # если возникает ошибка: [ERROR] Max virtual memory areas .max_map_count [65530] is too low
+  # решение:
+  # sudo echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
+  # sudo sysctl --system
+  opensearch-node1:
+    container_name: logging-opensearch-node1
+    image: opensearchproject/opensearch:latest
+    networks:
+      - net-logging
+    environment:
+      # - cluster.name=opensearch-cluster
+      # - plugins.security.ssl.http.enabled=false
+      # - plugins.security.disabled=true
+      - node.name=opensearch-node1
+      # - discovery.seed_hosts=opensearch-node1,opensearch-node2
+      - discovery.type=single-node
+      # - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2
+      - bootstrap.memory_lock=true  # along with the memlock settings below, disables swapping
+      - OPENSEARCH_JAVA_OPTS=-Xms2048m -Xmx2048m  # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${__OPENSEARCH_INITIAL_ADMIN_PASSWORD__}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536  # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        hard: 65536
+    volumes:
+      # TODO перенести хранение на md1
+      - opensearch-data1:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+      - 9600:9600  # required for Performance Analyzer
+    memswap_limit: 4g
+    mem_swappiness: 0
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4G
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+
+  opensearch-dashboards:
+    container_name: logging-dashboards
+    image: opensearchproject/opensearch-dashboards:latest
+    ports:
+      - 5601:5601
+    expose:
+      - '5601'
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch-node1:9200"]'
+    networks:
+      - net-logging
+    volumes:
+      - "../../.local/opensearch/opensearch-dashboard.conf:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml:ro"
+    depends_on:
+      - opensearch-node1
+    memswap_limit: 500m
+    mem_swappiness: 0
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 500m
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+
+  # ------
+  logstash:
+    container_name: logging-logstash
+    image: home/logstash-opensearsh-plugin:8.15.2
+    build: ./logstash
+    networks:
+      - net-logging
+    environment:
+      LS_JAVA_OPTS: "-Xmx1g -Xms1g"
+    volumes:
+      - "./logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro"
+      - "./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro"
+    depends_on:
+      - opensearch-node1
+    memswap_limit: 4g
+    mem_swappiness: 0
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 2g
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 0
+
+
+  # -------
+  fluentbit:
+    container_name: logging-fluentbit
+    image: fluent/fluent-bit:3.1.9-amd64
+    networks:
+      - net-logging
+    ports:
+      - 127.0.0.1:24224:24224
+      - 127.0.0.1:24224:24224/udp
+    volumes:
+      - ./fluent:/fluent-bit/etc
+      # - /var/log:/var/log
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 100M
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+

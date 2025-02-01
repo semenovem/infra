@@ -1,7 +1,6 @@
 
-
-
-# Отдельный выделенный файл для данных Xeoma смонтированный как диск
+# --- Xeoma --------------------------------------------------
+# Separate dedicated file for Xeoma data mounted as a disk
 # quota disk space:
 # https://souptonuts.sourceforge.net/quota_tutorial.html
 
@@ -19,15 +18,14 @@ ls -lh /usr/disk-img/disk-xeoma.ext3
 /sbin/mkfs -t ext3 -q /usr/disk-img/disk-xeoma.ext3 -F
 
 # add to /etc/fstab
-# /usr/disk-img/disk-xeoma.ext3    /mnt/xeoma ext3    defaults,rw,loop  0 0
+# /usr/disk-img/disk-xeoma.ext3    /mnt/xeoma-archive ext3    defaults,rw,loop  0 0
 
 # mount /mnt/xeoma
 # Or if you didn't edit /etc/fstab above
-# mount -o loop,rw /usr/disk-img/disk-xeoma.ext3 /mnt/xeoma
+# mount -o loop,rw /usr/disk-img/disk-xeoma.ext3  /mnt/xeoma-archive
 
 
-# -----------------------------------------------------
-# SSH
+# --- SSH -----------------------------------------------------
 vim /etc/ssh/sshd_config
 PasswordAuthentication no
 PermitRootLogin no
@@ -36,10 +34,7 @@ systemctl restart sshd.service
 
 
 
-# ---------------------------------
-# openvpn
-
-
+# -- openvpn --------------------------------------------------
 sudo vim /etc/sysctl.conf
 # uncomment
 net.ipv4.ip_forward = 1
@@ -49,7 +44,7 @@ sudo sysctl -p
 ip route list default
 
 
-# ---------------------------------
+# --- iptables ------------------------------------------------
 sudo iptables -t nat -L -v
 
 #
@@ -61,7 +56,7 @@ sudo iptables -t nat -A POSTROUTING -o gatewaytun -j MASQUERADE
 
 
 
-# ---------------------------------
+# --- ufw -----------------------------------------------------
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 
@@ -72,9 +67,16 @@ sudo ufw enable
 sudo ufw allow in on enp2s0 to any port 22
 sudo ufw allow in on enp7s0 to any port 22
 
-# srv,,,
+# 22/tcp 80/tcp 443/tcp 1900 1999 8090 8200 10090
 sudo ufw allow 22
 sudo ufw allow 1194
+sudo ufw allow 1999/tcp
+
+
+# --- ya disk -------------------------------------------------
+/mnt/vol_backup_1/ya-disk
+- cron переносит видео-записи в xeoma-reut-archive
+
 
 # ---------------------------------
 sudo apt-get install davfs2
@@ -88,3 +90,7 @@ sudo usermod -aG davfs2 $USER
 mount -t davfs https://cloud.evgio.com/remote.php/dav/files/evg /home/evg/nextcloud-webdav
 mount -t davfs http://127.0.0.1:8081/remote.php/dav/files/evg /home/evg/nextcloud-webdav
 
+
+
+# --- crontab -------------------------------------------------
+crontab: dc/home/crone
