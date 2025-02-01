@@ -2,10 +2,11 @@ package types
 
 import (
 	"applications/entities/roles"
+	"context"
 	"github.com/rivo/tview"
 )
 
-type Core interface {
+type Control interface {
 	ShowModal(el tview.Primitive, width, height int)
 	HideModal()
 
@@ -13,8 +14,10 @@ type Core interface {
 
 	SetFocus(tview.Primitive)
 
-	GetPathToRepo() string
+	GetRepoPath() string
 
-	GetCurrentRole() (roles.Role, error)
-	SetCurrentRole(roles.Role) error
+	GetRoleMachine() (roles.Role, error)
+	SetRoleMachine(roles.Role) error
+
+	ExecuteShellFile(ctx context.Context, filePath string, args ...string)
 }

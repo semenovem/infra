@@ -1,4 +1,4 @@
-package widget_log
+package log_zone
 
 import (
 	"fmt"

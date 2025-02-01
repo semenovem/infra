@@ -22,7 +22,7 @@ func (w *Widget) DrawEditor() {
 
 		form = tview.NewForm().
 			AddButton("Save", w.saveRole).
-			AddButton("Cancel", w.conf.HandlerHideModal)
+			AddButton("Cancel", w.ctrl.HideModal)
 	)
 
 	form.SetBorderPadding(0, 0, 2, 0).
@@ -34,7 +34,7 @@ func (w *Widget) DrawEditor() {
 				btnInd = (btnInd + 1) % 2
 				form.SetFocus(btnInd)
 			case tcell.KeyEscape:
-				w.conf.HandlerSetFocus(list)
+				w.ctrl.SetFocus(list)
 			default:
 			}
 
@@ -55,13 +55,13 @@ func (w *Widget) DrawEditor() {
 			switch event.Key() {
 			case tcell.KeyEscape:
 				w.logger.Info("widget-role-edit: pressed escape")
-				w.conf.HandlerHideModal()
+				w.ctrl.HideModal()
 			case tcell.KeyEnter:
-				w.conf.HandlerSetFocus(form)
+				w.ctrl.SetFocus(form)
 			}
 
 			if event.Rune() == ' ' {
-				w.conf.HandlerSetFocus(form)
+				w.ctrl.SetFocus(form)
 			}
 
 			return event
@@ -89,6 +89,6 @@ func (w *Widget) DrawEditor() {
 	panel.SetTitle(" change role ")
 	panel.AddItem(content, 0, 1, true)
 
-	w.conf.HandlerShowModal(panel, 60, 12)
-	w.conf.HandlerSetFocus(list)
+	w.ctrl.ShowModal(panel, 60, 12)
+	w.ctrl.SetFocus(list)
 }

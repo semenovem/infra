@@ -11,21 +11,14 @@ _DRY_=
 
 for p in "$@"; do
   case "$p" in
-    "-dry") shift; _DRY_=1;;
-    "-"*) echo "[ERRO] unknown flag [${p}]" 1>&2; shift; ;;
-    *) break ;;
+    "-dry") _DRY_=1; shift;;
+    "-"*) echo "[ERRO] unknown flag [${p}]" 1>&2; exit 1 ;;
   esac
 done
 
 _CURRENT_DIR_=$1
 [ -z "$_CURRENT_DIR_" ] && _CURRENT_DIR_="$PWD"
 
-for p in "$@"; do
-  case "$p" in
-    "-dry") _DRY_=1;;
-    "-"*) echo "[ERRO] unknown flag [${p}]" 1>&2; shift; ;;
-  esac
-done
 
 [ ! -d "$_CURRENT_DIR_" ] && echo "[ERRO] dir [${_CURRENT_DIR_}] not exist" 1>&2 && exit 1
 

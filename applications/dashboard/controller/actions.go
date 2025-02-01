@@ -4,8 +4,6 @@ import (
 	"applications/entities/roles"
 	"fmt"
 	"github.com/rivo/tview"
-	"os"
-	"strings"
 )
 
 func (t *Controller) Exit() {
@@ -24,15 +22,21 @@ func (t *Controller) OpenViewChangeRole() {
 }
 
 func (t *Controller) SetRoleMachine(r roles.Role) error {
-	w.logger.Info(fmt.Sprintf("(saveRole) old: %s new: %s ", w.selectedRole))
+	t.logger.Info(fmt.Sprintf("(SetRoleMachine) new role: %s ", r))
 
-	content := strings.ToUpper(strings.TrimSpace(w.selectedRole))
+	//content := strings.ToUpper(strings.TrimSpace(w.selectedRole))
 
-	err := os.WriteFile(w.roleFilePath, []byte(content), 0600)
-	if err != nil {
-		w.logger.With("error", err).Error("failed to save role")
-	} else {
-		w.currentRole = w.selectedRole
-		w.updateInformer()
-	}
+	//err := os.WriteFile(t.infraRepoPath, []byte(content), 0600)
+	//if err != nil {
+	//	t.logger.With("error", err).Error("failed to save role")
+	//} else {
+	//	t.currentRole = w.selectedRole
+	//	t.updateInformer()
+	//}
+	return nil
+}
+
+func (t *Controller) GetRoleMachine() (roles.Role, error) {
+	t.logger.Info("(Controller.OpenViewChangeRole) open view change role")
+	return "", nil
 }

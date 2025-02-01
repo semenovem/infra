@@ -1,0 +1,39 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/nvme0n1p2 during curtin installation
+/dev/disk/by-uuid/f530ab37-6ae8-4cba-95ff-d22fd65b57e5 / ext4 defaults 0 1
+# /boot/efi was on /dev/nvme0n1p1 during curtin installation
+/dev/disk/by-uuid/7FC7-C98C /boot/efi vfat defaults 0 1
+/swap.img	none	swap	sw	0	0
+
+# 4Tb raid-mainboard
+# /dev/md126    /mnt/raid4t_hard  ext4  defaults,nofail  1 0
+
+# 4Tb raid-linux-mdadm
+/dev/md402    /mnt/raid4t_soft  ext4  defaults,nofail  1 0
+
+# 1Tb ssd raid-linux-mdadm
+/dev/md1 /mnt/md1  ext4  defaults,nofail  1 0
+
+# one hdd 4g inside
+UUID=a20f1bfc-dc48-43bf-b83a-73a6968bd965  /mnt/single4g  ext4  defaults,nofail  1 0
+
+# 1Tb hdd 3.5
+UUID=c70d4195-fdfd-4119-a55b-1833f6ae5920  /mnt/1gb_hdd_3_5   ext4  defaults,nofail  1 0
+
+# myramdisk  /tmp/ramdisk  tmpfs  defaults,size=1G,x-gvfs-show  0  0
+tmpfs  /mnt/memfs  tmpfs  rw,size=2G  0   0
+
+# tmp ssd disk for any (/dev/sdf) 1t
+# UUID=4af6e1b2-00be-4fde-8f03-43fa83b30fdf /mnt/tmp/ ext4 rw,users 0 0
+
+# tmp hdd disk for any (/dev/sde) 2tb
+UUID=686d4b9a-f617-498e-95af-773ed147dac1 /mnt/hdd-2t/ ext4 defaults,nofail  0 0
+
+# xeoma disk
+/usr/disk-img/disk-xeoma.ext3    /mnt/xeoma-archive ext3    defaults,loop  0 0

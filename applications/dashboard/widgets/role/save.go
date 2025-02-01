@@ -21,5 +21,5 @@ func (w *Widget) saveRole() {
 
 	// TODO показать модальное окно с ошибкой
 
-	w.core.HideModal()
+	w.ctrl.HideModal()
 }

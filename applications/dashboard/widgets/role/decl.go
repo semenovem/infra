@@ -16,10 +16,10 @@ type Widget struct {
 	roleFilePath string
 	currentRole  string
 	selectedRole string
-	core         types.Core
+	ctrl         types.Control
 }
 
-func NewWidgetRole(logger *slog.Logger, core types.Core) *Widget {
+func NewWidgetRole(logger *slog.Logger, core types.Control) *Widget {
 	box := tview.NewTextView().SetMaxLines(1)
 	box.SetBorder(true).
 		SetBorderPadding(0, 0, 1, 0).
@@ -28,8 +28,8 @@ func NewWidgetRole(logger *slog.Logger, core types.Core) *Widget {
 	return &Widget{
 		logger:       logger.With("widget", "role"),
 		informerView: box,
-		roleFilePath: core.GetPathToRepo() + "/.local/role",
-		core:         core,
+		roleFilePath: core.GetRepoPath() + "/.local/role",
+		ctrl:         core,
 	}
 }
 

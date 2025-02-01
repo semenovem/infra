@@ -1,6 +1,7 @@
 package menu
 
 import (
+	"applications/dashboard/types"
 	"context"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -13,6 +14,7 @@ type Widget struct {
 	once   sync.Once
 	conf   Config
 	logger *slog.Logger
+	ctrl   types.Control
 }
 
 type Config struct {
@@ -26,11 +28,27 @@ type Config struct {
 	HandlerExecuteShellFile func(ctx context.Context, shellFilePath string, args ...string)
 }
 
-func New(conf Config, logger *slog.Logger) *Widget {
+func New(ctrl types.Control, conf Config, logger *slog.Logger) *Widget {
 	return &Widget{
+		ctrl:   ctrl,
 		conf:   conf,
 		logger: logger.With("widget", "menu"),
 	}
+}
+
+func New2(
+	ctx context.Context,
+	ctrl types.Control,
+	conf Config,
+	logger *slog.Logger,
+) tview.Primitive {
+	w := Widget{
+		ctrl:   ctrl,
+		conf:   conf,
+		logger: logger.With("widget", "menu"),
+	}
+
+	return w.Draw(ctx)
 }
 
 func (w *Widget) Draw(ctx context.Context) tview.Primitive {

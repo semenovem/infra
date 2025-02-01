@@ -26,7 +26,7 @@ func New(
 	inputLog <-chan []byte,
 ) error {
 	v := &Controller{
-		logger:        logger,
+		logger:        logger.With("module", "controller"),
 		app:           tview.NewApplication(),
 		pages:         tview.NewPages(),
 		infraRepoPath: infraRepoPath,
@@ -34,16 +34,12 @@ func New(
 
 	v.app.SetRoot(v.pages, true)
 
-	widgetRole := role.NewWidgetRole(role.Config{
-		PathRepo:         v.infraRepoPath,
-		HandlerShowModal: v.ShowModal,
-		HandlerHideModal: v.HideModal,
-		HandlerSetFocus:  v.SetFocus,
-	}, v.logger)
+	widgetRole := role.NewWidgetRole(v.logger, v)
 
 	v.widgetRole = widgetRole
 
-	v.buildRootLayout(ctx, inputLog)
+	//v.buildRootLayout(ctx, inputLog)
+	v.buildGrid(ctx, inputLog)
 
 	v.app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if v.isModalOpened {
