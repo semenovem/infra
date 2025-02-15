@@ -259,14 +259,12 @@ hosts:
       main:
         user: evg
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBE9qsJbSRrCYARg2uPSSX0TMzCaVzuEgv09FEnlRefzB6RbpmhHkPLJ+yn6k2qWQICYKebBY8nKjFZrgOAGQx+3tp+HKRESU2yP3+RBRtLCUBvQu1ULOYp5jk3gKcIDtFg== evg@office-server
-#    ssh_remote_forward:
-#      user: forward-user
-#      hosts: msk1 rr4
-#      ports:
-#        - 61022:0.0.0.0:22    # ssh
-#        - 61194:0.0.0.0:1194  # vpn
-#        - 61080:0.0.0.0:10080  # cctv xeoma
-#        - 61090:0.0.0.0:10090  # cctv http
+    ssh_remote_forward:
+      user: forward-user
+      hosts: msk1 rr4
+      ports:
+        - 61022:0.0.0.0:22    # ssh
+        - 61194:0.0.0.0:1194  # vpn
     wg0:
       port: 16633
       addr: 172.20.20.1/24
@@ -291,4 +289,25 @@ hosts:
         - 62022:0.0.0.0:22    # ssh
         - 62194:0.0.0.0:1194  # vpn
         - 62059::5900  # vnc
+
+
+  - name: exit-tv
+    role: OFFICE_SERVER
+    pki: auto
+    description: перезагрузка каждую пятницу
+    crontab: 0 3 * * 6 /usr/bin/systemctl reboot
+    local:
+      url: mini-tv.local
+      ip: 192.168.1.204
+    ssh:
+      main:
+        user: evg
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBA7EGPYbS3R3Jp8q/MdZS0+V4ZF4F82+9an6b42yqbvjCzC+q7SO7qI8KIzv+fFjGglUhC1XSM/3/ZagzUG7gLNls00/dRtWCP1Bl2kMvDREl3npp6jlJoPleV6ST9EU5Q== evg@exit-tv
+    ssh_remote_forward:
+      user: forward-user
+      hosts: msk1 rr4
+      ports:
+        - 63022:0.0.0.0:22    # ssh
+        - 63194:0.0.0.0:1194  # vpn
+        - 63059::5900  # vnc
 
