@@ -73,8 +73,8 @@ services:
   # https://github.com/docker-library/docs/blob/master/nextcloud/README.md
   # включение / выключение режима обслуживания
   # https://docs.nextcloud.com/server/latest/admin_manual/maintenance/backup.html#maintenance-mode
-  # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --on
-  # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --off
+  # docker exec -it -u www-data nextcloud-app php occ maintenance:mode --on
+  # docker exec -it -u www-data nextcloud-app php occ maintenance:mode --off
   nextcloud-app:
     container_name: nextcloud-app
     hostname: nextcloud-app
@@ -93,7 +93,6 @@ services:
       - "nohup sh -c 'sh /nextcloud-crone.sh' > /crone.log 2>&1 & /entrypoint.sh apache2-foreground"
     environment:
       - VIRTUAL_HOST=cloud.evgio.com
-      # - LETSENCRYPT_HOST=cloud.evgio.com
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
       - POSTGRES_PASSWORD=nextcloud
