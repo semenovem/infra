@@ -80,7 +80,7 @@ services:
     hostname: nextcloud-app
     networks:
       - net-nextcloud
-    image: nextcloud:30.0.1-apache
+    image: nextcloud:30.0.6-apache
     volumes:
       - /mnt/raid4t_soft/nextcloud/app:/var/www/html
       - ./nextcloud/trusted.config.php:/var/www/html/config/trusted.config.php:ro
@@ -147,7 +147,7 @@ services:
       - -c
       - |
         while true; do
-          sleep 600
+          sleep 3600
           echo "[INFO][$(date)] start sync nextcloud-exchanger"
 
           # Важно: в директории облака всегда должен оставаться один файл

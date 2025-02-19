@@ -117,7 +117,7 @@ func_analysis_arguments $@ || exit
 # $2 - PROJECT
 func_exe() {
 
-  echo "__ func_exe \$1=$1 \$2=$2"
+  # echo "__ func_exe \$1=$1 \$2=$2"
   # return 0
 
   case "$1" in
