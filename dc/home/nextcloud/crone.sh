@@ -13,5 +13,5 @@ while true; do
 
   echo "[INFO][$(date)] maintains nextcloud via crone end"
 
-  sleep 600
+  sleep 3600
 done

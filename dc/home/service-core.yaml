@@ -116,6 +116,8 @@ services:
 
 
 # --- samba ---------------------------------------------------
+  # настроить бекап time-machine на сервере
+  # https://linuxlife.page/posts/10-samba-timemachine
   # переменные в ../../.local/services.env
   # пароли для соответствующих пользователей, создаются с command:
   # __SAMBA_EVG_PASSWD__

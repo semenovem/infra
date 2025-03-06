@@ -48,7 +48,7 @@ services:
       resources:
         limits:
           cpus: '3'
-          memory: 14G
+          memory: 16G
       restart_policy:
         delay: 5s
         condition: any
@@ -87,8 +87,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 300m
+          cpus: '2'
+          memory: 500m
       restart_policy:
         delay: 5s
         condition: any

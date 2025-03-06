@@ -73,14 +73,14 @@ services:
   # https://github.com/docker-library/docs/blob/master/nextcloud/README.md
   # включение / выключение режима обслуживания
   # https://docs.nextcloud.com/server/latest/admin_manual/maintenance/backup.html#maintenance-mode
-  # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --on
-  # docker exec -it -u www-data home-nextcloud-app-1 php occ maintenance:mode --off
+  # docker exec -it -u www-data nextcloud-app php occ maintenance:mode --on
+  # docker exec -it -u www-data nextcloud-app php occ maintenance:mode --off
   nextcloud-app:
     container_name: nextcloud-app
     hostname: nextcloud-app
     networks:
       - net-nextcloud
-    image: nextcloud:30.0.1-apache
+    image: nextcloud:30.0.6-apache
     volumes:
       - /mnt/raid4t_soft/nextcloud/app:/var/www/html
       - ./nextcloud/trusted.config.php:/var/www/html/config/trusted.config.php:ro
@@ -93,7 +93,6 @@ services:
       - "nohup sh -c 'sh /nextcloud-crone.sh' > /crone.log 2>&1 & /entrypoint.sh apache2-foreground"
     environment:
       - VIRTUAL_HOST=cloud.evgio.com
-      # - LETSENCRYPT_HOST=cloud.evgio.com
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
       - POSTGRES_PASSWORD=nextcloud
@@ -148,7 +147,7 @@ services:
       - -c
       - |
         while true; do
-          sleep 600
+          sleep 3600
           echo "[INFO][$(date)] start sync nextcloud-exchanger"
 
           # Важно: в директории облака всегда должен оставаться один файл
