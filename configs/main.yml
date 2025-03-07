@@ -191,9 +191,6 @@ hosts:
     local:
       url: home.local core.home
       ip: 192.168.11.100
-    local2:
-      url: home2.local
-      ip: 192.168.12.100
     ssh:
       main:
         user: adman
@@ -243,6 +240,20 @@ hosts:
       ports:
         - 2202::22            # ssh
         - 11942:0.0.0.0:1194  # openvpn
+
+
+  - name: mini47
+    role: HOME_SERVER
+    pki: hom
+    description: перезагрузка 2-а раза в мес (timezone utc +3)
+    crontab:
+    local:
+      url: mini47.local
+      ip: 192.168.22.120
+    ssh:
+      main:
+        user: adman
+        pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBM7EuP0cedapWPeVJehtZ01RjJyCotbpwEKO+I5LhU12H3Sr2EuD3fdYnQRKojg1odcRUkEikk7C3jmPBXY/1lQXrZYVDfsFpix8bOWl9nBP1JBAxx5MVdjUaZeg0mzExQ== evg@mini47
 
 
   # ---------------------------------------------------------------------------------
