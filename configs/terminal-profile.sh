@@ -10,6 +10,10 @@ li() {
   du -xhd 1 "$dir" 2> /dev/null | sort -rh
 }
 
+goland() {
+  open -na "GoLand.app" --args "$@"
+}
+
 # -------------------------------------------------------------------
 export __INFRA_REPO__="${HOME}/_infra"
 export __INFRA_LOCAL__="${__INFRA_REPO__}/.local"
