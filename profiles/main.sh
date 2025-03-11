@@ -32,36 +32,36 @@ if [ -f "$self_updater_script" ]; then
   sh "$self_updater_script" "update-repo" || >&2 echo "[ERRO][$0] execute 'update-repo'"
 fi
 
-return
-
-# -------------------------------------------------------------------
 # platform actions
-. "${__INFRA_BIN__}/_lib/func.sh" || return
-case "$(__lib_platform__)" in
-  "MACOS")
-  export PATH="${PATH}:${__INFRA_REPO__}/bin/macos"
-  ;;
+case "$(uname)" in
+  'Linux') ;;
 
-  "LINUX");;
+  'Darwin')
+    f="${__INFRA_REPO__}/profiles/macos.sh"
+    # shellcheck disable=SC1090
+    . "$f" || >&2 echo "[ERRO][$0] source file $f"
+
+    export PATH="${PATH}:${__INFRA_BIN__}/macos"
+   ;;
+*) ;;
 esac
 
 # -------------------------------------------------------------------
-# machine role actions
-ROLE=$(sh "${__INFRA_REPO__}/bin/util/self/machine-role.sh" "get-machine-role") || >&2 echo "[ERRO][$0] execute 'machine-role.sh'"
+role="ROLE_$(cat "${__INFRA_LOCAL__}/role")" || >&2 echo "[ERRO][$0] execute 'machine-role.sh'"
 
-case "$ROLE" in
-  "HOME_SERVER")
-    export PATH="${PATH}:${__INFRA_REPO__}/bin/linux"
+case "$role" in
+  "ROLE_HOME_SERVER")
+    export PATH="${PATH}:${__INFRA_BIN__}/linux"
   ;;
-  "STANDBY_SERVER")
-    export PATH="${PATH}:${__INFRA_REPO__}/bin/linux"
+  "ROLE_STANDBY_SERVER")
+    export PATH="${PATH}:${__INFRA_BIN__}/linux"
   ;;
-  "PROXY_SERVER");;
-  "WORKSTATION");;
-  "MINI_SERVER")
-    export PATH="${PATH}:${__INFRA_REPO__}/bin/linux"
+  "ROLE_PROXY_SERVER");;
+  "ROLE_WORKSTATION");;
+  "ROLE_MINI_SERVER")
+    export PATH="${PATH}:${__INFRA_BIN__}/linux"
   ;;
-  "OFFICE_SERVER")
-    export PATH="${PATH}:${__INFRA_REPO__}/bin/linux"
+  "ROLE_OFFICE_SERVER")
+    export PATH="${PATH}:${__INFRA_BIN__}/linux"
   ;;
 esac
