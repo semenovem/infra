@@ -147,7 +147,7 @@ services:
       - -c
       - |
         while true; do
-          sleep 3600
+          sleep 86400
           echo "[INFO][$(date)] start sync nextcloud-exchanger"
 
           # Важно: в директории облака всегда должен оставаться один файл

@@ -24,16 +24,7 @@ if [ -f "$PROC_FILE" ]; then
 fi
 
 echo $$ > $PROC_FILE || exit
-
-
-echo ">>> $$"
-
-sleep 3600
-
-exit
-
-DST_BACKUP_DIR=/mnt/vol_media_1/backup_nextcloud
-
+echo "[INFO]pid=$$ file=${PROC_FILE}"
 
 
 # echo "$(date) incremental backup (rsync) start with dir [${INCREMENT_DIR}]" >>"$LOG_FILE"
@@ -48,7 +39,7 @@ DST_BACKUP_DIR=/mnt/vol_media_1/backup_nextcloud
 #fi
 
 
-
+DST_BACKUP_DIR=/mnt/vol_media_1/backup_nextcloud
 SRC_EVG="/mnt/soft/nextcloud/app/data/evg/files/"
 DST_EVG="${DST_BACKUP_DIR}/evg"
 DST_EVG_INCR="${DST_BACKUP_DIR}/evg-incr/${DAY}"
@@ -56,6 +47,17 @@ DST_EVG_INCR="${DST_BACKUP_DIR}/evg-incr/${DAY}"
 SRC_LEN="/mnt/soft/nextcloud/app/data/len/files/"
 DST_LEN="${DST_BACKUP_DIR}/len"
 DST_LEN_INCR="${DST_BACKUP_DIR}/len-incr/${DAY}"
+
+
+rsync -a --delete --log-file="${LOG_DIR}/${PREFIX}_evg.${DAY}.log" \
+  --inplace --backup --quiet \
+  --rsync-path="mkdir -p ${DST_EVG} && rsync" \
+  --exclude '.git' \
+  --exclude '.idea' \
+  --exclude '.DS_Store' \
+  --exclude 'node_modules' \
+  --backup-dir="$DST_EVG_INCR" \
+  "$SRC_EVG" "$DST_EVG"
 
 
 exit
