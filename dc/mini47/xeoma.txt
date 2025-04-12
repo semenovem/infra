@@ -1,0 +1,6 @@
+
+./xeoma.app -install -coreauto
+
+Settings path: /usr/local/Xeoma
+Executable file's path: /home/evg/bin/Xeoma/xeoma
+
