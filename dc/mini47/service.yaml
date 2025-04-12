@@ -1,0 +1,28 @@
+
+# networks:
+#   net-hq47:
+#     name: net-hq47
+
+
+services:
+  # https://github.com/alexta69/metube
+  metube:
+    container_name: metube
+    image: ghcr.io/alexta69/metube
+    # networks:
+    #   - net-hq47
+    # environment:
+    #   GITLAB: 123
+    ports:
+      - '8005:8081'
+    volumes:
+      - '/mnt/hdd2t_media/download_youtube:/downloads'
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 200M
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
