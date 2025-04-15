@@ -40,6 +40,7 @@ echo "[INFO]pid=$$ file=${PROC_FILE}"
 
 
 DST_BACKUP_DIR=/mnt/vol_media_1/backup_nextcloud
+
 SRC_EVG="/mnt/soft/nextcloud/app/data/evg/files/"
 DST_EVG="${DST_BACKUP_DIR}/evg"
 DST_EVG_INCR="${DST_BACKUP_DIR}/evg-incr/${DAY}"

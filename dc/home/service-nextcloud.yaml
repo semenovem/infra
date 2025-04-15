@@ -176,7 +176,7 @@ services:
       restart_policy:
         delay: 15s
         condition: any
-      replicas: 1
+      replicas: 0
     read_only: true
 
 
