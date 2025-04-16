@@ -4,9 +4,9 @@
 # for config file:
 # the configuration file should have its first comment specifying the service name for systemctl
 
-# use run
+# use run with sudo
 func_help() {
-  echo "use: \$1 [start|stop|state] \$2 [configuration file in the same directory]"
+  echo "use: \$1 [start|stop|state|list] \$2 [configuration file in the same directory]"
 }
 
 [ $# -eq 0 ] && func_help && exit 0
@@ -14,6 +14,19 @@ func_help() {
 func_extract_service_name() {
     grep -m 1 -i '^#' "$1" | sed 's/^[#[:space:]]*//'
 }
+
+# define command----------------------------------------
+case "$1" in
+    "start" | "stop" | "state" | "stat") ;;
+    "list") 
+        systemctl list-units --type=service | grep ssh-fwrd
+        exit 0
+    ;;
+    *) 
+        echo "[ERRO] unknown command \$1=[$1]"  
+        exit 1
+    ;;
+esac
 
 [ -z "$2" ] && echo "[ERRO] not passed \$2 - name of service" && exit 1
 
@@ -26,15 +39,6 @@ SERVICE_NAME="$(func_extract_service_name "$CONFIG_FILE")" || exit 1
 
 UNIT_FILE="/etc/systemd/system/${SERVICE_NAME}"
 
-# operation ------------------------------------------
-case "$1" in
-    "start" | "stop" | "state" | "stat") ;;
-    *) 
-        echo "[ERRO] unknown command \$1=[$1]"  
-        exit 1
-    ;;
-esac
-
 # ------------------------------------------------------
 case "$1" in
 "start")
@@ -43,8 +47,8 @@ case "$1" in
     cp "$CONFIG_FILE" "$UNIT_FILE" && \
     systemctl daemon-reload && \
     systemctl start "$SERVICE_NAME" && \
-    systemctl --no-pager status "$SERVICE_NAME" &&
-    systemctl enable "$SERVICE_NAME"
+    systemctl enable "$SERVICE_NAME" &&
+    systemctl --no-pager status "$SERVICE_NAME"
 ;;
 
 "stop")

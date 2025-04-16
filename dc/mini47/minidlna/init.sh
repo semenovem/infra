@@ -26,4 +26,4 @@ fs.inotify.max_user_watches = 100000
 
 sudo nano /etc/sysctl.conf
 
-#  /etc/minidlna.conf
+# /etc/minidlna.conf
