@@ -44,5 +44,5 @@ fi
 if [ "$1" = "down" ]; then 
   docker compose -p "hr47" down
 
-  exit
+  exit 
 fi
