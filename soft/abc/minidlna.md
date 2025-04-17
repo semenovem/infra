@@ -1,17 +1,11 @@
-#!/bin/bash
 
 sudo apt install minidlna
-
-mkdir -p /mnt/memfs/minidlna
-chown minidlna:minidlna /mnt/memfs/minidlna
-
-mkdir -p /mnt/hdd2t_media/caches/minidlna
-sudo chown minidlna:minidlna /mnt/hdd2t_media/caches/minidlna
+config is here: /etc/minidlna.conf
 
 # /lib/systemd/system/minidlna.service
 systemctl daemon-reload
 sudo systemctl restart minidlna
-sudo systemctl status minidlna
+sudo systemctl stop minidlna
 
 
 /usr/sbin/minidlnad -f $CONFIGFILE -P /run/minidlna/minidlna.pid -S $DAEMON_OPTS
@@ -26,4 +20,3 @@ fs.inotify.max_user_watches = 100000
 
 sudo nano /etc/sysctl.conf
 
-# /etc/minidlna.conf
