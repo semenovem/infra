@@ -59,3 +59,43 @@ services:
         delay: 5s
         condition: any
       replicas: 1
+
+
+  # https://github.com/hacdias/webdav
+  webdav:
+    container_name: webdav
+    image: hacdias/webdav:v5.7.4
+    volumes:
+      - ./configs/wevdav-conf.yml:/config.yml:rw
+      - /mnt/media_vol:/data:rw
+    ports:
+      - 6060:6060
+    command: -c /config.yml
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 100m
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+
+
+  main-page:
+    container_name: main-page
+    image: nginx:alpine
+    volumes:
+      - ./configs/main-page.html:/usr/share/nginx/html/index.html:ro
+    ports:
+      - 80:80
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 50m
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+            
