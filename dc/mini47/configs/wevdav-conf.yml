@@ -1,0 +1,6 @@
+port: 6060
+directory: /data
+
+users:
+  - username: admin
+    password: admin
