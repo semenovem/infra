@@ -8,21 +8,21 @@ sudo su
 mkdir -p /mnt/xeoma
 mkdir -p /usr/disk-img
 
-# 100Gb
-dd if=/dev/zero of=/usr/disk-img/disk-xeoma.ext3 bs=1G count=100
+# 30Gb
+dd if=/dev/zero of=/usr/disk-img/disk-xeoma.ext4 bs=1G count=30
 
 # check
-ls -lh /usr/disk-img/disk-xeoma.ext3
+ls -lh /usr/disk-img/disk-xeoma.ext4
 
 # format
-/sbin/mkfs -t ext3 -q /usr/disk-img/disk-xeoma.ext3 -F
+/sbin/mkfs -t ext4 -q /usr/disk-img/disk-xeoma.ext4 -F
 
 # add to /etc/fstab
-# /usr/disk-img/disk-xeoma.ext3    /mnt/xeoma-archive ext3    defaults,rw,loop  0 0
+# /usr/disk-img/disk-xeoma.ext4    /mnt/xeoma-archive ext4    defaults,rw,loop  0 0
 
 # mount /mnt/xeoma
 # Or if you didn't edit /etc/fstab above
-# mount -o loop,rw /usr/disk-img/disk-xeoma.ext3  /mnt/xeoma-archive
+# mount -o loop,rw /usr/disk-img/disk-xeoma.ext4  /mnt/xeoma-archive
 
 
 # --- SSH -----------------------------------------------------
