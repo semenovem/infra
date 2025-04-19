@@ -8,6 +8,9 @@ CONST_PROJ_MINIDLNA="hq47-minidlna" ## TODO
 
 ALL_PROJS="${CONST_PROJ_CORE} ${CONST_PROJ_METUBE} ${CONST_PROJ_MINIDLNA} "
 
+export __SAMBA_EVG_PASSWD__=1212
+export __SAMBA_LEN_PASSWD__=1212
+
 
 func_help() {
   echo "allow commands: [up|down|clean|logs|curl] projects: [all|core|minidlna]"
@@ -15,7 +18,7 @@ func_help() {
 
 if [ "$#" -eq 0 ]; then
   docker stats --no-stream
-  echo ""
+  echo 
   func_help
 
   exit 0
@@ -35,7 +38,7 @@ if [ "$1" = "up" ]; then
   # func_create_networks || exit
   
   docker compose -p "hr47" --project-directory "$ROOT" \
-    -f "${ROOT}/service.yaml" \
+    -f "${ROOT}/service-core.yaml" \
     --parallel=2 up --quiet-pull --detach
 
   exit
