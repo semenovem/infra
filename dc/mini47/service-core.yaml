@@ -98,4 +98,38 @@ services:
         delay: 5s
         condition: any
       replicas: 1
-            
+
+
+  smb-server:
+    container_name: core-smb-server
+    build:
+      context: ../../docker-files
+      dockerfile: samba.dockerfile
+    image: home/samba:4.19.6.a
+    ports:
+      - 445:7070
+    volumes:
+      - "/mnt:/mnt:rw"
+      
+      # служебное
+      - "./configs/samba.conf:/etc/samba/smb.conf:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/group:/etc/group:ro"
+      # для логов
+      - "/mnt/memfs/samba-log:/var/log/samba:rw"
+    command:
+      - sh
+      - -c
+      - |
+        # добавляем пользователей
+        echo -e "${__SAMBA_EVG_PASSWD__}\n${__SAMBA_EVG_PASSWD__}" | smbpasswd -s -a evg
+        smbd -d=1 -F -p=7070
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1            

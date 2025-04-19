@@ -97,6 +97,7 @@ services:
   rtsp-to-web:
     container_name: core-cam-rtsp-to-web
     image: ghcr.io/deepch/rtsptoweb:latest
+    user: 
     networks:
       - net-nginx
     # ports:
