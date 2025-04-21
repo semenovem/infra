@@ -11,6 +11,9 @@ ALL_PROJS="${CONST_PROJ_CORE} ${CONST_PROJ_METUBE} ${CONST_PROJ_MINIDLNA} "
 export __SAMBA_EVG_PASSWD__=1212
 export __SAMBA_LEN_PASSWD__=1212
 
+export UID=$(id -u)
+export GID=$(id -g)
+
 
 func_help() {
   echo "allow commands: [up|down|clean|logs|curl] projects: [all|core|minidlna]"
