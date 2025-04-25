@@ -1,24 +1,28 @@
 #!/bin/sh
 
-# каждый день в 23 часа
-# crontab
-# 1 23 * * * sh /home/evg/infra/dc/home/crone/backup.folder.sh
-# 1 16 30 * * sh /home/evg/infra/dc/home/crone/backup.folder.sh
-
 # sudo grep --color -i cron /var/log/syslog
-mkdir -p /home/evg/logs
-mkdir -p /home/evg/proc
 
-LOG_DIR="/home/evg/logs"
-PREFIX="crone.nextcloud"
+# crontab
+# 1 23 * * * sh /home/evg/_infra/dc/home/crone/backup.nextcloud.sh
+
+if [ ! -d "/home/evg/logs" ]; then
+  mkdir -p /home/evg/logs || exit
+fi
+
+if [ ! -d "/home/evg/proc" ]; then
+  mkdir -p /home/evg/proc
+fi
+
 PROC_FILE="/home/evg/proc/backup.nextcloud.pid"
-DAY=$(date +%m%d)
+DAY=$(date +%m%d%H%M)
+LOG_DIR="/home/evg/logs"
+BACKUP_DIR="/mnt/dat_vol/backups/nextcloud" # on a remote server
 
 if [ -f "$PROC_FILE" ]; then
   PID="$(cat $PROC_FILE)" || exit
 
   if [ -d "/proc/${PID}" ]; then
-    echo "[INFO][$(date +%m%d%H%m)] another instance is running PID=${PID}" >> "${LOG_DIR}/${PREFIX}_${DAY}_try"
+    echo "[INFO][$(date +%m%d%H%m)] another instance is running PID=${PID}"
     exit 0
   fi
 fi
@@ -26,64 +30,40 @@ fi
 echo $$ > $PROC_FILE || exit
 echo "[INFO]pid=$$ file=${PROC_FILE}"
 
+USER_NAME="" # full before call func
+func_sync() {
+  LOG_FILE="${LOG_DIR}/crone.nextcloud_${USER_NAME}.${DAY}.log"
+  DST_DIR="${BACKUP_DIR}/${USER_NAME}/"
+  DST_INCR="${BACKUP_DIR}/${USER_NAME}-incr/${DAY}"
 
-# echo "$(date) incremental backup (rsync) start with dir [${INCREMENT_DIR}]" >>"$LOG_FILE"
-# if [ -d "$INCREMENT_DIR" ]; then
-#   {
-#     echo "$(date) incremental dir [${INCREMENT_DIR}] already exist"
-#   } >>"$LOG_FILE"
-# fi
+  {
+    echo "[INFO] >>> LOG_FILE=$LOG_FILE"
+    echo "[INFO] >>> DST_DIR=$SRC_DIR"
+    echo "[INFO] >>> DST_DIR=$DST_DIR"
+    echo "[INFO] >>> DST_INCR=$DST_INCR"
+  } >> "$LOG_FILE"
 
-#if [ -e "$INCREMENT_DIR" ] ; then
-#  rm -rf "$INCREMENT_DIR"
-#fi
+  sudo rsync -a --delete --log-file="$LOG_FILE" \
+    --bwlimit=10000 \
+    --inplace --backup --quiet \
+    --rsync-path="mkdir -p ${DST_DIR} && rsync" \
+    --exclude '.git' \
+    --exclude '.idea' \
+    --exclude '*DS_Store' \
+    --exclude 'node_modules' \
+    --backup-dir="$DST_INCR" \
+    -e "ssh -p 4022 -i /home/evg/.ssh/id_ecdsa" \
+    "$SRC_DIR" "evg@localhost:${DST_DIR}"
+}
 
-
-DST_BACKUP_DIR=/mnt/vol_media_1/backup_nextcloud
-
-SRC_EVG="/mnt/soft/nextcloud/app/data/evg/files/"
-DST_EVG="${DST_BACKUP_DIR}/evg"
-DST_EVG_INCR="${DST_BACKUP_DIR}/evg-incr/${DAY}"
-
-SRC_LEN="/mnt/soft/nextcloud/app/data/len/files/"
-DST_LEN="${DST_BACKUP_DIR}/len"
-DST_LEN_INCR="${DST_BACKUP_DIR}/len-incr/${DAY}"
-
-
-rsync -a --delete --log-file="${LOG_DIR}/${PREFIX}_evg.${DAY}.log" \
-  --inplace --backup --quiet \
-  --rsync-path="mkdir -p ${DST_EVG} && rsync" \
-  --exclude '.git' \
-  --exclude '.idea' \
-  --exclude '.DS_Store' \
-  --exclude 'node_modules' \
-  --backup-dir="$DST_EVG_INCR" \
-  "$SRC_EVG" "$DST_EVG"
+USER_NAME="evg"
+# to get the contents of a directory use the trailing slash
+SRC_DIR="/mnt/soft/nextcloud/app/data/evg/files/"
+func_sync
 
 
-exit
+USER_NAME="len"
+SRC_DIR="/mnt/soft/nextcloud/app/data/len/files/"
+func_sync
 
-
-rsync -a --delete --log-file="${LOG_DIR}/${PREFIX}_len.${DAY}.log" \
-  --inplace --backup --quiet \
-  --rsync-path="mkdir -p ${DST_LEN} && rsync" \
-  --exclude '.git' \
-  --exclude '.idea' \
-  --exclude '.DS_Store' \
-  --exclude 'node_modules' \
-  --backup-dir="$DST_LEN_INCR" \
-  "$SRC_LEN" "$DST_LEN"
-
-
-
-exit
-
-# rsync -a --delete --log-file="${LOG_DIR}/len.${DAY}.log" --inplace --backup --quiet \
-#   --rsync-path="mkdir -p ${DST_LEN} && rsync" \
-#   --exclude '.git' \
-#   --exclude '.idea' \
-#   --exclude '.DS_Store' \
-#   --exclude 'node_modules' \
-#   --backup-dir="$INCREMENT_DIR" \
-#   "$SRC_LEN" "$DST_LEN"
-
+rm "$PROC_FILE"
