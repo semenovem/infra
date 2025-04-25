@@ -12,7 +12,10 @@ services:
     ports:
       - '8005:8081'
     volumes:
-      - '/mnt/hdd2t_media/download_youtube:/downloads'
+      - '/mnt/media_vol/download_youtube:/downloads'
+    environment:
+      UID: ${UID}
+      GID: ${GID}
     deploy:
       resources:
         limits:
