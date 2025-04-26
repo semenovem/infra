@@ -5,18 +5,18 @@
 # crontab
 # 1 23 * * * sh /home/evg/_infra/dc/home/crone/backup.nextcloud.sh
 
-if [ ! -d "/home/evg/logs" ]; then
-  mkdir -p /home/evg/logs || exit
+PROC_FILE="/home/evg/proc/backup.nextcloud.pid"
+DAY=$(date +%m%d%H%M)
+LOG_DIR="/home/evg/logs/crone.nextcloud"
+BACKUP_DIR="/mnt/dat_vol/backups/nextcloud" # on a remote server
+
+if [ ! -d "$LOG_DIR" ]; then
+  mkdir -p "$LOG_DIR" || exit
 fi
 
 if [ ! -d "/home/evg/proc" ]; then
   mkdir -p /home/evg/proc
 fi
-
-PROC_FILE="/home/evg/proc/backup.nextcloud.pid"
-DAY=$(date +%m%d%H%M)
-LOG_DIR="/home/evg/logs"
-BACKUP_DIR="/mnt/dat_vol/backups/nextcloud" # on a remote server
 
 if [ -f "$PROC_FILE" ]; then
   PID="$(cat $PROC_FILE)" || exit
@@ -27,12 +27,14 @@ if [ -f "$PROC_FILE" ]; then
   fi
 fi
 
+# -----------------------------
+
 echo $$ > $PROC_FILE || exit
 echo "[INFO]pid=$$ file=${PROC_FILE}"
 
 USER_NAME="" # full before call func
 func_sync() {
-  LOG_FILE="${LOG_DIR}/crone.nextcloud_${USER_NAME}.${DAY}.log"
+  LOG_FILE="${LOG_DIR}/${USER_NAME}.${DAY}.log"
   DST_DIR="${BACKUP_DIR}/${USER_NAME}/"
   DST_INCR="${BACKUP_DIR}/${USER_NAME}-incr/${DAY}"
 
