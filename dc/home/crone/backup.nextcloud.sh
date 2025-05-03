@@ -5,6 +5,7 @@
 # crontab
 # 1 23 * * * sh /home/evg/_infra/dc/home/crone/backup.nextcloud.sh
 
+ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 PROC_FILE="/home/evg/proc/backup.nextcloud.pid"
 DAY=$(date +%m%d%H%M)
 LOG_DIR="/home/evg/logs/crone.nextcloud"
@@ -56,6 +57,10 @@ func_sync() {
     --backup-dir="$DST_INCR" \
     -e "ssh -p 4022 -i /home/evg/.ssh/id_ecdsa" \
     "$SRC_DIR" "evg@localhost:${DST_DIR}"
+
+  exit_code="$?"
+
+  sh "${ROOT}/../../../call-script.sh" "scr-bot-evgio" "[INFO][nextcloud-backup] for user_name=${USER_NAME}, rsync_code=${exit_code}, moment=${DAY}"
 }
 
 USER_NAME="evg"
