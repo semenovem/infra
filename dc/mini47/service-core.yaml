@@ -178,4 +178,23 @@ services:
         delay: 5s
         condition: any
       replicas: 1
-       
+
+# --- RTSPtoWeb -----------------------------------------------
+# https://github.com/deepch/RTSPtoWeb
+  rtsp-to-web:
+    container_name: core-cam-rtsp-to-web
+    image: ghcr.io/deepch/rtsptoweb:latest
+    ports:
+      - 8083:8083
+    volumes:
+      - "../../.local/rtpstoweb.json:/config/config.json:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 40M
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
+    read_only: true
