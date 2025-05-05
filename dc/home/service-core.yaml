@@ -97,7 +97,6 @@ services:
   rtsp-to-web:
     container_name: core-cam-rtsp-to-web
     image: ghcr.io/deepch/rtsptoweb:latest
-    user: 
     networks:
       - net-nginx
     # ports:
@@ -163,6 +162,33 @@ services:
         condition: any
       replicas: 1
 
+
+  # https://github.com/hacdias/webdav
+  webdav:
+    container_name: webdav
+    image: hacdias/webdav:v5.7.4
+    volumes:
+      - ./configs/wevdav-conf.yml:/config.yml:ro
+      - /mnt/vol_media_1/films_ru:/data/films_ru:ro
+      - /mnt/vol_media_1/torrents:/data/torrents:ro
+      - /mnt/vol_media_1/videos_4k:/data/videos_4k:ro
+      - /mnt/vol_media_1/videos-relax:/data/videos-relax:ro
+      - /mnt/vol_media_1/videos_trash:/data/videos_trash:ro
+
+      - /home/evg/tmp/_videos:/data/videos_resized:ro
+    ports:
+      - 6060:6060
+    command: -c /config.yml
+    user: "${UID}:${GID}"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 100m
+      restart_policy:
+        delay: 5s
+        condition: any
+      replicas: 1
 
 
 # https://github.com/AdguardTeam/AdGuardHome
