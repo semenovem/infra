@@ -1,19 +1,11 @@
 #!/bin/sh
 
-# mamual: 
-# for config file:
-# the configuration file should have its first comment specifying the service name for systemctl
-
 # use run with sudo
 func_help() {
   echo "use: \$1 [start|stop|state|list] \$2 [configuration file in the same directory]"
 }
 
 [ $# -eq 0 ] && func_help && exit 0
-
-func_extract_service_name() {
-    grep -m 1 -i '^#' "$1" | sed 's/^[#[:space:]]*//'
-}
 
 # define command----------------------------------------
 case "$1" in
@@ -34,7 +26,7 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 CONFIG_FILE="${ROOT}/$2"
 [ ! -f "$CONFIG_FILE" ] && echo "[ERRO] \$2 not a file" && exit 1
 
-SERVICE_NAME="$(func_extract_service_name "$CONFIG_FILE")" || exit 1
+SERVICE_NAME="${2%%.*}.service"
 [ -z "$SERVICE_NAME" ] && echo "[ERRO] empty service name" && exit 1
 
 UNIT_FILE="/etc/systemd/system/${SERVICE_NAME}"
