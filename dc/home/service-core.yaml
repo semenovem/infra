@@ -182,8 +182,8 @@ services:
     command: -c /config.yml
     user: "${UID}:${GID}"
     environment:
-      WEBDAV_USER1_NAME: "${WEBDAV_USER1_NAME}"
-      WEBDAV_USER1_PASSWD: "${WEBDAV_USER1_PASSWD}"
+      WEBDAV_USER1_NAME: "${__WEBDAV_USER1_NAME__}"
+      WEBDAV_USER1_PASSWD: "${__WEBDAV_USER1_PASSWD__}"
     deploy:
       resources:
         limits:

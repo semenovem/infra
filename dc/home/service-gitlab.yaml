@@ -17,7 +17,7 @@ services:
       - net-prometheus
     environment:
       # GITLAB_LOG_LEVEL: WARN
-      GITLAB_ROOT_PASSWORD: "${GITLAB_ROOT_PASSWORD}"
+      GITLAB_ROOT_PASSWORD: "${__GITLAB_ROOT_PASSWORD__}"
       GITLAB_OMNIBUS_CONFIG: |
         # Add any other gitlab.rb configuration here, each on its own line
         external_url 'https://git.evgio.com'
