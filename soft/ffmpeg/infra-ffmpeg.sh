@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# /mnt/md1/tmp_rik_and_morty
+
 
 DST="/home/evg/tmp/star05"
 

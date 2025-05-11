@@ -34,7 +34,7 @@ services:
       - net-nextcloud
       - net-monitoring
       - net-logging
-    image: nginx:1.27.1-bookworm-perl
+    image: nginx:1.27.5-bookworm-perl
     ports:
       - 80:80
       - 443:443
@@ -44,11 +44,12 @@ services:
       - "../../.local/certbot/www:/var/www/certbot:ro"
       - "../../.local/certbot/conf:/etc/nginx/ssl:ro"
       - "../../.local/nginx/htpasswd:/etc/nginx/.htpasswd:ro"
-      - type: tmpfs
-        target: /var/cache/nginx
-        tmpfs:
-          size: 50m
-          mode: 0777
+      - "/home/evg/tmp/_cache_nginx:/var/cache/nginx:rw"
+      # - type: tmpfs
+      #   target: /var/cache/nginx
+      #   tmpfs:
+      #     size: 10g
+      #     mode: 0777
       - "./cctv-rtsp-to-web/www:/var/www/cctv-rtsp-to-web:ro"
     # logging:
     #   driver: "fluentd"
@@ -59,8 +60,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 300M
+          cpus: '2'
+          memory: 5G
         reservations:
           memory: 300M
       replicas: 1
@@ -180,6 +181,9 @@ services:
       - 6060:6060
     command: -c /config.yml
     user: "${UID}:${GID}"
+    environment:
+      WEBDAV_USER1_NAME: "${WEBDAV_USER1_NAME}"
+      WEBDAV_USER1_PASSWD: "${WEBDAV_USER1_PASSWD}"
     deploy:
       resources:
         limits:

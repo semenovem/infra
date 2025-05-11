@@ -6,5 +6,7 @@ $CONFIG = array(
     2 => 'nextcloud-app',
   ),
 
+  'tempdirectory' => '/tmp',
+
   'maintenance_window_start' => 1,
 );

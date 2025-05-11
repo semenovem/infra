@@ -69,6 +69,7 @@ services:
       replicas: 1
 
 
+  # https://github.com/nextcloud/docker
   # https://github.com/nextcloud/all-in-one
   # https://github.com/docker-library/docs/blob/master/nextcloud/README.md
   # включение / выключение режима обслуживания
@@ -78,6 +79,8 @@ services:
   nextcloud-app:
     container_name: nextcloud-app
     hostname: nextcloud-app
+    ports:
+      - 7007:80
     networks:
       - net-nextcloud
     image: nextcloud:30.0.6-apache
@@ -103,6 +106,7 @@ services:
       - OVERWRITEPROTOCOL=https
       - PHP_MEMORY_LIMIT=2G
       - PHP_UPLOAD_LIMIT=50G
+      - APACHE_BODY_LIMIT=0
     depends_on:
       postgres:
         condition: service_healthy
