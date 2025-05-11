@@ -28,6 +28,9 @@ if [ -f "$PROC_FILE" ]; then
   fi
 fi
 
+# sh "${ROOT}/../../../call-script.sh" "scr-bot-evgio" "[INFO][nextcloud-backup], --- skip ---, moment=${DAY}"
+# exit
+
 # -----------------------------
 
 echo $$ > $PROC_FILE || exit
@@ -54,6 +57,7 @@ func_sync() {
     --exclude '.idea' \
     --exclude '*DS_Store' \
     --exclude 'node_modules' \
+    --exclude '*.drawio.bkp' \
     --backup-dir="$DST_INCR" \
     -e "ssh -p 4022 -i /home/evg/.ssh/id_ecdsa" \
     "$SRC_DIR" "evg@localhost:${DST_DIR}"

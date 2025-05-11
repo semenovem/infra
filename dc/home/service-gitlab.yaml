@@ -30,6 +30,7 @@ services:
         registry_nginx['listen_https'] = false;
         gitlab_rails['gitlab_shell_ssh_port'] = 1999;
         gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8', '172.0.0.0/8', '192.168.11.0/24']
+        sidekiq['concurrency'] = 10
       # TODO setup smtp
       # https://docs.gitlab.com/omnibus/settings/smtp.html#yandex
     ports:

@@ -1,0 +1,10 @@
+
+https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html
+
+put in /etc/fstab
+# https://cloud.evgio.com/remote.php/dav/files/evg/ /home/evg/nextcloud davfs user,rw,noauto 0 0
+http://127.0.0.1:7007/remote.php/dav/files/evg/ /home/evg/nextcloud davfs sync,user,rw,noauto 0 0
+
+
+mount ~/nextcloud
+umount ~/nextcloud

@@ -1,0 +1,10 @@
+port: 6060
+directory: /data
+
+users:
+  - username: "{env}WEBDAV_USER1_NAME"
+    password: "{env}WEBDAV_USER1_PASSWD"
+
+debug: false
+
+permissions: R
