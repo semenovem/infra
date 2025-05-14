@@ -166,8 +166,11 @@ services:
 
   # https://github.com/hacdias/webdav
   webdav:
-    container_name: webdav
+    container_name: core-webdav
+    hostname: webdav
     image: hacdias/webdav:v5.7.4
+    networks:
+      - net-home
     volumes:
       - ./configs/wevdav-conf.yml:/config.yml:ro
       - /mnt/vol_media_1/films_ru:/data/films_ru:ro
@@ -178,7 +181,7 @@ services:
 
       - /home/evg/tmp/_videos:/data/videos_resized:ro
     ports:
-      - 6060:6060
+      - 6060:8080
     command: -c /config.yml
     user: "${UID}:${GID}"
     environment:
