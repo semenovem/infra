@@ -126,6 +126,8 @@ hosts:
     wg0:
       port: 21415
       addr: 10.14.15.0/24
+    socks5:
+      port: 40152
 
 
   # ---------------------------------------------------------------------------------
@@ -249,12 +251,18 @@ hosts:
     crontab:
     local:
       url: mini47.local
-      ip: 192.168.22.120
+      ip: 192.168.22.200
     ssh:
       main:
         user: adman
         pub_key: ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBM7EuP0cedapWPeVJehtZ01RjJyCotbpwEKO+I5LhU12H3Sr2EuD3fdYnQRKojg1odcRUkEikk7C3jmPBXY/1lQXrZYVDfsFpix8bOWl9nBP1JBAxx5MVdjUaZeg0mzExQ== evg@mini47
-
+    ssh_remote_forward:
+      hosts: msk1 home srv1 srv2
+      ports:
+        - 4022::22            # ssh
+      adding: 
+        - -> msk1 [xeoma 4090 port]
+        - -> eu1 [socks5 1080 port]
 
   # ---------------------------------------------------------------------------------
   ### Офис

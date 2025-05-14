@@ -11,7 +11,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 __USER_NAME__=proxy3
-__SOSCK5_PORT__=1080
+__SOSCK5_PORT__=40152
 
 # Ubuntu
 apt-get update && sudo apt-get install -y build-essential
