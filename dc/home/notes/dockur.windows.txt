@@ -1,0 +1,4 @@
+
+docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --device=/dev/net/tun --cap-add NET_ADMIN -v "/mnt/md1/windows-storage:/storage" --stop-timeout 120 dockurr/windows
+
+Резервная копия в /mnt/md1/windows-storage

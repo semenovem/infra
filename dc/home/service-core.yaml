@@ -140,7 +140,7 @@ services:
       - "/mnt/vol_backup_1/evg_time_machine:/mnt/backups/evg_time_machine:rw"
       - "/mnt/raid4t_soft/backups/len:/mnt/backups/len:rw"
       # служебное
-      - "./samba/samba.conf:/etc/samba/smb.conf:ro"
+      - "./configs/samba.conf:/etc/samba/smb.conf:ro"
       - "/etc/passwd:/etc/passwd:ro"
       - "/etc/group:/etc/group:ro"
       # для логов
