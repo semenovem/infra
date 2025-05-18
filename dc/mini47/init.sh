@@ -15,3 +15,8 @@ docker run -it --rm --name windows -p 8006:8006 \
   -v "/mnt/vol1/win11arm64.iso:/boot.iso:ro" \
   --stop-timeout 120 \
   dockurr/windows
+
+
+
+# Xeoma
+/usr/local/Xeoma/XeomaArchive/
