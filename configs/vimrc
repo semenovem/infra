@@ -24,3 +24,4 @@ set history=200
 set wildmenu
 " set list listchars=tab:→\ ,trail:·
 filetype plugin on
+set mouse-=a
