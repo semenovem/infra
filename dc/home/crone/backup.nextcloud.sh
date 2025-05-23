@@ -9,7 +9,7 @@ ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}
 PROC_FILE="/home/evg/proc/backup.nextcloud.pid"
 DAY=$(date +%m%d%H%M)
 LOG_DIR="/home/evg/logs/crone.nextcloud"
-BACKUP_DIR="/mnt/dat_vol/backups/nextcloud" # on a remote server
+BACKUP_DIR="/mnt/backup_vol/backups/nextcloud" # on a remote server
 
 if [ ! -d "$LOG_DIR" ]; then
   mkdir -p "$LOG_DIR" || exit
@@ -44,7 +44,7 @@ func_sync() {
 
   {
     echo "[INFO] >>> LOG_FILE=$LOG_FILE"
-    echo "[INFO] >>> DST_DIR=$SRC_DIR"
+    echo "[INFO] >>> SRC_DIR=$SRC_DIR"
     echo "[INFO] >>> DST_DIR=$DST_DIR"
     echo "[INFO] >>> DST_INCR=$DST_INCR"
   } >> "$LOG_FILE"
