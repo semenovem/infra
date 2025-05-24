@@ -7,6 +7,11 @@ func_help() {
 
 [ $# -eq 0 ] && func_help && exit 0
 
+if [ "$(id -u)" -ne 0 ]; then
+    sudo sh "$0" "$@"
+    exit
+fi
+
 # define command----------------------------------------
 case "$1" in
     "start" | "stop" | "state" | "stat") ;;
@@ -51,6 +56,10 @@ case "$1" in
     rm -f "$UNIT_FILE" && \
     systemctl reset-failed; \
     systemctl daemon-reload
+;;
+
+"all") 
+    echo ">>>>>"
 ;;
 
 *) systemctl --no-pager status "$SERVICE_NAME" ;;
