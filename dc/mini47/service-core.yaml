@@ -155,7 +155,7 @@ services:
       # Set the appropriate timezone for your location (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g:
       TZ: 'Europe/Moscos'
       # Set a password to access the web interface. Not setting one will result in a random password being assigned
-      FTLCONF_webserver_api_password: '121212'
+      FTLCONF_webserver_api_password: "${PIHOLE_WEBSERVER_API_PASSWORD}"
       # If using Docker's default `bridge` network setting the dns listening mode should be set to 'all'
       FTLCONF_dns_listeningMode: 'all'
     volumes:
@@ -178,6 +178,7 @@ services:
         delay: 5s
         condition: any
       replicas: 1
+
 
 # --- RTSPtoWeb -----------------------------------------------
 # https://github.com/deepch/RTSPtoWeb

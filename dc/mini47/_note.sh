@@ -20,17 +20,17 @@ docker run -it --rm --name windows -p 8006:8006 \
 
 ------------
 # fstab
+
+tmpfs  /mnt/ramfs  tmpfs  rw,size=50M  0   0
+
 # 500Gb nvm
 PARTUUID="f355333a-01" /mnt/dat-vol  ext4  defaults,nofail  0 0
 
 # 1T hdd
-UUID="c70d4195-fdfd-4119-a55b-1833f6ae5920" /mnt/media_vol  ext4  defaults,nofail  0 0
+UUID="c70d4195-fdfd-4119-a55b-1833f6ae5920" /mnt/media_vol  ext4  defaults,nofail  1 0
 
-tmpfs  /mnt/ramfs  tmpfs  rw,size=100M  0   0
-
-/dev/sdc 
-
-# /mnt/dat-vol/xeoma-archive  /mnt/xeoma-archive  bind    defaults,nofail,bind 0 0
+# 2T hdd2.5
+UUID="686d4b9a-f617-498e-95af-773ed147dac1" /mnt/backup_vol  ext4  defaults,nofail  1 0
 
 
 # Xeoma

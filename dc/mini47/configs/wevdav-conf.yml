@@ -2,5 +2,5 @@ port: 6060
 directory: /data
 
 users:
-  - username: admin
-    password: admin
+  - username: "{env}WEBDAV_USER1_NAME"
+    password: "{env}WEBDAV_USER1_PASSWD"
