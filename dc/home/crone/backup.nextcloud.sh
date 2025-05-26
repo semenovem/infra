@@ -49,6 +49,7 @@ func_sync() {
     echo "[INFO] >>> DST_INCR=$DST_INCR"
   } >> "$LOG_FILE"
 
+  # --dry-run \
   sudo rsync -a --delete --log-file="$LOG_FILE" \
     --bwlimit=10000 \
     --inplace --backup --quiet \
