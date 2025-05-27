@@ -35,7 +35,9 @@ services:
         puma['worker_processes'] = 0;
         sidekiq['concurrency'] = 5;
         prometheus_monitoring['enable'] = false
-      # TODO setup smtp
+        # backup
+        # gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
+      # TODO setup smtpiter
       # https://docs.gitlab.com/omnibus/settings/smtp.html#yandex
     ports:
       - '1999:22'
@@ -43,6 +45,7 @@ services:
       - '/mnt/md1/gitlab/config:/etc/gitlab'
       - '/mnt/md1/gitlab/logs:/var/log/gitlab'
       - '/mnt/md1/gitlab/data:/var/opt/gitlab'
+      - '/mnt/md1/gitlab_backups:/var/opt/gitlab/backups'
     shm_size: '256m'
     healthcheck:
       test: "curl -f http://gitlab/-/health"
@@ -53,7 +56,7 @@ services:
       resources:
         limits:
           cpus: '2'
-          memory: 8G
+          memory: 5G
       restart_policy:
         delay: 5s
         condition: any
