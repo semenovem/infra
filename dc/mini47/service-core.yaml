@@ -35,8 +35,8 @@ services:
     image: mini47/minidlna:1.0
     volumes: 
       - ./configs/minidlna-mini47.conf:/app/minidlna.conf:ro
-      - /mnt/memfs/minidlna/cache:/app/cache:rw
-      - /mnt/memfs/minidlna/logs:/app/logs:rw
+      - /mnt/ramfs/minidlna/cache:/app/cache:rw
+      - /mnt/ramfs/minidlna/logs:/app/logs:rw
       
       - /mnt/media_vol/content:/media1:ro
       - /mnt/media_vol/download_youtube:/media2/download_youtube:ro 
@@ -119,7 +119,7 @@ services:
       - "/etc/passwd:/etc/passwd:ro"
       - "/etc/group:/etc/group:ro"
       # для логов
-      - "/mnt/memfs/samba-log:/var/log/samba:rw"
+      - "/mnt/ramfs/samba-log:/var/log/samba:rw"
     command:
       - sh
       - -c
@@ -155,12 +155,12 @@ services:
       # Set the appropriate timezone for your location (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g:
       TZ: 'Europe/Moscos'
       # Set a password to access the web interface. Not setting one will result in a random password being assigned
-      FTLCONF_webserver_api_password: '121212'
+      FTLCONF_webserver_api_password: "${PIHOLE_WEBSERVER_API_PASSWORD}"
       # If using Docker's default `bridge` network setting the dns listening mode should be set to 'all'
       FTLCONF_dns_listeningMode: 'all'
     volumes:
       # For persisting Pi-hole's databases and common configuration file
-      - '/mnt/dat_vol/pihole:/etc/pihole'
+      - '/mnt/dat-vol/pihole:/etc/pihole'
     cap_add:
       # See https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
       # Required if you are using Pi-hole as your DHCP server, else not needed
@@ -178,6 +178,7 @@ services:
         delay: 5s
         condition: any
       replicas: 1
+
 
 # --- RTSPtoWeb -----------------------------------------------
 # https://github.com/deepch/RTSPtoWeb

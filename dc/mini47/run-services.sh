@@ -40,6 +40,10 @@ func_create_networks() {
 if [ "$1" = "up" ]; then 
   # func_create_networks || exit
   
+  set -o allexport
+  . "${ROOT}/../../.local/services.env" || exit 1
+  set +o allexport
+  
   docker compose -p "hr47" --project-directory "$ROOT" \
     -f "${ROOT}/service-core.yaml" \
     --parallel=2 up --quiet-pull --detach

@@ -161,7 +161,7 @@ services:
       restart_policy:
         delay: 5s
         condition: any
-      replicas: 1
+      replicas: 0
 
 
   # https://github.com/hacdias/webdav
@@ -177,7 +177,6 @@ services:
       - /mnt/vol_media_1/torrents:/data/torrents:ro
       - /mnt/vol_media_1/videos_4k:/data/videos_4k:ro
       - /mnt/vol_media_1/videos-relax:/data/videos-relax:ro
-      - /mnt/vol_media_1/videos_trash:/data/videos_trash:ro
 
       - /home/evg/tmp/_videos:/data/videos_resized:ro
     ports:
