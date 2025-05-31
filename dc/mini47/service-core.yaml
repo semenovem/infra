@@ -12,7 +12,7 @@ services:
     ports:
       - '8005:8081'
     volumes:
-      - '/mnt/media_vol/download_youtube:/downloads'
+      - '/mnt/backup_vol/download_youtube:/downloads'
     environment:
       UID: ${UID}
       GID: ${GID}
@@ -38,8 +38,8 @@ services:
       - /mnt/ramfs/minidlna/cache:/app/cache:rw
       - /mnt/ramfs/minidlna/logs:/app/logs:rw
       
-      - /mnt/media_vol/content:/media1:ro
-      - /mnt/media_vol/download_youtube:/media2/download_youtube:ro 
+      - /mnt/backup_vol/content:/media1:ro
+      - /mnt/backup_vol/download_youtube:/media2/download_youtube:ro 
     command:
       - sh 
       - -c 
@@ -70,11 +70,15 @@ services:
     image: hacdias/webdav:v5.7.4
     volumes:
       - ./configs/wevdav-conf.yml:/config.yml:rw
-      - /mnt/media_vol:/data:rw
+      - /mnt/backup_vol/content:/data/content:rw
+      - /mnt/backup_vol/download_youtube:/data/download_youtube:rw
     ports:
       - 6060:6060
     command: -c /config.yml
     user: "${UID}:${GID}"
+    environment:
+      WEBDAV_USER1_NAME: ${__WEBDAV_USER1_NAME__}
+      WEBDAV_USER1_PASSWD: ${__WEBDAV_USER1_PASSWD__}
     deploy:
       resources:
         limits:
@@ -135,7 +139,7 @@ services:
       restart_policy:
         delay: 5s
         condition: any
-      replicas: 1            
+      replicas: 1 
 
 
   pihole:
@@ -155,7 +159,7 @@ services:
       # Set the appropriate timezone for your location (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g:
       TZ: 'Europe/Moscos'
       # Set a password to access the web interface. Not setting one will result in a random password being assigned
-      FTLCONF_webserver_api_password: "${PIHOLE_WEBSERVER_API_PASSWORD}"
+      FTLCONF_webserver_api_password: "${__PIHOLE_WEBSERVER_API_PASSWORD__}"
       # If using Docker's default `bridge` network setting the dns listening mode should be set to 'all'
       FTLCONF_dns_listeningMode: 'all'
     volumes:
