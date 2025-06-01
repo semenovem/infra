@@ -101,3 +101,23 @@ services:
         delay: 5s
         condition: any
       replicas: 1
+
+
+  cadvisor:
+    container_name: cadvisor
+    hostname: cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
+    # network_mode: "host"
+    networks:
+      - net-prometheus
+    ports:
+      - "8802:8080"
+    volumes:
+      - "/:/rootfs"
+      - "/var/run:/var/run"
+      - "/sys:/sys"
+      - "/var/lib/docker/:/var/lib/docker"
+      - "/dev/disk/:/dev/disk"
+    privileged: true
+    devices:
+      - "/dev/kmsg"

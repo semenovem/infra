@@ -190,7 +190,10 @@ for ARG in $ARGUMENTS; do
   case "$ARG" in
     "curl")
       docker run -it --rm \
-        --network net-home --network net-gitlab --network net-nextcloud --network net-monitoring --network net-logging \
+        --network net-home --network net-gitlab --network net-nextcloud \
+        --network net-monitoring \
+        --network net-prometheus \
+        --network net-logging \
         curlimages/curl:8.10.1 sh
       ;;
 
