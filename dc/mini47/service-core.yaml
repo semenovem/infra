@@ -164,7 +164,7 @@ services:
       FTLCONF_dns_listeningMode: 'all'
     volumes:
       # For persisting Pi-hole's databases and common configuration file
-      - '/mnt/dat-vol/pihole:/etc/pihole'
+      - '/mnt/media_vol/pihole:/etc/pihole'
     cap_add:
       # See https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
       # Required if you are using Pi-hole as your DHCP server, else not needed
