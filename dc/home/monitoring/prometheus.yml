@@ -51,3 +51,9 @@ scrape_configs:
   - job_name: smartctl-exporter
     static_configs:
       - targets: ['smartctl-exporter:9902']
+
+  - job_name: cadvisor
+    scrape_interval: 5s
+    static_configs:
+    - targets:
+      - cadvisor:8080

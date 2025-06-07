@@ -1,11 +1,8 @@
 
 apt-get install ntp
-vim /etc/ntp.conf
 
-systemctl status ntpsec.service 
+systemctl status ntpsec.service
 ntpq -p
-
-
 
 /etc/ntpsec/ntp.conf
 
