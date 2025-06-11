@@ -173,10 +173,10 @@ services:
       - net-home
     volumes:
       - ./configs/wevdav-conf.yml:/config.yml:ro
-      - /mnt/vol_media_1/films_ru:/data/films_ru:ro
+      # - /mnt/vol_media_1/films_ru:/data/films_ru:ro
       - /mnt/vol_media_1/torrents:/data/torrents:ro
-      - /mnt/vol_media_1/videos_4k:/data/videos_4k:ro
-      - /mnt/vol_media_1/videos-relax:/data/videos-relax:ro
+      # - /mnt/vol_media_1/videos_4k:/data/videos_4k:ro
+      # - /mnt/vol_media_1/videos-relax:/data/videos-relax:ro
 
       - /home/evg/tmp/_videos:/data/videos_resized:ro
     ports:
@@ -194,7 +194,7 @@ services:
       restart_policy:
         delay: 5s
         condition: any
-      replicas: 1
+      replicas: 0
 
 
 # https://github.com/AdguardTeam/AdGuardHome
