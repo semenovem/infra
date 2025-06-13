@@ -1,0 +1,5 @@
+
+https://askubuntu.com/questions/39760/how-can-i-control-hdd-spin-down-time
+
+hdparm -S 25 /dev/sdb  # spindown after 25*5 seconds.
+hdparm -S 245 /dev/sdb # spindown after (245-240)*30 minutes.
