@@ -10,6 +10,7 @@ PROC_FILE="/home/evg/proc/backup.nextcloud.pid"
 DAY=$(date +%m%d%H%M)
 LOG_DIR="/home/evg/logs/crone.nextcloud"
 BACKUP_DIR="/mnt/backup_vol/backups/nextcloud" # on a remote server
+EXCLUDE_FILE="$(mktemp)" || exit
 
 if [ ! -d "$LOG_DIR" ]; then
   mkdir -p "$LOG_DIR" || exit
@@ -59,6 +60,7 @@ func_sync() {
     --exclude '*DS_Store' \
     --exclude 'node_modules' \
     --exclude '*.drawio.bkp' \
+    --exclude-from "$EXCLUDE_FILE" \
     --backup-dir="$DST_INCR" \
     -e "ssh -p 4022 -i /home/evg/.ssh/id_ecdsa" \
     "$SRC_DIR" "evg@localhost:${DST_DIR}"
@@ -71,11 +73,13 @@ func_sync() {
 USER_NAME="evg"
 # to get the contents of a directory use the trailing slash
 SRC_DIR="/mnt/soft/nextcloud/app/data/evg/files/"
+echo 'media/' > "$EXCLUDE_FILE"
 func_sync
 
 
 USER_NAME="len"
 SRC_DIR="/mnt/soft/nextcloud/app/data/len/files/"
+: > "$EXCLUDE_FILE"
 func_sync
 
 rm "$PROC_FILE"
