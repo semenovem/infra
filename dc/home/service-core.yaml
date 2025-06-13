@@ -194,7 +194,7 @@ services:
       restart_policy:
         delay: 5s
         condition: any
-      replicas: 0
+      replicas: 1
 
 
 # https://github.com/AdguardTeam/AdGuardHome
