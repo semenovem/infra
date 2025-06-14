@@ -9,10 +9,8 @@ exit
 
 ### mount remote directory via ssh
 # https://osxfuse.github.io/
-
 # https://github.com/osxfuse/sshfs
 # https://github.com/osxfuse/sshfs/releases
-
 
 # execute
 sshfs evg@192.168.11.100:/mnt ~/_mount
@@ -46,3 +44,10 @@ networksetup
 #-----------------------------------------
 # Список wifi сетей
 /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -s
+
+
+#----------------------------------------
+# https://stackoverflow.com/questions/48910876/error-eacces-permission-denied-access-usr-local-lib-node-modules
+mkdir ~/.npm-global
+npm config set prefix "${HOME}/.npm-global"
+export PATH=~/.npm-global/bin:$PATH
