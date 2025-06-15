@@ -56,6 +56,7 @@ ROLE="$(sh "${__INFRA_REPO__}/bin/util/machine-role.sh")" || >&2 echo "[ERRO][$0
 
 case "$ROLE" in
   "HOME_SERVER")
+    export PATH="${PATH}:${__INFRA_REPO__}/bin/roles/home_server"
   ;;
   "STANDBY_SERVER")
   ;;
