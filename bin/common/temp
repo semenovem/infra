@@ -2,10 +2,6 @@
 
 PLATFORM=$(sh "${__INFRA_REPO__}/bin/util/platform.sh") || exit
 
-echo ">>>> $PLATFORM"
-
-#exit
-
 case $PLATFORM in
 "PLATFORM_RASPBIAN") watch -t -n 1 vcgencmd measure_temp ;;
 "debian" | "linux")
