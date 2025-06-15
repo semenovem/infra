@@ -64,7 +64,8 @@ func_sync() {
 
   exit_code="$?"
 
-  sh "${ROOT}/../../../call-script.sh" "scr-bot-evgio" "[INFO][nextcloud-backup] for user_name=${USER_NAME}, rsync_code=${exit_code}, moment=${DAY}"
+  sh "${ROOT}/../../../bin/call-script.sh" "scr-bot-evgio" \
+    "[INFO][nextcloud-backup] for user_name=${USER_NAME}, rsync_code=${exit_code}, moment=${DAY}"
 }
 
 USER_NAME="evg"

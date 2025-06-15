@@ -1,6 +1,6 @@
 #!/bin/bash
 
-alias ll='ls -l'
+alias ll='ls -lh'
 alias la='ls -la'
 
 if which minikube 1>/dev/null && ! which kubectl; then

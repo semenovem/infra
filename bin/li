@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# размер директорий
-
-du -xhd 1 "${1-.}" 2> /dev/null | sort -rh
-
-# du -xhd 1 . 2> /dev/null | sort -rh

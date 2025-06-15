@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Directories size
+
+du -xhd 1 "${1-.}" 2> /dev/null | sort -rh
