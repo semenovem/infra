@@ -51,24 +51,19 @@ case "$PLATFORM_NAME" in
   "LINUX");;
 esac
 
-return 0
-
 # machine role actions -------------------------------
-ROLE=$(sh "${__INFRA_REPO_ _}/bin/util/self/machine-role.sh" "get-machine-role") || >&2 echo "[ERRO][$0] execute 'machine-role.sh'"
+ROLE="$(sh "${__INFRA_REPO__}/bin/util/machine-role.sh")" || >&2 echo "[ERRO][$0] execute 'machine-role.sh'"
 
 case "$ROLE" in
   "HOME_SERVER")
-    export PATH="${PATH}:${__INFRA_REPO__}/bin/linux"
   ;;
   "STANDBY_SERVER")
-    export PATH="${PATH}:${__INFRA_REPO__}/bin/linux"
   ;;
   "PROXY_SERVER");;
   "WORKSTATION");;
   "MINI_SERVER")
-    export PATH="${PATH}:${__INFRA_REPO__}/bin/linux"
+#    export PATH="${PATH}:${__INFRA_REPO__}/bin/linux"
   ;;
   "OFFICE_SERVER")
-    export PATH="${PATH}:${__INFRA_REPO__}/bin/linux"
   ;;
 esac

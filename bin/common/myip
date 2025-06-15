@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if which curl2 1>/dev/null; then
+if which curl 1>/dev/null; then
   curl -s 2ip.ru && exit 0
 
   curl -w'\n' ifconfig.me 2>/dev/null && exit 0

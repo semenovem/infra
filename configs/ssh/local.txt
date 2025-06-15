@@ -45,11 +45,6 @@ Host mini
 
 # -----------------------------
 # office
-Host office
-  HostName     85.30.226.184
-  User         evg
-  Port         22
-  IdentityFile ~/.ssh/id_ecdsa
 
 Host office-local
   HostName     192.168.5.200

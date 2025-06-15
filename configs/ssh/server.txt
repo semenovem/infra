@@ -3,14 +3,12 @@
 # v1.0
 # ----------------------------------
 
-# 5.45.120.70
 Host eu eu1
   HostName     eu1.evgio.com
   Port         22
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-# rhor-hosting ihor 194.67.205.149
 Host rr3
   HostName     rr3.evgio.com
   Port         22
@@ -18,7 +16,6 @@ Host rr3
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
 
-# 185.87.51.94 (ihor-hosting.ru)
 Host rr4
   HostName     rr4.evgio.com
   Port         2257
