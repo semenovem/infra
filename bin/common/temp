@@ -1,0 +1,28 @@
+#!/bin/sh
+
+PLATFORM=$(sh "${__INFRA_REPO__}/bin/util/platform.sh") || exit
+
+echo ">>>> $PLATFORM"
+
+#exit
+
+case $PLATFORM in
+"PLATFORM_RASPBIAN") watch -t -n 1 vcgencmd measure_temp ;;
+"debian" | "linux")
+  if ! which sensors >/dev/null; then
+    sudo apt update || exit 1
+    sudo apt -y install sensors || exit 1
+  fi
+
+  sensors
+  ;;
+
+"PLATFORM_MACOS_INTEL"*)
+  sudo powermetrics | grep -i "CPU die temperature"
+  exit 0
+  ;;
+*)
+  __warn__ "Not supported for OS=${OS}"
+  ;;
+esac
+
