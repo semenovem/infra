@@ -29,9 +29,6 @@ if [ -f "$PROC_FILE" ]; then
   fi
 fi
 
-# sh "${ROOT}/../../../call-script.sh" "scr-bot-evgio" "[INFO][nextcloud-backup], --- skip ---, moment=${DAY}"
-# exit
-
 # -----------------------------
 
 echo $$ > $PROC_FILE || exit
