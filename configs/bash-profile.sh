@@ -3,7 +3,7 @@
 alias ll='ls -lh'
 alias la='ls -la'
 
-if which minikube 1>/dev/null && ! which kubectl; then
+if which minikube >/dev/null 2>&1 && ! which kubectl >/dev/null 2>&1; then
   alias kubectl="minikube kubectl --"
 fi
 

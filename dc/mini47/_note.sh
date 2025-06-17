@@ -11,8 +11,8 @@ AllowTcpForwarding yes
 docker run -it --rm --name windows -p 8006:8006 \
   --device=/dev/kvm --device=/dev/net/tun \
   --cap-add NET_ADMIN \
-  -v "/mnt/dat-vol/windows:/storage:rw"\
-  -v "/mnt/dat-vol/win11arm64.iso:/boot.iso:ro" \
+  -v "/mnt/backup_vol/windows:/storage:rw"\
+  -v "/mnt/backup_vol/win11arm64.iso:/boot.iso:ro" \
   --stop-timeout 120 \
   dockurr/windows
 
