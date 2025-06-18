@@ -43,6 +43,12 @@ Host mini
   Port         22
   IdentityFile ~/.ssh/id_ecdsa
 
+Host mini47 47
+  HostName     mini47.local
+  User         evg
+  Port         22
+  IdentityFile ~/.ssh/id_ecdsa
+
 # -----------------------------
 # office
 
