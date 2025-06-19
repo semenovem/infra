@@ -24,4 +24,4 @@ if [ -z "$1" ]; then
   echo "NOT_DEFINED"
 fi
 
-echo "$1" >"${ROLE_FILE}/role"
+echo "$1" >"$ROLE_FILE"
