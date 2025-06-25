@@ -43,8 +43,9 @@ sh "${__INFRA_REPO__}/bin/util/update-infra-repo.sh" || \
 
 # platform actions --------------------------------------------
 PLATFORM_NAME="${__INFRA_REPO__}/bin/util/platform.sh"
-case "$PLATFORM_NAME" in
-  "MACOS")
+
+case "$(sh "$PLATFORM_NAME")" in
+  "PLATFORM_MACOS_"*)
   export PATH="${PATH}:${__INFRA_REPO__}/bin/macos"
   ;;
 
