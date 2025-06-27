@@ -5,7 +5,7 @@
 # PLATFORM_LINUX_UBUNTU
 # PLATFORM_LINUX_DEBIAN
 
-which "/usr/bin/raspi-config" >/dev/null && echo "PLATFORM_RASPBIAN" && exit 0
+which "/usr/bin/raspi-config" >/dev/null 2>&1 && echo "PLATFORM_RASPBIAN" && exit 0
 
 case "$(uname)" in
   'Linux') echo 'PLATFORM_LINUX' ;;
