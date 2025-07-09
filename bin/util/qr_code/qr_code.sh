@@ -197,7 +197,7 @@ case $? in
 0) ;;
 1)
   [ -n "$__DRY__" ] && __info__ "image assembly" && exit 0
-  docker build -f "${ROOT}/qr_code.dockerfile" -t "$IMAGE" "$ROOT" || exit 1
+  docker build -f "${ROOT}/qr_code.dockerfile" -t "$IMAGE" "." || exit 1
   ;;
 *) exit 1 ;;
 esac

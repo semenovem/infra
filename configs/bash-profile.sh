@@ -33,7 +33,7 @@ export __INFRA_BIN__="${__INFRA_REPO__}/bin"
   return
 
 [ ! -d "$__INFRA_REPO__" ] && \
-  >&2 echo "[ERRO][$0] variable [__INFRA_REPO__] contains not exist directory [${__INFRA_REPO__}]" && \
+  >&2 echo "[ERRO][$0] variable [__INFRA_REPO__] contains not exists directory [${__INFRA_REPO__}]" && \
   return
 
 export PATH="${PATH}:${__INFRA_REPO__}/bin/common:${__INFRA_REPO__}/bin"

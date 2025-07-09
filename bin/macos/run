@@ -1,0 +1,8 @@
+#!/bin/bash
+
+case "$1" in
+  "go")
+  docker run -it --rm -w /app -v "${PWD}:/app:ro" golang:1.24.4-bookworm bash
+  ;;
+  *) echo "use: [go]" ;;
+esac
