@@ -32,6 +32,8 @@ UUID="c70d4195-fdfd-4119-a55b-1833f6ae5920" /mnt/media_vol  ext4  defaults,nofai
 # 2T hdd2.5
 UUID="686d4b9a-f617-498e-95af-773ed147dac1" /mnt/backup_vol  ext4  defaults,nofail  0 0
 
+# 4T hdd3.5 new
+PARTUUID="038d8f59-a164-7645-953a-0c84e1d9c406" /mnt/backup_vol  ext4  defaults,nofail  0 0
 
 # Xeoma
 /usr/local/Xeoma/XeomaArchive/
