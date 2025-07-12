@@ -1,7 +1,6 @@
 
 exit
 
-# install https://brew.sh/
 # todo linux-like/get_started.md
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
@@ -47,7 +46,7 @@ networksetup
 
 
 #----------------------------------------
-# https://stackoverflow.com/questions/48910876/error-eacces-permission-denied-access-usr-local-lib-node-modules
+# https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally#manually-change-npms-default-directory
 mkdir ~/.npm-global
 npm config set prefix "${HOME}/.npm-global"
 export PATH=~/.npm-global/bin:$PATH
