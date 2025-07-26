@@ -4,3 +4,4 @@ directory: /data
 users:
   - username: "{env}WEBDAV_USER1_NAME"
     password: "{env}WEBDAV_USER1_PASSWD"
+    permissions: CRUD
