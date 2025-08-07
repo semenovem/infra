@@ -1,0 +1,54 @@
+#!/bin/bash
+
+CUR_DIR=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+
+fn_lint() {
+#      docker run --rm -t -v "$(pwd)":/app -w /app \
+#      --user "$(id -u):$(id -g)" \
+#      -v "$(go env GOCACHE):/.cache/go-build" \
+#      -v "$(go env GOMODCACHE):/.cache/mod" \
+#      -e GOMODCACHE=/.cache/mod \
+#      -e GOCACHE=/.cache/go-build \
+#      -v ~/.cache/golangci-lint:/.cache/golangci-lint -e GOLANGCI_LINT_CACHE=/.cache/golangci-lint \
+#      golangci/golangci-lint:v1.64.8-alpine \
+#      golangci-lint run --fix --config=.golangci.yml
+
+  #    golangci/golangci-lint:v2.2.2 golangci-lint run
+
+    golangci-lint run --fix -c .golangci.v2.yml
+}
+
+fn_go() {
+    docker run -it --rm -w /app -v "${PWD}:/app:ro" golang:1.24.4-bookworm bash
+}
+
+fn_stats() {
+  #     docker stats  --format "table{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"
+       docker stats  --format "table{{.Name}}\t{{.CPUPerc}}"
+}
+
+fn_2fa() {
+  docker run -it --rm totp-golang:1.0 totp-cli generate cloud iam-dev
+}
+
+fn_tool() {
+  local img="tool:1.24.5"
+#  local cur
+#  cur="$(pwd)"
+
+  if [ -z "$(docker image ls --filter=reference="$img" -q)" ]; then
+    docker build -f "${CUR_DIR}/../../docker-files/tool.dockerfile" -t "$img" "."
+  fi
+
+#    --user "$(id -u):$(id -g)" \
+  docker run -it --rm -w /app \
+    -v "${PWD}:/app:ro" --network host "$img" bash
+}
+
+if [ "$#" -eq 0 ]; then
+  functions="$(grep -Eo '^fn_[^)(]+' "$0" | sed 's/^fn_//' | tr '\n' '|')"
+   echo "use: [${functions%?}]"
+  exit 0
+fi
+
+"fn_$1"

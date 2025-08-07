@@ -83,7 +83,8 @@ __info__ "[INFO] $(date '+%Y-%m-%d %H:%M') incremental backup (rsync) start with
 
 __confirm__ "run sync ?" || exit 0
 
-rsync -a --delete --log-file=/dev/stdout --inplace --backup --quiet \
+# --log-file=/dev/stdout
+rsync -a --delete --inplace --backup --quiet \
   --rsync-path="mkdir -p ${REMOTE_PATH} && rsync" \
   --exclude '.git' \
   --exclude '.idea' \
