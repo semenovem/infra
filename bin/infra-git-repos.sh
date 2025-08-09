@@ -1,0 +1,130 @@
+#!/bin/bash
+
+set -o errexit
+
+CMD_PULL=n
+OPT_PATH=n
+ROOT_DIR="$PWD"
+DIRS_FILE="$(mktemp)"
+MAX_LENGTH_NAME=0
+
+for p in "$@"; do
+  case "$p" in
+  "-pull") CMD_PULL=y ;;
+  "-path") OPT_PATH=y ;;
+  *)
+    if [ -d "$p" ]; then
+      ROOT_DIR="$p"
+      continue
+    fi
+
+    echo "[ERRO] unknown flag [${p}]" 1>&2
+    ;;
+  esac
+done
+
+# iterate dirs
+# $1 - файл, в который записывается результат
+# $2 - directory
+# $3 - sort
+# $4 - level
+fn_iterator() {
+  local store_f="$1" dir="$2" sort="$3" level="$4" path tmp_f name index=1000
+  tmp_f="$(mktemp)"
+  ((level++))
+
+  for path in $(find "${dir}/" -not -path "${dir}/" -maxdepth 1 -type d | sort); do
+    ((index++))
+    if [ -d "${path}/.git" ]; then
+      echo "${sort}a${index} ${level} typ_git 0 ${path}" >>"$tmp_f"
+      name="$(basename "$path")"
+      len="$((${#name} + (level * 3)))"
+      [ "$len" -gt "$MAX_LENGTH_NAME" ] && MAX_LENGTH_NAME="$len"
+    else
+      fn_iterator "$tmp_f" "$path" "${sort}b${index}" "$level" ||
+        if [ $? -eq 11 ]; then ((index--)); fi
+    fi
+  done
+
+  [ -s "$tmp_f" ] || return 11
+
+  echo "${sort}1000 $((level - 1)) typ_root $((index - 1000)) $(basename "$dir")" >>"$store_f"
+  cat "$tmp_f" >>"$store_f"
+}
+
+fn_iterator "$DIRS_FILE" "$ROOT_DIR" "" "0"
+
+MAX_LENGTH_NAME="$((MAX_LENGTH_NAME + 3))"
+[ "$MAX_LENGTH_NAME" -gt "60" ] && MAX_LENGTH_NAME="60"
+
+pipe() {
+  local level type elem_count path indexes child_counts last
+  local color_state_clear not_clear branch name_len error
+
+  while read -r line; do
+    level=$(echo "$line" | awk '{print $2}')
+    type=$(echo "$line" | awk '{print $3}')
+    elem_count=$(echo "$line" | awk '{print $4}')
+    path=$(echo "$line" | awk '{print $5}')
+
+    if [ "$type" = "typ_root" ]; then
+      child_counts["$((level + 1))"]="$elem_count"
+      indexes["$((level + 1))"]=0
+    fi
+    ((indexes["$level"]++))
+    [ "${indexes[$level]}" = "${child_counts[$level]}" ] && last=y || last=
+
+    for ((i = 1; i <= "$level"; i++)); do
+      if [ "$i" -eq "$level" ]; then
+        [ "$last" = y ] && printf '`-- ' || printf '|-- '
+      else
+        [ "$i" -ne 1 ] && [ "$i" -ne "$level" ] && printf "    " || printf "|   "
+      fi
+    done
+
+    if [ "$type" = "typ_root" ]; then
+      basename "$path"
+      continue
+    fi
+
+    color_state_clear="\033[32m"
+    not_clear=" "
+    error=
+
+    git -C "$path" diff --exit-code 1>/dev/null &&
+      git -C "$path" diff --cached --exit-code 1>/dev/null ||
+      not_clear=x
+    if ! branch=$(git -C "$path" rev-parse --abbrev-ref HEAD 2>&1); then
+      error="$branch"
+      branch=""
+    fi
+
+    [ "$not_clear" = x ] && color_state_clear="\033[33m"
+
+    name_len="$((MAX_LENGTH_NAME - (level * 4)))"
+    printf "%-${name_len}s ${color_state_clear}[${not_clear}]\033[0m ${branch}" \
+      "$(basename "$path")"
+
+    [ "$OPT_PATH" = y ] && printf " \033[43m\033[30m %s \033[0m" "$path"
+
+    if [ -n "$error" ]; then
+      printf " \033[31m%s\033[0m" "$(echo "$error" | tr -s '[:space:]' ' ')"
+      echo
+      continue
+    fi
+
+    if [ "$CMD_PULL" = y ] && [ "$not_clear" != y ]; then
+      if ! error="$(GIT_SSH_COMMAND="ssh -o ConnectTimeout=1" git -C "$path" pull origin --no-rebase --no-commit -q 2>&1)"; then
+        printf " \033[31m%s\033[0m" "$(echo "$error" | tr -s '[:space:]' ' ')"
+        echo
+        continue
+      fi
+
+      printf " \033[32mpull ok\033[0m"
+    fi
+
+    echo
+  done
+}
+
+sort "$DIRS_FILE" | pipe
