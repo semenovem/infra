@@ -19,6 +19,7 @@ for p in "$@"; do
     fi
 
     echo "[ERRO] unknown flag [${p}]" 1>&2
+    exit
     ;;
   esac
 done
@@ -113,7 +114,7 @@ pipe() {
       continue
     fi
 
-    if [ "$CMD_PULL" = y ] && [ "$not_clear" != y ]; then
+    if [ "$CMD_PULL" = y ] && [ "$not_clear" != x ]; then
       if ! error="$(GIT_SSH_COMMAND="ssh -o ConnectTimeout=1" git -C "$path" pull origin --no-rebase --no-commit -q 2>&1)"; then
         printf " \033[31m%s\033[0m" "$(echo "$error" | tr -s '[:space:]' ' ')"
         echo
