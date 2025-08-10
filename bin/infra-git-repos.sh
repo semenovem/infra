@@ -4,6 +4,7 @@ set -o errexit
 
 CMD_PULL=n
 OPT_PATH=n
+OPT_SHORT_ROOT_DIR=n
 ROOT_DIR="$PWD"
 DIRS_FILE="$(mktemp)"
 MAX_LENGTH_NAME=0
@@ -12,6 +13,8 @@ for p in "$@"; do
   case "$p" in
   "-pull") CMD_PULL=y ;;
   "-path") OPT_PATH=y ;;
+  "-root-short") OPT_SHORT_ROOT_DIR=y ;;
+  "-help" | "-h") echo "flags [-pull|-path|-root-short]"; exit ;;
   *)
     if [ -d "$p" ]; then
       ROOT_DIR="$p"
@@ -24,36 +27,37 @@ for p in "$@"; do
   esac
 done
 
-# iterate dirs
 # $1 - файл, в который записывается результат
-# $2 - directory
-# $3 - sort
-# $4 - level
+# $2 - директория
+# $3 - уровень вложенности
+# $4 - префикс сортировка
+# $5 - индекс
 fn_iterator() {
-  local store_f="$1" dir="$2" sort="$3" level="$4" path tmp_f name index=1000
-  tmp_f="$(mktemp)"
+  local store_f="$1" dir="$2" level="$3" prefix="$4" index="$5" first_index="$5" path name child_counts=0
+
+  if [ -d "${dir}/.git" ]; then
+    echo "${prefix}a${index} ${level} typ_git 0 ${dir}" >>"$store_f"
+    name="$(basename "$dir")"
+    len="$((${#name} + (level * 3)))"
+    [ "$len" -gt "$MAX_LENGTH_NAME" ] && MAX_LENGTH_NAME="$len"
+    return 0
+  fi
+
+  prefix="${prefix}b${index}"
   ((level++))
 
   for path in $(find "${dir}/" -not -path "${dir}/" -maxdepth 1 -type d | sort); do
     ((index++))
-    if [ -d "${path}/.git" ]; then
-      echo "${sort}a${index} ${level} typ_git 0 ${path}" >>"$tmp_f"
-      name="$(basename "$path")"
-      len="$((${#name} + (level * 3)))"
-      [ "$len" -gt "$MAX_LENGTH_NAME" ] && MAX_LENGTH_NAME="$len"
-    else
-      fn_iterator "$tmp_f" "$path" "${sort}b${index}" "$level" ||
-        if [ $? -eq 11 ]; then ((index--)); fi
-    fi
+    fn_iterator "$store_f" "$path" "$level" "${prefix}" "$index" && ((child_counts++)) || :
   done
 
-  [ -s "$tmp_f" ] || return 11
+  [ "$child_counts" -ne 0 ] || return 11
 
-  echo "${sort}1000 $((level - 1)) typ_root $((index - 1000)) $(basename "$dir")" >>"$store_f"
-  cat "$tmp_f" >>"$store_f"
+  echo "${prefix}${first_index} $((level - 1)) typ_root ${child_counts} ${dir}" >>"$store_f"
 }
 
-fn_iterator "$DIRS_FILE" "$ROOT_DIR" "" "0"
+fn_iterator "$DIRS_FILE" "$ROOT_DIR" "0" "" "1000"
+
 
 MAX_LENGTH_NAME="$((MAX_LENGTH_NAME + 3))"
 [ "$MAX_LENGTH_NAME" -gt "60" ] && MAX_LENGTH_NAME="60"
@@ -84,7 +88,7 @@ pipe() {
     done
 
     if [ "$type" = "typ_root" ]; then
-      basename "$path"
+      printf "\033[36m%s\033[0m\n" "$([ "$OPT_SHORT_ROOT_DIR" = y ] && basename "$path" || echo "$path")"
       continue
     fi
 
