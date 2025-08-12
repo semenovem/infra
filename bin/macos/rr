@@ -40,9 +40,10 @@ fn_tool() {
     docker build -f "${CUR_DIR}/../../docker-files/tool.dockerfile" -t "$img" "."
   fi
 
-#    --user "$(id -u):$(id -g)" \
   docker run -it --rm -w /app \
-    -v "${PWD}:/app:ro" --network host "$img" bash
+    --user "$(id -u):$(id -g)" \
+    --tmpfs /.cache :exec,mode=1777 \
+    -v "${PWD}:/app:rw" --network host "$img" bash
 }
 
 if [ "$#" -eq 0 ]; then
