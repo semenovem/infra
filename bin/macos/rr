@@ -42,7 +42,7 @@ fn_tool() {
 
   docker run -it --rm -w /app \
     --user "$(id -u):$(id -g)" \
-    --tmpfs /.cache :exec,mode=1777 \
+    --tmpfs /.cache:exec,mode=1777 \
     -v "${PWD}:/app:rw" --network host "$img" bash
 }
 
