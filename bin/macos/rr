@@ -1,6 +1,14 @@
 #!/bin/bash
 
+set -o errexit
+set -o nounset
+
 CUR_DIR=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
+
+TOOL_IMG="tool:1.24.5"
+if [ -z "$(docker image ls --filter=reference="$TOOL_IMG" -q)" ]; then
+  docker build -f "${CUR_DIR}/../../docker-files/tool.dockerfile" -t "$TOOL_IMG" "."
+fi
 
 fn_lint() {
 #      docker run --rm -t -v "$(pwd)":/app -w /app \
@@ -28,22 +36,36 @@ fn_stats() {
 }
 
 fn_2fa() {
-  docker run -it --rm totp-golang:1.0 totp-cli generate cloud iam-dev
-}
-
-fn_tool() {
-  local img="tool:1.24.5"
-#  local cur
-#  cur="$(pwd)"
-
-  if [ -z "$(docker image ls --filter=reference="$img" -q)" ]; then
-    docker build -f "${CUR_DIR}/../../docker-files/tool.dockerfile" -t "$img" "."
+  local file="${__INFRA_LOCAL__}/totp" cmd name key line desc
+  if [ ! -f "$file" ]; then
+    printf "# list records\n# name key description\n\n" > "$file"
+    return 0
   fi
+
+  while IFS= read -r line; do
+    name="$(echo "$line" | awk '{print $1}')"
+    key="$(echo "$line" | awk '{print $2}')"
+    desc="$(echo "$line" | awk 'NF >= 3 { for(i=3;i<=NF;i++) printf("%s%s", $i,(i==NF?"":" ")); print "" }')"
+
+    [ -n "$cmd" ] && cmd="${cmd}; "
+    cmd="${cmd}printf '\033[0;32m--%-15s\033[0m %6s %s\n' '${name}' \"\$(TOTP_TOKEN=${key} totp-cli instant | tr -s '[:space:]' ' ')\" '${desc}'"
+
+  done <<< "$(grep -E '^[^[:space:]#]+' "$file")"
 
   docker run -it --rm -w /app \
     --user "$(id -u):$(id -g)" \
     --tmpfs /.cache:exec,mode=1777 \
-    -v "${PWD}:/app:rw" --network host "$img" bash
+    --read-only \
+    --network=none \
+    -v "${PWD}:/app:rw" \
+    "$TOOL_IMG" bash -c "$cmd"
+}
+
+fn_tool() {
+  docker run -it --rm -w /app \
+    --user "$(id -u):$(id -g)" \
+    --tmpfs /.cache:exec,mode=1777 \
+    -v "${PWD}:/app:rw" --network host "$TOOL_IMG" bash
 }
 
 if [ "$#" -eq 0 ]; then

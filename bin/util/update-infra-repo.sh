@@ -13,12 +13,10 @@ NOW=$(date "+%Y%m%d") || exit 1
 DIFF=$((NOW - PREV))
 [ "$DIFF" -eq 0 ] && [ "$1" != 'force' ] && exit 0
 
-if ! cd "$__INFRA_REPO__"; then
-  >&2 echo "[ERRO][$0] cd to [${__INFRA_REPO__}]"
-  exit 1
-fi
+[ ! -d "$__INFRA_LOCAL__" ] && mkdir "$__INFRA_LOCAL__"
+chmod -R 0700 "$__INFRA_LOCAL__"
 
-BRANCH=$(git rev-parse --abbrev-ref HEAD) || exit
-git pull origin "$BRANCH" || exit
+BRANCH=$(git -C "$__INFRA_REPO__" rev-parse --abbrev-ref HEAD) || exit
+git -C "$__INFRA_REPO__" pull origin "$BRANCH" || exit
 
 echo "$NOW" >"$LAST_UPDATE_FILE" || exit
