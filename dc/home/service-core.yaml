@@ -41,7 +41,8 @@ services:
     volumes:
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
       - "./nginx/conf:/etc/nginx/conf.d:ro"
-      - "../../.local/certbot/www:/var/www/certbot:ro"
+      # - "../../.local/certbot/www:/var/www/certbot:ro"
+      - "./nginx/.well-known:/var/www/certbot:ro"
       - "../../.local/certbot/conf:/etc/nginx/ssl:ro"
       - "../../.local/nginx/htpasswd:/etc/nginx/.htpasswd:ro"
       - "/home/evg/tmp/_cache_nginx:/var/cache/nginx:rw"

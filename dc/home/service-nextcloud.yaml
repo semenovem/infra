@@ -38,10 +38,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 500M
+          cpus: '3'
+          memory: 2G
         reservations:
-          memory: 500M
+          memory: 2G
       restart_policy:
         delay: 5s
         condition: any
@@ -119,8 +119,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '3'
-          memory: 3G
+          cpus: '5'
+          memory: 8G
       restart_policy:
         delay: 5s
         condition: any
