@@ -192,7 +192,7 @@ services:
     ports:
       - 8083:8083
     volumes:
-      - "../../.local/rtpstoweb.json:/config/config.json:rw"
+      - "../../.local/cctv-rpts-to-web.json:/config/config.json:rw"
     deploy:
       resources:
         limits:
@@ -201,5 +201,5 @@ services:
       restart_policy:
         delay: 5s
         condition: any
-      replicas: 0
-    read_only: true
+      replicas: 1
+    # read_only: true
