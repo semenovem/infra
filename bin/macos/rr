@@ -30,11 +30,6 @@ fn_go() {
     docker run -it --rm -w /app -v "${PWD}:/app:ro" golang:1.24.4-bookworm bash
 }
 
-fn_stats() {
-  #     docker stats  --format "table{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"
-       docker stats  --format "table{{.Name}}\t{{.CPUPerc}}"
-}
-
 fn_2fa() {
   local file="${__INFRA_LOCAL__}/totp" cmd name key line desc
   if [ ! -f "$file" ]; then
