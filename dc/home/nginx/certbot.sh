@@ -8,12 +8,20 @@ echo "__INFRA_LOCAL__=$__INFRA_LOCAL__"
   echo "[ERRO][$0] dir in __INFRA_LOCAL__=${__INFRA_LOCAL__} not exists" && \
   exit 1
 
-for DOMAIN in cloud.evgio.com git.evgio.com grafana.evgio.com cam.evgio.com; do
-  docker run -it --rm \
+DOMAINS="cloud.evgio.com git.evgio.com grafana.evgio.com cam.evgio.com"
+DOMAINS="cam.evgio.com"
+DOMAINS="immich.evgio.com"
+
+for DOMAIN in $DOMAINS; do
+  docker run --name certbot -it --rm \
     -v "${ROOT}/.well-known:/var/www/certbot:rw" \
     -v "${__INFRA_LOCAL__}/certbot/conf:/etc/letsencrypt:rw" \
     certbot/certbot:v4.2.0 \
-    certonly --quiet --webroot --webroot-path /var/www/certbot -d "$DOMAIN"
+    certonly  --webroot --webroot-path /var/www/certbot -d "$DOMAIN"
+
+# --quiet
+  # exit 0
+    # -u "$(id -u):$(id -g)" \
 
   if [ "$?" -eq 0 ]; then
     printf "\033[0;32m[INFO]\033[0m ok [%s]\n" "$DOMAIN"
@@ -24,4 +32,3 @@ done
 
 # reload config nginx
 docker exec -it core-nginx nginx -s reload
-

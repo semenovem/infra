@@ -8,6 +8,7 @@ CONST_PROJ_LOGGING="home-logging"
 CONST_PROJ_MONITORING="home-monitoring"
 CONST_PROJ_GITLAB="home-gitlab"
 CONST_PROJ_NEXTCLOUD="home-nextcloud"
+CONST_PROJ_IMMICH="home-immich"
 
 CONST_PROJ_YA_DISK="home-ya-disk" ## TODO
 CONST_PROJ_MINIDLNA="home-minidlna" ## TODO
@@ -68,6 +69,7 @@ func_analysis_arguments() {
       "nextcloud")  proj="$CONST_PROJ_NEXTCLOUD" ;;
       "monitoring") proj="$CONST_PROJ_MONITORING" ;;
       "logging")    proj="$CONST_PROJ_LOGGING" ;;
+      "immich")     proj="$CONST_PROJ_IMMICH" ;;
       "all")        all_selected=1; proj="ALL" ;;
 
       "eof_arg") ;;
@@ -164,6 +166,12 @@ func_exe() {
         "$CONST_PROJ_LOGGING")
           docker compose -p "$CONST_PROJ_LOGGING" --project-directory "$ROOT" \
             -f "${ROOT}/service-logging.yaml" \
+            --parallel=3 up --quiet-pull --detach
+        ;;
+
+        "$CONST_PROJ_IMMICH")
+          docker compose -p "$CONST_PROJ_IMMICH" --project-directory "${ROOT}/immich" \
+            -f "${ROOT}/immich/service-immich.yaml" \
             --parallel=3 up --quiet-pull --detach
         ;;
       esac
