@@ -17,6 +17,10 @@ docker run -it --rm --name windows -p 8006:8006 \
   dockurr/windows
 
 
+sudo useradd -m -s /bin/bash backman
+# authorization <- добавить ключи home пользователя
+# создать директорию для резервных копий
+
 
 ------------
 # fstab

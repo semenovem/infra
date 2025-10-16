@@ -1,0 +1,5 @@
+
+
+diff -bur folder1/ folder2/
+
+ls -lR --time-style=long-iso "/dir/dir"  | grep ^- | tr -s ' ' | cut -d' ' -f5- | sort -k 4 >files_output.txt

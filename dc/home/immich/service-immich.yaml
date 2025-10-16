@@ -14,12 +14,16 @@ networks:
     name: net-immich
   net-nginx:
     name: net-nginx
+  net-prometheus:
+    name: net-prometheus
+
 
 services:
   immich-server:
     networks:
       - net-immich
       - net-nginx
+      - net-prometheus
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     # extends:
@@ -41,6 +45,8 @@ services:
     restart: always
     healthcheck:
       disable: false
+    deploy:
+      replicas: 1
 
   immich-machine-learning:
     networks:
