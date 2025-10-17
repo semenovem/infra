@@ -35,6 +35,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/raid4t_soft/nextcloud/app/data/evg/files/photos:/mnt/media/nextcloud_evg:ro
       # - /mnt/soft/photo/foto_job:/mnt/media/junk/foto_job:ro
+      - /mnt/raid4t_soft/evg/photo/ya_evg_photo:/mnt/media/evg_photo_ya:ro
     env_file:
       - .env
     # ports:
