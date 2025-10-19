@@ -1,0 +1,2 @@
+
+0 2 * * * sh /home/evg/_infra/dc/447/immich/sync-immich.sh &> /mnt/vol1/immich/logs/crone-sync.log
