@@ -1,2 +1,6 @@
 
 0 2 * * * sh /home/evg/_infra/dc/447/immich/sync-immich.sh &> /mnt/vol1/immich/logs/crone-sync.log
+
+
+rsync -azP --delete home:/mnt/raid4t_soft/evg/photo/ /mnt/vol1/immich/external-media
+rsync -azP --delete mini47:/mnt/backup_vol/backups/nextcloud/evg/shared/photos/ /mnt/vol1/immich/from-nextcloud

@@ -34,6 +34,8 @@ services:
       - ${UPLOAD_LOCATION}:/data
       - /etc/localtime:/etc/localtime:ro
       - /mnt/vol1/immich/external-media/icloud_shared:/mnt/media/icloud_shared:ro
+      - /mnt/vol1/immich/external-media/ya_evg_photo:/mnt/media/ya_evg_photo:ro
+      - /mnt/vol1/immich/from-nextcloud:/mnt/media/from-nextcloud:ro
     env_file:
       - .env
     ports:
