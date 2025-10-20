@@ -26,6 +26,9 @@ if [ -n "$DO_RESTORE" ]; then
     | docker exec -i immich_postgres psql --dbname="$DB_DATABASE_NAME" --username="$DB_USERNAME"  
 fi
 
+export UID="$(id -u)"
+export GID="$(id -g)"
+
 
 docker compose -p "447" --project-directory "${ROOT}/immich" \
     -f "${ROOT}/immich/service-immich.yaml" \

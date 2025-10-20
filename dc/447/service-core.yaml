@@ -33,3 +33,24 @@ services:
     deploy:
       replicas: 1
     read_only: true
+
+
+  # # https://github.com/hacdias/webdav
+  # webdav:
+  #   container_name: core-webdav
+  #   hostname: webdav
+  #   image: hacdias/webdav:v5.8.1
+  #   volumes:
+  #     - ./.wevdav-conf.yml:/config.yml:ro
+  #     - /mnt/vol1/transfer-photo/wip_photo:/data/wip-photo:rw
+  #     # - /mnt/vol1/transfer-photo/wip_photo:/data/wip-photo:rw
+  #   ports:
+  #     - 6060:8080
+  #   command: -c /config.yml
+  #   user: "${UID}:${GID}"
+  #   deploy:
+  #     restart_policy:
+  #       delay: 5s
+  #       condition: any
+  #     replicas: 0
+  #   read_only: true
