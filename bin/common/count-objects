@@ -5,8 +5,8 @@ ROOT="${1:-.}"
 
 exec 2>/dev/null
 
-files="$(find "$ROOT" -type f -printf '.' | wc -c)"
-dirs="$(find "$ROOT" -type d -printf '.' | wc -c)"
-links="$(find "$ROOT" -type l - '.' | wc -c)"
+files="$(find "$ROOT" -type f | wc -l)" 
+dirs="$(find "$ROOT" -type d | wc -l)"
+links="$(find "$ROOT" -type l | wc -l)"
 
 printf "f:%-6d d:%-6d l:%-6d\n" "$files" "$dirs" "$links"
