@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# рекурсивный подсчёт файлов/директорий/симлинков
+
+ROOT="${1:-.}"
+
+exec 2>/dev/null
+
+files="$(find "$ROOT" -type f -printf '.' | wc -c)"
+dirs="$(find "$ROOT" -type d -printf '.' | wc -c)"
+links="$(find "$ROOT" -type l - '.' | wc -c)"
+
+printf "f:%-6d d:%-6d l:%-6d\n" "$files" "$dirs" "$links"
