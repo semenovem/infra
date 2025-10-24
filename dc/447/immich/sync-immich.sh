@@ -3,6 +3,7 @@
 # создаем дамп БД
 # копируем данные
 # /mnt/vol1/immich/logs/crone-sync.log
+# sudo journalctl -u cron.service
 
 set -o errexit
 set -o nounset
