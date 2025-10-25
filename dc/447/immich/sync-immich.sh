@@ -44,7 +44,10 @@ rsync -azP --delete /mnt/vol1/immich/immich_data "$SYNC_COPY_DIR"
 
 # ---------- mini47
 fn_report_info "sync to mini47"
-rsync -azP --delete "$SYNC_COPY_DIR" mini47:/mnt/backup_vol/immich \
+rsync -azP --delete \
+    --exclude 'immich_data/encoded-video' \
+    --exclude 'immich_data/thumbs' \
+    "$SYNC_COPY_DIR" mini47:/mnt/backup_vol/immich \
     || fn_report_failure "rsync to mini47"
 
 
