@@ -33,9 +33,10 @@ services:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/data
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/vol1/immich/external-media/icloud_shared:/mnt/media/icloud_shared:ro
-      - /mnt/vol1/immich/external-media/ya_evg_photo:/mnt/media/ya_evg_photo:ro
+      # - /mnt/vol1/immich/external-media/icloud_shared:/mnt/media/icloud_shared:ro
+      # - /mnt/vol1/immich/external-media/ya_evg_photo:/mnt/media/ya_evg_photo:ro
       - /mnt/vol1/immich/from-nextcloud:/mnt/media/from-nextcloud:ro
+      - /mnt/vol1/photo-lib:/photos:ro
     env_file:
       - .env
     ports:
