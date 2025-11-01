@@ -14,6 +14,11 @@ sudo dd status=progress if=rasbp.img of=/dev/disk4
 
 sudo diskutil eject /dev/disk4
 
+
+# --------------- расширение диска до полного размера после накатки сжатого образа
+resize2fs /dev/mmcblk0p2
+
+
 # ------------------------
 # сжатие образа
 # https://askubuntu.com/questions/1174487/re-size-the-img-for-smaller-sd-card-how-to-shrink-a-bootable-sd-card-image
