@@ -17,6 +17,7 @@ set +o allexport
 
 fn_report_failure() {
     echo "[ERRO][sync-immich][$(date +%m-%d_%H:%M)] $*"
+    bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[ERRO][mini447][sync-immich] $*"
 }
 
 fn_report_info() {
