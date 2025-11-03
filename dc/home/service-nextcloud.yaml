@@ -9,7 +9,7 @@ services:
 # ------------------------- nextcloud -------------------------
 # -------------------------------------------------------------
   postgres:
-    container_name: nextcloud-postgres
+    container_name: nextcloud-db
     hostname: nextcloud-postgres
     networks:
       - net-nextcloud
@@ -76,6 +76,7 @@ services:
   # https://docs.nextcloud.com/server/latest/admin_manual/maintenance/backup.html#maintenance-mode
   # docker exec -it -u www-data nextcloud-app php occ maintenance:mode --on
   # docker exec -it -u www-data nextcloud-app php occ maintenance:mode --off
+  # update version inside container app: php occ upgrade
   nextcloud-app:
     container_name: nextcloud-app
     hostname: nextcloud-app
@@ -83,7 +84,7 @@ services:
       - 7007:80
     networks:
       - net-nextcloud
-    image: nextcloud:30.0.6-apache
+    image: nextcloud:32.0.1-apache
     volumes:
       - /mnt/raid4t_soft/nextcloud/app:/var/www/html
       - ./nextcloud/trusted.config.php:/var/www/html/config/trusted.config.php:ro

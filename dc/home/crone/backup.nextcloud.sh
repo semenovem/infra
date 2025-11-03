@@ -29,6 +29,17 @@ if [ -f "$PROC_FILE" ]; then
   fi
 fi
 
+# ------------------ database
+DB_BKP_FILE="/mnt/vol_backup_1/nextcloud_db_bkp/nextcloud-sqlbkp_$(date +"%d")"
+DB_ARCHIVE_FILE="${DB_BKP_FILE}.tar.gz"
+docker exec -it -e "PGPASSWORD=nextcloud" nextcloud-db pg_dump -U nextcloud nextcloud > "$DB_BKP_FILE" && \
+tar czf "${DB_ARCHIVE_FILE}" "$DB_BKP_FILE" && rm -rf "$DB_BKP_FILE"
+
+rsync -azP --size-only --delete -e "ssh -p 4022 -i /home/evg/.ssh/id_ecdsa" \
+    "/mnt/vol_backup_1/nextcloud_db_bkp" evg@localhost:/mnt/backup_vol/nextcloud_backups \
+      || echo "[ERRO][nextcloud-backup] save db to remote"
+
+
 # -----------------------------
 
 echo $$ > $PROC_FILE || exit
