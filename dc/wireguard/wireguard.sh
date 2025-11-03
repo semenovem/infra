@@ -8,10 +8,6 @@ wg genkey | tee wg-server-srv2-prv.key |  wg pubkey > wg-server-srv2-pub.key
 wg genkey | tee wg-alex-private.key |  wg pubkey > wg-alex-public.key
 
 
-# sudo wg-quick up wg0
-
-
-
 # home 51820-51820
 
 
@@ -20,8 +16,6 @@ apt/dnf install qrencode
 
 qrencode -t ansiutf8 -r wg.conf
 qrencode -t png -o file_with_qr.png -r wg.conf
-
-
 
 
 
@@ -36,8 +30,10 @@ qrencode -t png -o file_with_qr.png -r wg.conf
 
 # sudo wg-quick up wg0
 # sudo wg-quick down wg0
+# wg show
 # sudo systemctl enable wg-quick@wg0
 # sudo systemctl status wg-quick@wg0
+
 # sudo ufw allow 44400/udp
 # sudo ufw status
 
