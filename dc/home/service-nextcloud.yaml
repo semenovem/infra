@@ -15,7 +15,7 @@ services:
       - net-nextcloud
     image: postgres:17.0-alpine3.20
     volumes:
-      - /mnt/raid4t_soft/nextcloud/db:/var/lib/postgresql/data:rw
+      - /mnt/md1/nextcloud_db:/var/lib/postgresql/data:rw
     environment:
       POSTGRES_DB: nextcloud
       POSTGRES_USER: nextcloud
