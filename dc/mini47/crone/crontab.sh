@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # crontab
-# /bin/bash "/home/evg/_infra/dc/mini47/crone/crontab.sh"
+# /bin/bash "/home/evg/_infra/dc/mini47/crone/crontab.sh" &> /mnt/backup_vol/logs/mini47-fwd-check.log
+
+bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[INFO][mini47] start check ssh forwarding"
 
 # Проверить, что интернет есть
 if ! ping -c 2 ya.ru > /dev/null 2>&1; then
@@ -23,32 +25,33 @@ fn_is_verification() {
 
 # $@ ssh conection params
 fn_check() {
-    OUT_MSG="$(ssh "$@" -i /home/evg/.ssh/id_ecdsa 'ssh -p 4022 test13579@localhost hostname' 2>&1 | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')" 
-    if echo "$OUT_MSG" | grep -q "Permission denied"; then
-        return 0
-    fi
+  OUT_MSG="$(ssh "$@" -i /home/evg/.ssh/id_ecdsa 'ssh -p 4022 test13579@localhost hostname' 2>&1 | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+  if echo "$OUT_MSG" | grep -q "Permission denied"; then
+    return 0
+  fi
 
-    echo "[ERRO][$0] no connect to [-p ${2} ${3}]: [${OUT_MSG}]"
-    return 1
+  echo "[ERRO][$0] no connect to [-p ${2} ${3}]: [${OUT_MSG}]"
+  bash "/home/evg/_infra/bin/util/bot-evgio.sh" "$(fn_notify_msg "[-p ${2} ${3}]")"
+  return 1
 }
 
-if ! fn_check -p 2022 forwardman@home.evgio.com; then 
-    bash "/home/evg/_infra/bin/util/bot-evgio.sh" "$(fn_notify_msg "home")"
+if ! fn_check -p 2022 forwardman@home.evgio.com; then
+    if ! fn_is_verification; then
+      sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh stop 'ssh-fwrd-home.conf'
+      sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh start 'ssh-fwrd-home.conf'
+  fi
 fi
 
-
-if ! fn_check -p 2122 forwardman@home.evgio.com; then 
-    if ! fn_is_verification; then
-        sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh stop 'ssh-fwrd-home-srv1.conf'
-        sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh start 'ssh-fwrd-home-srv1.conf'
-    fi
+if ! fn_check -p 2122 forwardman@home.evgio.com; then
+  if ! fn_is_verification; then
+      sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh stop 'ssh-fwrd-home-srv1.conf'
+      sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh start 'ssh-fwrd-home-srv1.conf'
+  fi
 fi
 
-if ! fn_check -p 2257 forwardman@msk1.evgio.com; then 
-    bash "/home/evg/_infra/bin/util/bot-evgio.sh" "$(fn_notify_msg "msk1")"
-
-    if ! fn_is_verification; then
-        sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh stop 'ssh-fwrd-msk1.conf'
-        sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh start 'ssh-fwrd-msk1.conf'
-    fi
+if ! fn_check -p 2257 forwardman@msk1.evgio.com; then
+  if ! fn_is_verification; then
+      sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh stop 'ssh-fwrd-msk1.conf'
+      sh /home/evg/_infra/dc/mini47/systemctl/run-task.sh start 'ssh-fwrd-msk1.conf'
+  fi
 fi
