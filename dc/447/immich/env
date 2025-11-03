@@ -1,0 +1,12 @@
+# static value for .env file
+
+UPLOAD_LOCATION=/mnt/vol1/immich/immich_data
+DB_DATA_LOCATION=/mnt/vol1/immich/immich_db
+TZ=MSK
+IMMICH_VERSION=v2.2.1
+
+DB_PASSWORD=
+DB_USERNAME=postgres
+DB_DATABASE_NAME=immich
+
+IMMICH_TELEMETRY_INCLUDE=all
