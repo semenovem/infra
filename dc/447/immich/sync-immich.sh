@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# crontab
+# CRONE_EXEC=y
+# 0 0 * * * /bin/bash "/home/evg/_infra/dc/447/immich/sync-immich.sh"
+
+[ "$CRONE_EXEC" = y ] && exec >> "/mnt/vol1/immich/logs/crone-sync.log" 2>&1
+
+echo "[INFO][mini477][$(date +%H:%M)] start sync immich"
+bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[INFO][mini477][sync-immich] start sync immich"
+
+
 # создаем дамп БД
 # копируем данные
 # /mnt/vol1/immich/logs/crone-sync.log
@@ -40,7 +50,7 @@ docker exec -t immich_postgres pg_dumpall --clean --if-exists --username="$DB_US
 
 mv "${SYNC_COPY_DIR}/tmp_dump.sql.gz" "${SYNC_COPY_DIR}/dump.sql.gz"
 
-rsync -azP --size-only --delete \
+rsync -azPq --size-only --delete \
     --exclude 'immich_data/encoded-video' \
     --exclude 'immich_data/thumbs' \
     /mnt/vol1/immich/immich_data "$SYNC_COPY_DIR"
@@ -48,14 +58,12 @@ rsync -azP --size-only --delete \
 
 # ---------- mini47
 fn_report_info "sync to mini47"
-rsync -azP --size-only --delete \
-    "$SYNC_COPY_DIR" mini47:/mnt/backup_vol/immich \
+rsync -azPq --size-only --delete "$SYNC_COPY_DIR" mini47:/mnt/backup_vol/immich \
     || fn_report_failure "rsync to mini47"
 
 
 # ---------- home
 fn_report_info "sync to home"
-rsync -azP --size-only --delete \
-    "$SYNC_COPY_DIR" home:/mnt/raid4t_soft/immich \
+rsync -azPq --size-only --delete "$SYNC_COPY_DIR" home:/mnt/raid4t_soft/immich \
     || fn_report_failure "rsync to home server"
 
