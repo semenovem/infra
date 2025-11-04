@@ -87,8 +87,8 @@ services:
     image: nextcloud:32.0.1-apache
     volumes:
       - /mnt/raid4t_soft/nextcloud/app:/var/www/html
-      - ./nextcloud/trusted.config.php:/var/www/html/config/trusted.config.php:ro
-      - ./nextcloud/crone.sh:/nextcloud-crone.sh:ro
+      - ./trusted.config.php:/var/www/html/config/trusted.config.php:ro
+      - ./crone.sh:/nextcloud-crone.sh:ro
     entrypoint:
       - sh
       - -c

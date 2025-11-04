@@ -152,8 +152,8 @@ func_exe() {
         ;;
 
         "$CONST_PROJ_NEXTCLOUD")
-          docker compose -p "$CONST_PROJ_NEXTCLOUD" --project-directory "$ROOT" \
-            -f "${ROOT}/service-nextcloud.yaml" \
+          docker compose -p "$CONST_PROJ_NEXTCLOUD" --project-directory "${ROOT}/nextcloud" \
+            -f "${ROOT}/nextcloud/service-nextcloud.yaml" \
             --parallel=3 up --quiet-pull --detach
         ;;
 
