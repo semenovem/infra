@@ -1,8 +1,12 @@
 #!/bin/bash
 
 # crontab
-# /bin/bash "/home/evg/_infra/dc/mini47/crone/crontab.sh" &> /mnt/backup_vol/logs/mini47-fwd-check.log
+# CRONE_EXEC=y
+# 0 1,9,17 * * * /bin/bash "/home/evg/_infra/dc/mini47/crone/crontab.sh"
 
+[ "$CRONE_EXEC" = y ] && exec >> "/mnt/backup_vol/logs/mini47-fwd-check.log" 2>&1
+
+echo "[INFO][mini47][$(date +%H:%M)] start check ssh forwarding"
 bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[INFO][mini47] start check ssh forwarding"
 
 # Проверить, что интернет есть
