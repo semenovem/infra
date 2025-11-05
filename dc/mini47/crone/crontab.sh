@@ -6,13 +6,17 @@
 
 [ "$CRONE_EXEC" = y ] && exec >> "/mnt/backup_vol/logs/mini47-fwd-check.log" 2>&1
 
-echo "[INFO][mini47][$(date +%H:%M)] start check ssh forwarding"
-bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[INFO][mini47] start check ssh forwarding"
+log_prefix() {
+    echo "[mini47][fwd][$(date +%m-%d_%H:%M)]"
+}
+
+echo "[INFO]$(log_prefix) check ssh forwarding"
+bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[INFO]$(log_prefix) check ssh forwarding"
 
 # Проверить, что интернет есть
 if ! ping -c 2 ya.ru > /dev/null 2>&1; then
-    echo "[WARN][$0] no internet connecion"
-    bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[WARN] mini47 no internet connecion"
+    echo "[WARN]$(log_prefix) no internet connecion"
+    bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[WARN]$(log_prefix) no internet connecion"
     exit 1
 fi
 
@@ -20,7 +24,7 @@ OUT_MSG=
 
 # $1 name of endpoint
 fn_notify_msg() {
-    echo "[ERRO][mini47] ssh forwarding to ${1} does not work: [${OUT_MSG}]"
+    echo "[ERRO]$(log_prefix) ssh forwarding to ${1} does not work: [${OUT_MSG}]"
 }
 
 fn_is_verification() {
@@ -34,7 +38,7 @@ fn_check() {
     return 0
   fi
 
-  echo "[ERRO][$0] no connect to [-p ${2} ${3}]: [${OUT_MSG}]"
+  echo "[ERRO]$(log_prefix) no connect to [-p ${2} ${3}]: [${OUT_MSG}]"
   bash "/home/evg/_infra/bin/util/bot-evgio.sh" "$(fn_notify_msg "[-p ${2} ${3}]")"
   return 1
 }

@@ -16,7 +16,7 @@ msg_prefix() {
 [ "$CRONE_EXEC" = y ] && exec >> '/mnt/vol1/immich/logs/crone-sync.log' 2>&1
 
 echo "[INFO]$(msg_prefix) start sync immich"
-bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[INFO]$(msg_prefix) start sync immich"
+bash "/home/evg/_infra/bin/util/bot-evgio.sh" "[INFO]$(msg_prefix) sync immich"
 
 set -o allexport
 . "${ROOT}/.env"
@@ -32,7 +32,7 @@ fn_report_info() {
 }
 
 SYNC_COPY_DIR='/mnt/vol1/immich/synchronized-copy'
-if [ ! -d "$SYNC_COPY_DIR" ]; then 
+if [ ! -d "$SYNC_COPY_DIR" ]; then
     fn_report_info "not exists [${SYNC_COPY_DIR}] - creating"
     mkdir -p "$SYNC_COPY_DIR"
 fi
