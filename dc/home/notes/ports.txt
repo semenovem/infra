@@ -1,0 +1,20 @@
+
+forward ports
+
+ssh(home svc) 2022 port
+openvpn       1194 (tcp&udp)
+home          80
+home          443 (tcp&udp)
+tmp-socsks    10080 (tcp&udp)
+git           1999
+home-wg       51820 (udp)
+mssql-bot     1433
+
+
+ssh(srv1)     2122
+srv1-WG       50555 (udp)
+
+
+ssh(srv2)     2222
+srv2-WG       51820 (udp)
+
