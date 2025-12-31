@@ -72,6 +72,7 @@ services:
       - ./configs/wevdav-conf.yml:/config.yml:rw
       - /mnt/backup_vol/content:/data/content:rw
       - /mnt/backup_vol/download_youtube:/data/download_youtube:rw
+      - /mnt/backup_vol:/data/backups-storage:ro
     ports:
       - 6060:6060
     command: -c /config.yml
