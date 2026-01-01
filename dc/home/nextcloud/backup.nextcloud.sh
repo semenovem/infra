@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # sudo grep --color -i cron /var/log/syslog
 
@@ -8,7 +8,6 @@
 
 set -o errexit
 
-ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 PROC_FILE="/home/evg/proc/backup.nextcloud.pid"
 DAY=$(date +%m%d%H%M)
 LOG_DIR="/home/evg/logs/crone.nextcloud"
@@ -113,6 +112,7 @@ func_sync() {
 
 # to get the contents of a directory use the trailing slash
 echo 'media/' > "$EXCLUDE_FILE"
+echo 'edu/GolangProfessional/' >> "$EXCLUDE_FILE"
 func_sync 'evg' '/mnt/soft/nextcloud/app/data/evg/files/'
 
 

@@ -4,7 +4,8 @@ exit
 # todo linux-like/get_started.md
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
-
+brew install gnu-tar
+which gtar # this is the full linux version of tar
 
 ### mount remote directory via ssh
 # https://osxfuse.github.io/
