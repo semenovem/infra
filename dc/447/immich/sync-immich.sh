@@ -61,11 +61,11 @@ fn_sync_to() {
     fn_report_info "sync to ${n}"
 
     echo "[INFO]$(msg_prefix) ${n} before: $(ssh "$n" "./_infra/bin/common/count-objects '${p}'")"
-    rsync -azPq --size-only --delete "$SYNC_COPY_DIR" 'mini47:/mnt/backup_vol/immich' \
+    rsync -azPq --size-only --delete "$SYNC_COPY_DIR" "${n}:${p}" \
         || fn_report_failure "rsync to ${n}"
 
     echo "[INFO]$(msg_prefix) ${n} after : $(ssh "$n" "./_infra/bin/common/count-objects '${p}'")"
 }
 
-fn_sync_to 'mini47' '/mnt/backup_vol/immich/synchronized-copy'
-fn_sync_to 'home' '/mnt/raid4t_soft/immich/synchronized-copy'
+fn_sync_to 'mini47' '/mnt/backup_vol/immich'
+fn_sync_to 'home' '/mnt/raid4t_soft/immich'
