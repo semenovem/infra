@@ -8,7 +8,7 @@ services:
   # https://github.com/alexta69/metube
   metube:
     container_name: metube
-    image: ghcr.io/alexta69/metube
+    image: ghcr.io/alexta69/metube:2026.01.02
     ports:
       - '8005:8081'
     volumes:
@@ -27,30 +27,30 @@ services:
       replicas: 1
 
 
-  minidlna: 
-    container_name: minidlna 
+  minidlna:
+    container_name: minidlna
     build:
       context: ../../docker-files
       dockerfile: minidlna.dockerfile
     image: mini47/minidlna:1.0
-    volumes: 
+    volumes:
       - ./configs/minidlna-mini47.conf:/app/minidlna.conf:ro
       - /mnt/ramfs/minidlna/cache:/app/cache:rw
       - /mnt/ramfs/minidlna/logs:/app/logs:rw
-      
+
       - /mnt/backup_vol/content:/media1:ro
-      - /mnt/backup_vol/download_youtube:/media2/download_youtube:ro 
+      - /mnt/backup_vol/download_youtube:/media2/download_youtube:ro
     command:
-      - sh 
-      - -c 
+      - sh
+      - -c
       - |
-        minidlnad -f "/app/minidlna.conf" -P "/tmp/minidlna.pid" -R -r 
+        minidlnad -f "/app/minidlna.conf" -P "/tmp/minidlna.pid" -R -r
         tail -f /dev/null
     # environment:
-    #   - MINIDLNA_media_dir=V,/media 
-    #   - MINIDLNA_friendly_name=MiniDLNA 
-    #   - MINIDLNA_merge_media_dirs=yes 
-    #   - MINIDLNA_force_sort_criteria= upnp:class, upnp:originalTrackNumber, dc:title 
+    #   - MINIDLNA_media_dir=V,/media
+    #   - MINIDLNA_friendly_name=MiniDLNA
+    #   - MINIDLNA_merge_media_dirs=yes
+    #   - MINIDLNA_force_sort_criteria= upnp:class, upnp:originalTrackNumber, dc:title
     #   - MINIDLNA_root_container=B
     network_mode: host
     deploy:
@@ -140,7 +140,7 @@ services:
       restart_policy:
         delay: 5s
         condition: any
-      replicas: 1 
+      replicas: 1
 
 
   pihole:
