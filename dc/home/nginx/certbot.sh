@@ -8,7 +8,7 @@ echo "__INFRA_LOCAL__=$__INFRA_LOCAL__"
   echo "[ERRO][$0] dir in __INFRA_LOCAL__=${__INFRA_LOCAL__} not exists" && \
   exit 1
 
-DOMAINS="cloud.evgio.com git.evgio.com grafana.evgio.com cam.evgio.com"
+DOMAINS="cloud.evgio.com git.evgio.com grafana.evgio.com cam.evgio.com immich.evgio.com media.evgio.com"
 DOMAINS="cam.evgio.com"
 DOMAINS="immich.evgio.com"
 

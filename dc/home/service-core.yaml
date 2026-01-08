@@ -27,6 +27,8 @@ services:
   # .local/nginx/htpasswd
   nginx:
     container_name: core-nginx
+    build:
+      dockerfile: nginx/nginx.dockerfile
     networks:
       - net-nginx
       - net-home
@@ -34,7 +36,7 @@ services:
       - net-nextcloud
       - net-monitoring
       - net-logging
-    image: nginx:1.27.5-bookworm-perl
+    # image: nginx:1.27.5-bookworm-perl
     ports:
       - 80:80
       - 443:443
@@ -52,6 +54,7 @@ services:
       #     size: 10g
       #     mode: 0777
       - "./cctv-rtsp-to-web/www:/var/www/cctv-rtsp-to-web:ro"
+      - "/mnt/vol_media_1/torrents:/mnt/media/torrents:ro"
     # logging:
     #   driver: "fluentd"
     #   options:

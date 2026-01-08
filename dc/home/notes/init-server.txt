@@ -26,12 +26,7 @@ ls -lh /usr/disk-img/disk-xeoma.ext4
 
 
 # --- SSH -----------------------------------------------------
-vim /etc/ssh/sshd_config
-PasswordAuthentication no
-PermitRootLogin no
-
-systemctl restart sshd.service
-
+os/linux-like/ssh.sh
 
 
 # -- openvpn --------------------------------------------------

@@ -7,7 +7,7 @@ sudo vim /etc/ssh/sshd_config
 PasswordAuthentication no
 PermitRootLogin no
 AllowTcpForwarding yes
-#GatewayPorts yes
+GatewayPorts yes
 
 # setenforce 0 - если ошибка по новому порту
 systemctl restart sshd.service
@@ -16,6 +16,8 @@ systemctl restart sshd.service
 ### показать логи ssh
 journalctl -u ssh -f
 
+
+# --- Usage example -----------------------------------------------------
 
 ############################################################
 # SSH: Run Commands or Scripts Remotely
