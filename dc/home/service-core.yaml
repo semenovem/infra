@@ -27,8 +27,7 @@ services:
   # .local/nginx/htpasswd
   nginx:
     container_name: core-nginx
-    build:
-      dockerfile: nginx/nginx.dockerfile
+    image: nginx:1.29.4-perl
     networks:
       - net-nginx
       - net-home
@@ -36,7 +35,6 @@ services:
       - net-nextcloud
       - net-monitoring
       - net-logging
-    # image: nginx:1.27.5-bookworm-perl
     ports:
       - 80:80
       - 443:443
