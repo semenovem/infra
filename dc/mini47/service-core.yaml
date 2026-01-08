@@ -67,7 +67,7 @@ services:
   # https://github.com/hacdias/webdav
   webdav:
     container_name: webdav
-    image: hacdias/webdav:v5.8.0
+    image: hacdias/webdav:v5.10.2
     volumes:
       - ./configs/wevdav-conf.yml:/config.yml:rw
       - /mnt/backup_vol/content:/data/content:rw
@@ -143,9 +143,10 @@ services:
       replicas: 1
 
 
+  # https://pi-hole.net/
   pihole:
     container_name: pihole
-    image: pihole/pihole:latest
+    image: pihole/pihole:2025.11.1
     ports:
       # DNS Ports
       - "53:53/tcp"
