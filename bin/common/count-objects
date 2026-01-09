@@ -1,12 +1,39 @@
 #!/usr/bin/env bash
-# рекурсивный подсчёт файлов/директорий/симлинков
-
-ROOT="${1:-.}"
+# recursive counting of files/directories/symlinks
+# use count-objects [dir1, [dir2], ...]
 
 exec 2>/dev/null
 
-files="$(find "$ROOT" -type f | wc -l)" 
-dirs="$(find "$ROOT" -type d | wc -l)"
-links="$(find "$ROOT" -type l | wc -l)"
+if [[ $# -le 1 ]]; then
+    ROOT="${1:-.}"
 
-printf "f:%-6d d:%-6d l:%-6d\n" "$files" "$dirs" "$links"
+    exec 2>/dev/null
+
+    files="$(find "$ROOT" -type f | wc -l)"
+    dirs="$(find "$ROOT" -type d | wc -l)"
+    links="$(find "$ROOT" -type l | wc -l)"
+
+    printf "f:%-6d d:%-6d l:%-6d\n" "$files" "$dirs" "$links"
+
+    exit 0
+fi
+
+
+total_files=0
+total_dirs=0
+total_links=0
+
+for DIR in "$@"; do
+    files=$(find "$DIR" -type f | wc -l)
+    dirs=$(find "$DIR" -type d | wc -l)
+    links=$(find "$DIR" -type l | wc -l)
+
+    total_files=$((total_files + files))
+    total_dirs=$((total_dirs + dirs))
+    total_links=$((total_links + links))
+
+    printf "f:%-6d d:%-6d l:%-6d %s\n" "$files" "$dirs" "$links" "$DIR"
+done
+
+echo "----------------------"
+printf "f:%-6d d:%-6d l:%-6d\n" "$total_files" "$total_dirs" "$total_links"
