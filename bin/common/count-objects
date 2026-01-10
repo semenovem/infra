@@ -1,39 +1,129 @@
 #!/usr/bin/env bash
 # recursive counting of files/directories/symlinks
-# use count-objects [dir1, [dir2], ...]
+# use count-objects [dir1, [dir2], ...] [--exclude dir2] [--exclude dir3] [--only-total]
+# examples
+# count-objects --exclude encoded-video --exclude thumbs backups encoded-video
+# count-objects thumbs backups encoded-video
 
 exec 2>/dev/null
 
-if [[ $# -le 1 ]]; then
-    ROOT="${1:-.}"
+IS_ONLY_TOTAL=
+DIRS=""
+DIR_COUNT=0
+EXCLUDE_DIRS=
+DEBUG=
+SHOW_SUB_DIR=y
 
-    exec 2>/dev/null
+# $@ of script
+fn_args() {
+    local i i2 arg next_arg ret=0 newline=$'\n'
 
-    files="$(find "$ROOT" -type f | wc -l)"
-    dirs="$(find "$ROOT" -type d | wc -l)"
-    links="$(find "$ROOT" -type l | wc -l)"
+    DIRS=
 
-    printf "f:%-6d d:%-6d l:%-6d\n" "$files" "$dirs" "$links"
+    for ((i = 1; i <= "$#"; i++)); do
+        arg="${!i}"
 
-    exit 0
-fi
+        case "$arg" in
+        "--only-total") IS_ONLY_TOTAL=1;;
+
+        "--exclude")
+            next_arg=$((i+1))
+            if [ "$next_arg" -le "$#" ] && [[ ! "${!next_arg}" =~ ^- ]]; then
+                EXCLUDE_DIRS="${EXCLUDE_DIRS}${!next_arg}${newline}"
+                i="$next_arg"
+                continue
+            fi
+
+            echo "bad args: --exclude parameter on ${i} position has no specified value, the directory name must be specified." >&2
+            ret=1
+        ;;
+
+        *)
+            for ((i2 = "$#"; i2 >= "$i"; i2--)); do
+                [[ ! "${!i2}" =~ ^- ]] && continue
+                echo "bad args: unknown value [${!i}] on ${i} position"
+                ret=1
+                break
+            done
+
+            [ "$ret" -eq 0 ] && DIRS="${DIRS}${!i}${newline}" && ((DIR_COUNT++))
+        ;;
+        esac
+    done
+
+    [ -z "$DIRS" ] && DIRS="." && DIR_COUNT=1
+    DIRS="${DIRS%$newline}"
+    EXCLUDE_DIRS="${EXCLUDE_DIRS%$newline}"
+
+    return "$ret"
+}
+
+fn_args "$@" || exit "$?"
+
+[ "$DIR_COUNT" -eq 1 ] && IS_ONLY_TOTAL=y
 
 
-total_files=0
-total_dirs=0
-total_links=0
+# $1 - dir path
+# return 0 - no, dir is not exclude
+# return 1 - yes, dir is exclude
+fn_is_exclude() {
+    [ -z "$EXCLUDE_DIRS" ] && return 0
+    local p
 
-for DIR in "$@"; do
-    files=$(find "$DIR" -type f | wc -l)
-    dirs=$(find "$DIR" -type d | wc -l)
-    links=$(find "$DIR" -type l | wc -l)
+    while IFS= read -r p; do
+        [[ "$1" =~ .*${p}$ ]] && return 1
+    done <<< "$EXCLUDE_DIRS"
 
-    total_files=$((total_files + files))
-    total_dirs=$((total_dirs + dirs))
-    total_links=$((total_links + links))
+    return 0
+}
 
-    printf "f:%-6d d:%-6d l:%-6d %s\n" "$files" "$dirs" "$links" "$DIR"
-done
+[ -n "$DEBUG" ] && echo "[DEBU] excludes dirs:" && echo "$EXCLUDE_DIRS" && echo "------------" && echo "[DEBU] DIR_COUNT=${DIR_COUNT}"
 
-echo "----------------------"
-printf "f:%-6d d:%-6d l:%-6d\n" "$total_files" "$total_dirs" "$total_links"
+
+TOTAL_FILES=0
+TOTAL_DIRS=0
+TOTAL_LINKS=0
+
+while IFS= read -r DIR; do
+    DIR="$(cd "$DIR" && pwd)" || continue
+    SUB_DIRS="$DIR"
+    FILES_COUNT=0
+    DIRS_COUNT=0
+    LINKS_COUNT=0
+    FOUND_DIRS=
+
+    [ -n "$DEBUG" ] && echo ">>> Processing dir: ${DIR}"
+
+    if [ -n "$EXCLUDE_DIRS" ]; then
+        FOUND_DIRS="$(find "$DIR" -mindepth 1 -maxdepth 1 -type d)"
+        [ -n "$FOUND_DIRS" ] && SUB_DIRS="$FOUND_DIRS" && ((TOTAL_DIRS++)) # increment dirs - because parent directory
+    fi
+
+    while IFS= read -r SUB_DIR; do
+        fn_is_exclude "$SUB_DIR" || continue
+        [ -n "$DEBUG" ] && echo "   >>> sub dir: ${SUB_DIR}"
+
+        SUB_DIR_FILES_COUNT="$(find "$SUB_DIR" -type f | wc -l)"
+        SUB_DIR_DIRS_COUNT="$(find "$SUB_DIR" -type d | wc -l)"
+        SUB_DIR_LINKS_COUNT="$(find "$SUB_DIR" -type l | wc -l)"
+
+        if [ -n "$SHOW_SUB_DIR" ] && [ -n "$FOUND_DIRS" ]; then
+            printf "  f:%-6d d:%-6d l:%-6d %s\n" "$SUB_DIR_FILES_COUNT" "$SUB_DIR_DIRS_COUNT" "$SUB_DIR_LINKS_COUNT" "$SUB_DIR"
+        fi
+
+        FILES_COUNT="$((FILES_COUNT + SUB_DIR_FILES_COUNT))"
+        DIRS_COUNT="$((DIRS_COUNT + SUB_DIR_DIRS_COUNT))"
+        LINKS_COUNT="$((LINKS_COUNT + SUB_DIR_LINKS_COUNT))"
+
+    done <<< "$SUB_DIRS"
+
+    [ -z "$IS_ONLY_TOTAL" ] && printf "f:%-6d d:%-6d l:%-6d %s\n" "$FILES_COUNT" "$DIRS_COUNT" "$LINKS_COUNT" "$DIR"
+
+    TOTAL_FILES="$((TOTAL_FILES+FILES_COUNT))"
+    TOTAL_DIRS="$((TOTAL_DIRS+DIRS_COUNT))"
+    TOTAL_LINKS="$((TOTAL_LINKS+LINKS_COUNT))"
+
+done <<< "$DIRS"
+
+[ -z "$IS_ONLY_TOTAL" ] && echo "----------------------"
+printf "f:%-6d d:%-6d l:%-6d\n" "$TOTAL_FILES" "$TOTAL_DIRS" "$TOTAL_LINKS"
