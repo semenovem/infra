@@ -95,7 +95,7 @@ while IFS= read -r DIR; do
     [ -n "$DEBUG" ] && echo ">>> Processing dir: ${DIR}"
 
     if [ -n "$EXCLUDE_DIRS" ]; then
-        FOUND_DIRS="$(find "$DIR" -mindepth 1 -maxdepth 1 -type d)"
+        FOUND_DIRS="$(find "$DIR" -mindepth 1 -maxdepth 1 -type d | sort)"
         [ -n "$FOUND_DIRS" ] && SUB_DIRS="$FOUND_DIRS" && ((TOTAL_DIRS++)) # increment dirs - because parent directory
     fi
 
