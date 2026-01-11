@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -o errexit
+
+[ "$UID" -eq 0 ] && echo "[ERRO][$0] user must not be root" && exit 1
+
+[ -z "$__INFRA_LOCAL__" ] && echo "[ERRO][$0] empty variable __INFRA_LOCAL__" && exit 1
+[ ! -d "$__INFRA_LOCAL__" ] && echo "[ERRO][$0] not found dir in variable __INFRA_LOCAL__ [${__INFRA_LOCAL__}] " && exit 1
+
+if hostname | grep -Eqv "ibtv-8.local"; then
+    echo "[ERRO][$0] hostname = $(hostname) is forbidden"
+    exit 1
+fi
+
+CFG_DIR="${__INFRA_LOCAL__}/backup-configs"
+mkdir -p "$CFG_DIR"
+
+CFG_FILE="${CFG_DIR}/config.conf"
+
+if [ ! -f "$CFG_FILE" ]; then
+  {
+    echo "__SDSDSD__=dfsdfsd"
+    echo "__SDSDSD2__=dfsdfsd"
+  } > "$CFG_FILE"
+fi
+
+echo "[INFO] use backup|check|unpack immich|nextcloud"
+
