@@ -24,9 +24,14 @@ fn_args() {
         arg="${!i}"
 
         case "$arg" in
-        "--only-total") IS_ONLY_TOTAL=1;;
+        "-h" | "--help") echo "use " ;;
 
-        "--exclude")
+        "--only-total") 
+            IS_ONLY_TOTAL=1
+            SHOW_SUB_DIR=
+        ;;
+
+        "--exclude" | "-e")
             next_arg=$((i+1))
             if [ "$next_arg" -le "$#" ] && [[ ! "${!next_arg}" =~ ^- ]]; then
                 EXCLUDE_DIRS="${EXCLUDE_DIRS}${!next_arg}${newline}"
