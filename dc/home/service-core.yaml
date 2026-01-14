@@ -170,7 +170,7 @@ services:
   webdav:
     container_name: core-webdav
     hostname: webdav
-    image: hacdias/webdav:v5.8.1
+    image: hacdias/webdav:v5.10.2
     networks:
       - net-home
     volumes:

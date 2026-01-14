@@ -87,9 +87,7 @@ func_sync() {
   echo "[INFO]$(msg_prefix)[${user_name}] before: $(ssh -p 4022 evg@localhost "./_infra/bin/common/count-objects '${dst_dir}'")"
 
   # --dry-run \
-  sudo rsync --quiet -a --delete \
-    --bwlimit=10000 \
-    --inplace --backup --quiet \
+  sudo rsync --quiet -a --delete --delete-excluded --bwlimit=10000 --inplace --backup \
     --rsync-path="mkdir -p ${dst_dir} && rsync" \
     --exclude '.git' \
     --exclude '.idea' \
