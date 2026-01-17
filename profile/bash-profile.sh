@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# [ -f "${HOME}/.bashrc" ] && sed -i 's|configs/bash-profile.sh|profile/bash-profile.sh|' /home/evg/.bashrc
-[ -n "$__INFRA_LOCAL__" ] && return 0
+THIS="${BASH_SOURCE[0]}"
+[ -z "$THIS" ] && THIS="$0"
 
 alias ll='ls -lh'
 alias la='ls -la'
@@ -20,31 +20,20 @@ li() {
 #  open -na "GoLand.app" --args "$@"
 #}
 
-# -------------------------------------------------------------
+# --- environment
 export __INFRA_REPO__="${HOME}/_infra"
 export __INFRA_LOCAL__="${__INFRA_REPO__}/.local"
 
-# Deprecated
-export __INFRA_BIN__="${__INFRA_REPO__}/bin"
-
-#env | grep INFRA | sort
-
-
-# environment -------------------------------------------------
-[ -z "$__INFRA_REPO__" ] && \
-  >&2 echo "[ERRO][$0] variable [__INFRA_REPO__] not set" && \
-  return
-
-[ ! -d "$__INFRA_REPO__" ] && \
-  >&2 echo "[ERRO][$0] variable [__INFRA_REPO__] contains not exists directory [${__INFRA_REPO__}]" && \
-  return
+[ -z "$__INFRA_REPO__" ] && echo "[ERRO][$THIS] var __INFRA_REPO__ not set" >&2 && return
+[ ! -d "$__INFRA_REPO__" ] && echo "[ERRO][$THIS] var __INFRA_REPO__ must be a directory [${__INFRA_REPO__}]" >&2 && return
 
 export PATH="${PATH}:${__INFRA_REPO__}/bin/common:${__INFRA_REPO__}/bin"
 
-sh "${__INFRA_REPO__}/bin/util/update-infra-repo.sh" || \
-  >&2 echo "[ERRO][$0] execute 'update-repo'"
+# --- update infra
 
-# platform actions --------------------------------------------
+bash "${__INFRA_REPO__}/bin/util/update-infra-repo.sh" || :
+
+# --- platform actions
 PLATFORM_NAME="${__INFRA_REPO__}/bin/util/platform.sh"
 
 case "$(sh "$PLATFORM_NAME")" in

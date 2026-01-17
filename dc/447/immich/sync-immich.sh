@@ -7,11 +7,11 @@
 
 # $1 - server-name
 
+[ "$CRONE_EXEC" = y ] && exec >> '/mnt/vol1/immich/logs/crone-sync2.log' 2>&1
 set -o errexit
 
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 SERVER_NAME="$1"
-[ "$CRONE_EXEC" = y ] && exec >> '/mnt/vol1/immich/logs/crone-sync2.log' 2>&1
 MONTH_DAY="$(date "+%m%d")"
 
 msg_prefix() {
@@ -51,7 +51,7 @@ fn_sync_to() {
 
     info "bak_dir=${bak_dir} bak_incr_dir=${bak_incr_dir}"
     
-    orig_count="$(count-objects --exclude encoded-video --exclude thumbs --only-total '/mnt/vol1/immich/immich_data')"
+    orig_count="$(~/_infra/bin/common/count-objects --exclude encoded-video --exclude thumbs --only-total '/mnt/vol1/immich/immich_data')"
     info "source origin: ${orig_count}"
 
     remote_before_count="$(fn_count "$n" "${bak_dir}")"
