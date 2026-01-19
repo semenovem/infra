@@ -1,0 +1,23 @@
+
+
+
+docker run -d -v "/mnt/dat/mssql-idelia-english-bot:/var/opt/mssql" -p 1433:1433 \
+  --name "englishbot-sql" \
+  --hostname "englishbot-sql" \
+  -e "SA_PASSWORD=" \
+  -e "ACCEPT_EULA=Y" \
+  idelia-eng-bot-mssql:1
+
+# mcr.microsoft.com/mssql/server:2022-latest
+
+
+
+exit 0
+
+/etc/fstab
+
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/vda2 during curtin installation
+/dev/disk/by-uuid/a9972fc5-6b7b-4a7b-bd11-28eb161dfa12 / ext4 defaults 0 1
+# additional disk
+/dev/disk/by-uuid/4c9fec12-b274-48dc-a3c7-c6659a5b15e8 /mnt/dat ext4 defaults,nofail 0 1
