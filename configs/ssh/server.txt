@@ -33,3 +33,16 @@ Host kz2
   Port         2257
   User         adman
   IdentityFile ~/.ssh/id_ecdsa
+
+Host job1
+  HostName     176.109.111.105
+  Port         22
+  User         adman
+  IdentityFile ~/.ssh/id_ecdsa
+
+Host bot
+  HostName     161.35.69.129
+  Port         22
+  User         adman
+  IdentityFile ~/.ssh/id_rsa
+
