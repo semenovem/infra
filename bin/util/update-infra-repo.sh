@@ -13,7 +13,7 @@ BRANCH=$(git -C "$__INFRA_REPO__" rev-parse --abbrev-ref HEAD)
 LAST_UPDATE_FILE="${__INFRA_LOCAL__}/last-update-repo"
 [ -f "$LAST_UPDATE_FILE" ] && PREV=$(cat "$LAST_UPDATE_FILE")
 
-[[ "$PREV" =~ ^[0-9]+$ ]] || PREV=0
+echo "$PREV" | grep -Eq '^[0-9]+$' || PREV=0
 
 NOW=$(date "+%Y%m%d")
 [ "$((NOW - PREV))" -eq 0 ] && [ "$FORCE" != 'force' ] && exit 0
