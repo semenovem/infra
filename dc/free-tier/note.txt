@@ -1,12 +1,12 @@
 
 
 
-docker run -d -v "/mnt/dat/mssql-idelia-english-bot:/var/opt/mssql" -p 1433:1433 \
+docker run -d --restart unless-stopped -v "/mnt/dat/mssql-idelia-english-bot:/var/opt/mssql" -p 1433:1433 \
   --name "englishbot-sql" \
   --hostname "englishbot-sql" \
   -e "SA_PASSWORD=" \
   -e "ACCEPT_EULA=Y" \
-  idelia-eng-bot-mssql:1
+  idelia-eng-bot-mssql:2
 
 # mcr.microsoft.com/mssql/server:2022-latest
 
