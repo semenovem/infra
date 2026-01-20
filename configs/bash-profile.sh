@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# [ -f "${HOME}/.bashrc" ] && sed -i 's|configs/bash-profile.sh|profile/bash-profile.sh|' /home/evg/.bashrc
+[ -f "${HOME}/.bashrc" ] && sed -i 's|configs/bash-profile.sh|profile/bash-profile.sh|' /home/evg/.bashrc && exit 0
 [ -n "$__INFRA_LOCAL__" ] && return 0
 
 alias ll='ls -lh'
