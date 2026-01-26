@@ -63,6 +63,11 @@ fn_tool() {
     -v "${PWD}:/app:rw" --network host "$TOOL_IMG" bash
 }
 
+# $1 - base64
+fn_b64() {
+  echo "$1" | base64 -d
+}
+
 if [ "$#" -eq 0 ]; then
   functions="$(grep -Eo '^fn_[^)(]+' "$0" | sed 's/^fn_//' | tr '\n' '|')"
    echo "use: [${functions%?}]"
