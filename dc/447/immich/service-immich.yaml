@@ -38,6 +38,7 @@ services:
       - /mnt/vol1/immich/from-nextcloud:/mnt/media/from-nextcloud:ro
       - /mnt/vol1/photo-lib:/photos:ro
     env_file:
+      - env
       - .env
     ports:
       - '2283:2283'
@@ -63,6 +64,7 @@ services:
     volumes:
       - /mnt/vol1/immich/model-cache:/cache
     env_file:
+      - env
       - .env
     restart: always
     healthcheck:

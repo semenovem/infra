@@ -1,8 +1,11 @@
 #!/bin/bash
 
+set -eu
+
 ROOT=$(dirname "$(echo "$0" | grep -E "^/" -q && echo "$0" || echo "$PWD/${0#./}")")
 
 set -o allexport
+. "${ROOT}/immich/env"
 . "${ROOT}/immich/.env"
 set +o allexport
 
@@ -26,9 +29,8 @@ if [ -n "$DO_RESTORE" ]; then
     | docker exec -i immich_postgres psql --dbname="$DB_DATABASE_NAME" --username="$DB_USERNAME"  
 fi
 
-export UID="$(id -u)"
-export GID="$(id -g)"
-
+[ -z "${UID+x}" ] && export UID="$(id -u)"
+[ -z "${GID+x}" ] && export GID="$(id -g)"
 
 docker compose -p "447" --project-directory "${ROOT}/immich" \
     -f "${ROOT}/immich/service-immich.yaml" \
